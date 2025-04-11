@@ -7,8 +7,9 @@ export default function Admin() {
             
             <div className='flex flex-col items-center space--5'>
             <div className="text-3xl font-bold text-white pt-10">
-                Admin Panel
+                Restaurants List   
             </div>
+                
             </div>
         </main>
     );
