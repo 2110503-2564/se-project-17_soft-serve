@@ -6,6 +6,7 @@ import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@mui/material";
 import getRestaurants from "@/libs/getRestaurants";
+import ReviewBox from "@/components/ReviewBox";
 
 // Extract Reducer for cleaner code
 const ratingReducer = (state: Map<string, number>, action: { type: string, ratingName: string, value: number }) => {
@@ -128,8 +129,13 @@ export default function RatingDetailPage() {
                 ))}
             </div>
 
+            <div className="flex flex-wrap flex-row justify-center p-10 gap-10 items-start">
+            {/* Ratings */}
+            <div className="p-2 mb-20 mr-16">
+                <ReviewBox />
+            </div>
+
             {/* Overall Rating */}
-            <div className="justify-center p-10">
                 <div key="Overall Rating" className="flex flex-col text-xl font-bold mb-4 scale-150">
                     Overall Rating
                     <div className="relative flex flex-col items-center">

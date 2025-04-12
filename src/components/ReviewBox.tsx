@@ -15,7 +15,7 @@ export default function ReviewBox() {
             autoComplete="off"
         >
             <div>
-                <div className="text-xl font-bold">
+                <div className="text-xl font-bold scale-150">
                     Review
                 </div>
                 <TextField
