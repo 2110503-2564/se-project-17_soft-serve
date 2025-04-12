@@ -4,7 +4,7 @@ import getUserProfile from "@/libs/getUserProfile";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 import { redirect } from 'next/navigation';
-import AdminRow from "./AdminRow";
+import AdminRow from "./AdminReservationRow";
 
 export default async function AdminReservationTable() {
     const session = await getServerSession(authOptions);

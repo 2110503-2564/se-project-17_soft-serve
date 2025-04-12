@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from "react";
 import deleteReservation from "@/libs/deleteReservation";
 
-export default function AdminRow({reservationItem} : {reservationItem : ReservationItem}) {
+export default function AdminReservationRow({reservationItem} : {reservationItem : ReservationItem}) {
     
     const reservationDate = new Date(reservationItem.revDate);
     
