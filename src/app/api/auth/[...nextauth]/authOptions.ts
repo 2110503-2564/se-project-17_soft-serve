@@ -13,8 +13,10 @@ export const authOptions: AuthOptions = {
 
               const { email, password } = credentials as { email: string; password: string };
 
+              const user = await userLogIn({ userEmail: email, userPassword: password });
+
               try {
-                  const user = await userLogIn({ userEmail: email, userPassword: password });
+                  
                 //   console.log(user);
 
                   if (!user) {

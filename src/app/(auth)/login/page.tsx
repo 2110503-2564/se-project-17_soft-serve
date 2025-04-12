@@ -29,6 +29,10 @@ export default function LoginPage() {
             // console.log('Login response:', response);
     
             if (response?.error) {
+                if(response.error == 'not verified'){
+                    alert('you are yet to be verified. Please wait for admin');
+                    return;
+                }
                 alert('Error logging in, please try again.');
                 return;
             }

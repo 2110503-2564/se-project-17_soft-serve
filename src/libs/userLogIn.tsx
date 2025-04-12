@@ -10,8 +10,15 @@ export default async function userLogIn ({userEmail, userPassword} : {userEmail 
         }),
     });
 
+    const data = await response.json();
+
+    if(data.msg == 'not verified'){
+        throw new Error('not verified')
+    }
+
+
     if(!response.ok){
-        throw new Error('Failed to log-in');
+        throw new Error('Invalid credentials');
     }
 
     return await response.json();
