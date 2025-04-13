@@ -1,20 +1,77 @@
 'use client'
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function CreateNotification() {
+    const router = useRouter();
+    const { data: session } = useSession();
+    
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [targetAudience, setTargetAudience] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTargetAudience(event.target.value === targetAudience ? null : event.target.value);
     };
 
-    const handleClick = () => {
-        console.log("Title", title);
-        console.log("Message", message);
-        console.log("Target", targetAudience);
-    };
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        
+        if (!title || !message || !targetAudience) {
+            setError('Please complete all fields');
+            return;
+        }
+
+        // Check if user is authenticated
+        if (!session || !session.user || !session.user.token) {
+            setError('You must be logged in to create notifications');
+            return;
+        }
+
+        const apiTargetAudience = 
+            targetAudience === 'customer' ? 'Customers' : 
+            targetAudience === 'manager' ? 'RestaurantManagers' : 'All';
+
+        setIsSubmitting(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const token = session.user.token;
+            
+            const response = await fetch(`${process.env.BACKEND_URL}api/v1/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    title,
+                    message,
+                    targetAudience: apiTargetAudience
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create notification');
+            }
+
+            setSuccess('Notification created successfully!');
+            setTitle('');
+            setMessage('');
+            setTargetAudience(null);
+            
+        } catch (err: any) {
+            setError(err.message || 'Failed to create notification');
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     return (
         <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 overflow-auto">
@@ -22,53 +79,92 @@ export default function CreateNotification() {
                 <div className="text-3xl font-bold text-center mt-6 mb-8">
                     Create a Notification
                 </div>
-                <form>
-                    {/*Title*/}
+                
+                {error && (
+                    <div className="mx-20 mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        {error}
+                    </div>
+                )}
+                
+                {success && (
+                    <div className="mx-20 mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                        {success}
+                    </div>
+                )}
+                
+                <form onSubmit={handleSubmit}>
                     <label htmlFor="title" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
                         Title
                     </label>
                     <div className="flex justify-center items-center block mb-6">
-                        <input onChange={(e) => setTitle(e.target.value)} type="text" id="title" placeholder="title"
-                        className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"/>
+                        <input 
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)} 
+                            type="text" 
+                            id="title" 
+                            placeholder="title"
+                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
+                        />
                     </div>
-                    {/*Message*/}
+                    
                     <label htmlFor="message" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
                         Message
                     </label>
                     <div className="flex justify-center items-center block mb-6">
-                        <input onChange={(e) => setMessage(e.target.value)} type="text" id="message" placeholder="message"
-                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"/>
+                        <input 
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)} 
+                            type="text" 
+                            id="message" 
+                            placeholder="message"
+                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
+                        />
                     </div>
-                    {/*Target Audience*/}
-                    <label htmlFor="arget" className="block text-gray-800 text-lg font-semibold pl-20">
+                    
+                    <label htmlFor="target" className="block text-gray-800 text-lg font-semibold pl-20">
                         Target Audience
                     </label>
                     <div className="flex justify-center items-center p-4 rounded-xl space-x-4">
                         <div className="flex items-center">
-                            <input id="customer" type="checkbox" value="customer" name="target"
-                                className="w-5 h-5 border-gray-300 rounded-xl" style={{accentColor:'red'}}
+                            <input 
+                                id="customer" 
+                                type="checkbox" 
+                                value="customer" 
+                                name="target"
+                                className="w-5 h-5 border-gray-300 rounded-xl" 
+                                style={{accentColor:'red'}}
                                 checked={targetAudience === 'customer'}
-                                onChange={handleCheckboxChange}/>
+                                onChange={handleCheckboxChange}
+                            />
                             <label htmlFor="customer" className="ml-2 text-lg text-gray-800">
                                 customers
                             </label>
                         </div>
                         <div className="flex items-center">
-                            <input id="manager" type="checkbox" value="manager" name="target"
-                                className="w-5 h-5 ml-12 border-gray-300 rounded-xl" style={{accentColor:'red'}}
+                            <input 
+                                id="manager" 
+                                type="checkbox" 
+                                value="manager" 
+                                name="target"
+                                className="w-5 h-5 ml-12 border-gray-300 rounded-xl" 
+                                style={{accentColor:'red'}}
                                 checked={targetAudience === 'manager'}
-                                onChange={handleCheckboxChange}/>
+                                onChange={handleCheckboxChange}
+                            />
                             <label htmlFor="manager" className="ml-2 text-lg text-gray-800">
                                 restaurant managers
                             </label>
                         </div>
                     </div>
-                    {/*Submit button*/}
+                    
                     <div className="flex flex-col justify-center items-center">
                         <div className="relative">
-                            <button onClick={handleClick} type="button"
-                                className='block bg-myred border border-white text-white text-xl font-semibold w-[150px] py-2 px-4 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
-                                Submit
+                            <button 
+                                type="submit"
+                                disabled={isSubmitting}
+                                className='block bg-myred border border-white text-white text-xl font-semibold w-[150px] py-2 px-4 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600 disabled:bg-gray-400 disabled:text-gray-200 disabled:hover:bg-gray-400 disabled:hover:text-gray-200 disabled:cursor-not-allowed'
+                            >
+                                {isSubmitting ? 'Sending...' : 'Submit'}
                             </button>
                         </div>
                     </div>
