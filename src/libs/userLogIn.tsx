@@ -10,8 +10,6 @@ export default async function userLogIn ({userEmail, userPassword} : {userEmail 
         }),
     });
 
-   // console.log(await response.json());
-
     const data = await response.json();
 
     if(data.msg == 'not verified'){
@@ -22,8 +20,6 @@ export default async function userLogIn ({userEmail, userPassword} : {userEmail 
     if(!response.ok){
         throw new Error('Invalid credentials');
     }
-
-    
 
     return await data;
 }
