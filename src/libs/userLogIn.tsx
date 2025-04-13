@@ -23,3 +23,4 @@ export default async function userLogIn ({userEmail, userPassword} : {userEmail 
 
     return await data;
 }
+

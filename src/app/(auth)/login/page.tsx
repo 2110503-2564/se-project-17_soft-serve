@@ -8,40 +8,43 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState<{ text: string; type: 'error' | 'success' } | null>(null);
 
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
+
         if (!email || !password) {
-            alert('Please fill in all fields');
-            return; // Don't continue if any field is missing
+            setMessage({ text: 'Please fill in all fields', type: 'error' });
+            return;
         }
-    
+
         try {
             const response = await signIn('credentials', {
                 email,
                 password,
                 redirect: false,
             });
-    
-            // console.log('Login response:', response);
-    
+
             if (response?.error) {
-                if(response.error == 'not verified'){
-                    alert('you are yet to be verified. Please wait for admin');
+                if (response.error === 'not verified') {
+                    setMessage({ text: 'You are yet to be verified. Please wait for admin.', type: 'error' });
                     return;
                 }
-                alert('Error logging in, please try again.');
+                if (response.error === 'Invalid credentials') {
+                    setMessage({ text: 'Invalid credentials. Please change the email or password.', type: 'error' });
+                    return;
+                }
+                setMessage({ text: 'Error logging in, please try again.(failed to fetch)', type: 'error' });
                 return;
             }
-    
-            alert('Login successful!');
+
+            setMessage({ text: 'Login successful!', type: 'success' });
             router.replace('/');
         } catch (error) {
             console.error('Error logging in:', error);
-            alert('Error logging in, please try again.');
+            setMessage({ text: 'Error logging in, please try again.', type: 'error' });
         }
     };
 
@@ -72,6 +75,13 @@ export default function LoginPage() {
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
                         />
                     </div>
+                    {message && (
+                        <div className={`text-center w-4/5 mx-auto mb-4 py-2 px-4 rounded-xl ${
+                            message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                        }`}>
+                            {message.text}
+                        </div>
+                    )}
                     <div className="flex flex-col justify-center items-center">
                         <button 
                             type="submit"
