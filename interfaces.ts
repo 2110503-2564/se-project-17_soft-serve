@@ -72,3 +72,19 @@ export interface UserJson {
     success: boolean,
     data : User
 }
+
+export interface NotificationItem{
+    _id: string;
+  title: string;
+  message: string;
+  creatorId: string;
+  createdBy: string;
+  targetAudience: string;
+  createdAt: Date;
+  __v: number;
+}
+
+export interface NotificationJson {
+    success: boolean,
+    data : NotificationItem[]
+}
