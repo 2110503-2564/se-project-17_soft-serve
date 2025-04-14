@@ -11,6 +11,7 @@ export interface RestaurantItem {
     openTime?: string,
     closeTime?: string,
     rating?: number,
+    reviewCount?: number,
     maxReservation: number,
     imgPath: string,
     verified: boolean,
