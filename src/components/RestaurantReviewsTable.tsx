@@ -20,8 +20,11 @@ interface Review {
   };
   createdAt: string;
 }
+interface RestaurantReviewsTableProps {
+  restaurantId: string;
+}
 
-export default function RestaurantReviewsTable() {
+export default function RestaurantReviewsTable({ restaurantId }: RestaurantReviewsTableProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,8 +40,10 @@ export default function RestaurantReviewsTable() {
         
         const restaurantParam = searchParams.get('restaurant');
         const ratingParam = searchParams.get('rating');
-        
-        let apiUrl = `${process.env.BACKEND_URL}api/v1/reviews`;
+        console.log("Restaurant Param:", restaurantParam);
+        console.log("Rating Param:", ratingParam);
+
+        let apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants/${restaurantId}/reviews`;
         
         if (restaurantParam) {
           const restaurantsRes = await fetch(`${process.env.BACKEND_URL}api/v1/restaurants?name=${encodeURIComponent(restaurantParam)}`, {
@@ -61,13 +66,16 @@ export default function RestaurantReviewsTable() {
         });
         
         const data = await response.json();
-        
+        console.log("Fetched Data:", data);
+
         if (!response.ok) {
           throw new Error(data.message || 'Failed to fetch reviews');
         }
         
+        console.log("Fetched Reviews(data.data):", data.data);
         let filteredReviews = data.data;
-        
+        console.log("Fetched Reviews(filteredReviews):", filteredReviews);
+
         // Client-side filtering by minimum rating if needed
         if (ratingParam) {
           const minRating = parseInt(ratingParam);
@@ -87,32 +95,6 @@ export default function RestaurantReviewsTable() {
     fetchReviews();
   }, [searchParams, session]);
   
-  const handleDeleteReview = async (reviewId: string) => {
-    if (!session?.user?.token) return;
-    
-    if (confirm('Are you sure you want to delete this review?')) {
-      try {
-        const response = await fetch(`${process.env.BACKEND_URL}api/v1/reviews/${reviewId}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${session.user.token}`,
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to delete review');
-        }
-        
-        // Remove the deleted review from state
-        setReviews(reviews.filter(review => review._id !== reviewId));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete review');
-      }
-    }
-  };
-  
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
@@ -121,9 +103,11 @@ export default function RestaurantReviewsTable() {
   
   if (error) return <div className="bg-red-100 p-4 text-red-700 rounded mt-5">{error}</div>;
   
+  console.log("reviews.length ",reviews.length);
   return (
     <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
       <div className="w-full">
+        
         <h2 className="text-xl font-semibold mb-4 text-black">
           {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'} Found
         </h2>
