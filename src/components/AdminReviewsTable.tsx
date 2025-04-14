@@ -106,7 +106,7 @@ export default function AdminReviewsTable() {
         }
         
         // Remove the deleted review from state
-        setReviews(reviews.filter(review => review._id !== reviewId));
+        setReviews(prevReviews => prevReviews.filter(review => review._id !== reviewId));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to delete review');
       }

@@ -40,7 +40,9 @@ export default function RestaurantReviewsTable({ restaurantId }: RestaurantRevie
         
         const restaurantParam = searchParams.get('restaurant');
         const ratingParam = searchParams.get('rating');
-        
+        console.log("Restaurant Param:", restaurantParam);
+        console.log("Rating Param:", ratingParam);
+
         let apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants/${restaurantId}/reviews`;
         
         if (restaurantParam) {
@@ -64,13 +66,16 @@ export default function RestaurantReviewsTable({ restaurantId }: RestaurantRevie
         });
         
         const data = await response.json();
-        
+        console.log("Fetched Data:", data);
+
         if (!response.ok) {
           throw new Error(data.message || 'Failed to fetch reviews');
         }
         
+        console.log("Fetched Reviews(data.data):", data.data);
         let filteredReviews = data.data;
-        
+        console.log("Fetched Reviews(filteredReviews):", filteredReviews);
+
         // Client-side filtering by minimum rating if needed
         if (ratingParam) {
           const minRating = parseInt(ratingParam);
