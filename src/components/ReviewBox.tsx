@@ -18,7 +18,7 @@ export default function ReviewBox({
   rating: number;
 }) {
   const { data: session } = useSession();
-  const token = session?.user?.token ?? "";
+  
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -26,7 +26,8 @@ export default function ReviewBox({
       alert("Please provide a rating and a comment.");
       return;
     }
-
+    if(!session || !session.user || !session.user.token) return null;
+    const token = session.user.token;
     try {
       const res = await addReview({
         restaurantId,
@@ -61,23 +62,7 @@ export default function ReviewBox({
         />
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        variant="contained"
-        sx={{
-          backgroundColor: 'gray',
-          color: 'white',
-          fontWeight: 'bold',
-          padding: '10px 20px',
-          borderRadius: '8px',
-          transition: 'background-color 0.3s',
-          '&:hover': {
-            backgroundColor: 'rgb(25, 146, 69)',
-          },
-        }}
-      >
-        Submit Your Review
-      </Button>
+    
     </Box>
   );
 }
