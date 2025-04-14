@@ -24,7 +24,7 @@ interface RestaurantReviewsTableProps {
   restaurantId: string;
 }
 
-export default function RestaurantReviewsTable() {
+export default function RestaurantReviewsTable({ restaurantId }: RestaurantReviewsTableProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,9 +98,11 @@ export default function RestaurantReviewsTable() {
   
   if (error) return <div className="bg-red-100 p-4 text-red-700 rounded mt-5">{error}</div>;
   
+  console.log("reviews.length ",reviews.length);
   return (
     <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
       <div className="w-full">
+        
         <h2 className="text-xl font-semibold mb-4 text-black">
           {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'} Found
         </h2>

@@ -5,13 +5,25 @@ import TotalRate from "@/components/OverallRating";
 import Image from "next/image";
 import getRestaurants from "@/libs/getRestaurants";
 
-interface Props {
-  params: { rid: string };
-}
+// interface Props {
+//   params: { rid: string };
+// }
+// interface Restaurant {
+//     id: string;
+//     name: string;
+//     imgPath: string;
+//     avgRating?: number;
+//   }
 
-export default async function RestaurantReviewsDashboard(props: Props) {
+export default async function RestaurantReviewsDashboard({
+    params,
+  }: {
+    params: { rid: string };
+  }) {
+    const { rid } = await params;
     const session = await getServerSession(authOptions);
     console.log("SESSION:", session);
+    console.log("rid :",rid);
 
     if (!session || !session.user || !session.user.token) {
         return (
@@ -20,11 +32,16 @@ export default async function RestaurantReviewsDashboard(props: Props) {
           </main>
         );
     }
-    const { rid } = props.params; 
 
     // Fetch restaurant data
+    // const restaurantJson = await getRestaurants();
+    // const restaurant: Restaurant | undefined = restaurantJson.data.find(
+    //     (r: Restaurant) => r.id === rid
+    // );
     const restaurantJson = await getRestaurants();
-    const restaurant = restaurantJson.data.find((r: any) => r.id === rid);
+    const restaurant = restaurantJson.data.find(
+        (r: { id: string }) => r.id === rid
+    );
 
     if (!restaurant) {
         return (
@@ -34,7 +51,6 @@ export default async function RestaurantReviewsDashboard(props: Props) {
         );
     }
 
-    // Sample: simulate average rating — replace with real logic if needed
     const avgRating = parseFloat((restaurant.avgRating || 4.2).toFixed(1));
 
     return (
