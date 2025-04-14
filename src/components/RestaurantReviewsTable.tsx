@@ -20,6 +20,9 @@ interface Review {
   };
   createdAt: string;
 }
+interface RestaurantReviewsTableProps {
+  restaurantId: string;
+}
 
 export default function RestaurantReviewsTable() {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -38,7 +41,7 @@ export default function RestaurantReviewsTable() {
         const restaurantParam = searchParams.get('restaurant');
         const ratingParam = searchParams.get('rating');
         
-        let apiUrl = `${process.env.BACKEND_URL}api/v1/reviews`;
+        let apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants/${restaurantId}/reviews`;
         
         if (restaurantParam) {
           const restaurantsRes = await fetch(`${process.env.BACKEND_URL}api/v1/restaurants?name=${encodeURIComponent(restaurantParam)}`, {
@@ -86,32 +89,6 @@ export default function RestaurantReviewsTable() {
     
     fetchReviews();
   }, [searchParams, session]);
-  
-  const handleDeleteReview = async (reviewId: string) => {
-    if (!session?.user?.token) return;
-    
-    if (confirm('Are you sure you want to delete this review?')) {
-      try {
-        const response = await fetch(`${process.env.BACKEND_URL}api/v1/reviews/${reviewId}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${session.user.token}`,
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to delete review');
-        }
-        
-        // Remove the deleted review from state
-        setReviews(reviews.filter(review => review._id !== reviewId));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete review');
-      }
-    }
-  };
   
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
