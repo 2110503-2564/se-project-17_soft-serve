@@ -5,14 +5,15 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import getRestaurants from "@/libs/getRestaurants";
+import getUserProfile from "@/libs/getUserProfile";
 
-export default function AdminSearchBox() {
+export default function AdminSearchBox({token}: {token: string}) {
+    const router = useRouter();
     const [restaurantNames, setRestaurantNames] = useState<string[]>([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
-    const router = useRouter();
     const searchParams = useSearchParams();
-
+    
     useEffect(() => {
         const fetchRestaurants = async () => {
         const restaurantJson = await getRestaurants();

@@ -1,52 +1,39 @@
-// import { ReservationJson, ReservationItem } from "@/../interfaces";
-// import getReservations from "@/libs/getReservations";
-// /import getUserProfile from "@/libs/getUserProfile";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
-// import { redirect } from 'next/navigation';
+'use client';
+import { useEffect, useState } from 'react';
 import AdminRow from './AdminRestaurantRow';
+import { RestaurantItem, RestaurantJson } from "../../interfaces";
+import getRestaurants from '@/libs/getRestaurants';
 
-export default async function AdminRestaurantTable() {
-    /*const session = await getServerSession(authOptions);
-    
-    if (!session || !session.user || !session.user.token) return null;
+export default function AdminRestaurantTable() {
+    const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const token = session.user.token;
-    const user = await getUserProfile(token);
-
-    if (user.data.role !== 'admin') {
-        redirect('/');
-        return null;
+    useEffect(() => {
+        const fetchRestaurantsData = async () => {
+            setIsLoading(true);
+            try {
+                const restaurantJson: RestaurantJson = await getRestaurants();
+                if (restaurantJson.success && restaurantJson.data) {
+                    setRestaurants(restaurantJson.data);
+                } else {
+                    setError('Failed to fetch restaurants data.');
+                }
+            } catch (err: any) {
+                setError(`Error fetching restaurants: ${err.message}`);
+                console.error(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchRestaurantsData();
+    }, []);
+    if (isLoading) {
+        return <div className='text-lg text-white m-10'>Loading restaurants...</div>;
     }
-
-    const reservationJson: ReservationJson = await getReservations({ token });*/
-
-    // Mock Data
-    interface RestaurantItem {
-        mid: string; // manager id
-        status: 'pending' | 'approved';
-        name: string;
-        email: string;
+    if (error) {
+        return <div className='text-lg text-white m-10'>Error: {error}</div>;
     }
-
-    const mockRestaurantData: RestaurantItem[] = [
-        {
-            mid: '1',
-            name: 'Hotpot Man',
-            status: 'approved',
-            email: 'restaurant1@gmail.com'
-        },
-        {
-            mid: '2',
-            name: 'Gan Mala',
-            status: 'pending',
-            email: 'restaurant2@gmail.com'
-        }
-    ]
-
-    const restaurantJson = {
-        data: mockRestaurantData,
-    };
 
     return (
         <main>
@@ -58,14 +45,14 @@ export default async function AdminRestaurantTable() {
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Status</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Name</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Email</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>View</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {restaurantJson.data.map((restaurantItem: RestaurantItem) => {
+                        {restaurants.map((restaurantItem: RestaurantItem) => {
                             return (
-                                <AdminRow restaurantItem={restaurantItem} key={restaurantItem.mid} />
+                                <AdminRow restaurantItem={restaurantItem} key={restaurantItem.id}/>
                             );
                         })}
                     </tbody>
