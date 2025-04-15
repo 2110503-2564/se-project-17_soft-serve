@@ -2,13 +2,15 @@
 import Image from "next/image";
 import Rate from '@/components/ReviewRatings';
 import TotalRate from '@/components/OverallRating';
+import ReviewBox from "@/components/ReviewBox";
+import getRestaurants from "@/libs/getRestaurants";
+import addReview from "@/libs/addReview";
+
 import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@mui/material";
-import getRestaurants from "@/libs/getRestaurants";
-import ReviewBox from "@/components/ReviewBox";
 
-// Extract Reducer for cleaner code
+// Reducer for ratings
 const ratingReducer = (state: Map<string, number>, action: { type: string, ratingName: string, value: number }) => {
     const newState = new Map(state);
     switch (action.type) {
@@ -28,6 +30,9 @@ export default function RatingDetailPage() {
     const [isLoading, setIsLoading] = useState(true); 
     const [ratings, dispatch] = useReducer(ratingReducer, new Map<string, number>());
     const [overallRating, setOverallRating] = useState(0);
+    const [comment, setComment] = useState(""); 
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : "";
 
     // Fetch restaurant data
     useEffect(() => {
@@ -66,14 +71,27 @@ export default function RatingDetailPage() {
         }
     }, [ratings]);
 
-    const handleSubmit = () => {
-        if (overallRating <= 0) return;
+    const handleSubmit = async () => {
+        if (overallRating <= 0 || !comment.trim()) {
+            alert('Please provide a rating and a comment.');
+            return;
+        }
 
-        alert(`Review submitted successfully!\nOverall Rating: ${overallRating}/5`);
-        router.push("/");
+        try {
+            const res = await addReview({
+                restaurantId: rid as string,
+                rating: overallRating,
+                review: comment,
+                token: token,
+            });
+
+            alert(`Review submitted successfully!\nOverall Rating: ${res.data.rating}/5`);
+            router.push("/");
+        } catch (error: any) {
+            alert(`Error submitting review: ${error.message}`);
+        }
     };
 
-    // Render Section
     if (isLoading) {
         return (
             <main className="text-center p-5">
@@ -92,7 +110,7 @@ export default function RatingDetailPage() {
 
     return (
         <main className="text-center pb-10 text-black">
-            {/* Image */}
+            {/* Restaurant Image */}
             <div className="block p-5 m-0 w-screen h-[80vh] relative">
                 <Image
                     src={restaurant.imgPath}
@@ -107,7 +125,7 @@ export default function RatingDetailPage() {
                 [ {restaurant.name} ]
             </div>
 
-            {/* Rating Section */}
+            {/* Description */}
             <div className="text-2xl font-bold p-2">
                 Rate the Restaurant
             </div>
@@ -129,13 +147,20 @@ export default function RatingDetailPage() {
                 ))}
             </div>
 
+            {/* Review and Overall Rating */}
             <div className="flex flex-wrap flex-row justify-center p-10 gap-10 items-start">
-            {/* Ratings */}
-            <div className="p-2 mb-20 mr-16">
-                <ReviewBox />
-            </div>
+                {/* Comment Box */}
+                <div className="p-2 mb-20 mr-16">
+                <ReviewBox
+                    value={comment}
+                    onChange={setComment}
+                    restaurantId={rid as string}
+                    rating={overallRating}
+                />
 
-            {/* Overall Rating */}
+                </div>
+
+                {/* Overall Rating */}
                 <div key="Overall Rating" className="flex flex-col text-xl font-bold mb-4 scale-150">
                     Overall Rating
                     <div className="relative flex flex-col items-center">

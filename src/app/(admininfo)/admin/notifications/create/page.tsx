@@ -65,7 +65,7 @@ export default function CreateNotification() {
             setTitle('');
             setMessage('');
             setTargetAudience(null);
-            
+            router.replace('/admin/notifications');
         } catch (err: any) {
             setError(err.message || 'Failed to create notification');
         } finally {

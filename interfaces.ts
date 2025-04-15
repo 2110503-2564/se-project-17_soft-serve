@@ -11,8 +11,10 @@ export interface RestaurantItem {
     openTime?: string,
     closeTime?: string,
     rating?: number,
+    reviewCount?: number,
     maxReservation: number,
     imgPath: string,
+    verified: boolean,
     __v?: number,
     id: string
 }
@@ -64,6 +66,8 @@ export interface User {
     tel: string,
     email: string,
     role: string,
+    verified?: boolean,
+    restaurant?: string,
     createdAt : Date,
     __v : number
 }
