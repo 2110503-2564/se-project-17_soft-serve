@@ -22,7 +22,9 @@ export default function EditRestaurantBox({/*{ restaurantId, token }: { restaura
       rating: 4.5,
       maxReservation: 20,
       imgPath: '/img/tomyum_seafood.jpg',
-      id: "a1b2c3d4e5f67890"
+      id: "a1b2c3d4e5f67890",
+      verified: true,
+      reviewCount: 100,
     };
     const { imgPath, name, address, province, district, postalcode, description, foodType, openTime, closeTime, tel } = mockRestaurantData;
 

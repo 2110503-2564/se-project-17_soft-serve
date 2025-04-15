@@ -14,6 +14,7 @@ export default function RestaurantManagerRegisterPage() {
   
   // Restaurant information state
   const [restaurantName, setRestaurantName] = useState('');
+  const [description, setDescription] = useState(''); // New description field
   const [foodType, setFoodType] = useState('');
   const [address, setAddress] = useState('');
   const [province, setProvince] = useState('');
@@ -22,6 +23,7 @@ export default function RestaurantManagerRegisterPage() {
   const [restaurantTel, setRestaurantTel] = useState('');
   const [openTime, setOpenTime] = useState('');
   const [closeTime, setCloseTime] = useState('');
+  const [maxReservation, setMaxReservation] = useState(0); // New maxReservation field
   const [imgPath, setImgPath] = useState('');
   
   // UI control state
@@ -62,7 +64,7 @@ export default function RestaurantManagerRegisterPage() {
   const validateRestaurantInfo = () => {
     // Check for empty fields
     if (!restaurantName || !foodType || !address || !province || 
-        !district || !postalcode || !openTime || !closeTime) {
+        !district || !postalcode || !openTime || !closeTime || maxReservation === undefined) {
       alert('Please fill in all required restaurant information fields');
       return false;
     }
@@ -86,6 +88,12 @@ export default function RestaurantManagerRegisterPage() {
     
     if (closeHour < openHour || (closeHour === openHour && closeMinute <= openMinute)) {
       alert('Closing time must be after opening time');
+      return false;
+    }
+    
+    // Validate maxReservation is a non-negative number
+    if (isNaN(maxReservation) || maxReservation < 0) {
+      alert('Maximum reservation must be 0 or higher');
       return false;
     }
     
@@ -154,6 +162,7 @@ export default function RestaurantManagerRegisterPage() {
         },
         body: JSON.stringify({
           name: restaurantName,
+          description, // Include description field
           foodType,
           address,
           province,
@@ -162,6 +171,7 @@ export default function RestaurantManagerRegisterPage() {
           tel: restaurantTel,
           openTime,
           closeTime,
+          maxReservation: Number(maxReservation), // Include maxReservation field
           imgPath: imgPath || undefined
         })
       });
@@ -242,8 +252,10 @@ export default function RestaurantManagerRegisterPage() {
   const inputClass = "w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800";
   const buttonClass = "block bg-myred border border-white text-white text-xl font-semibold w-[150px] py-2 px-4 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600 disabled:opacity-50";
   const secondaryButtonClass = "block bg-gray-300 border border-gray-300 text-gray-800 text-xl font-semibold w-[150px] py-2 px-4 rounded-xl shadow-sm hover:bg-gray-400 disabled:opacity-50";
+  const textareaClass = "w-4/5 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-2 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800";
 
   // Render personal information form fields
+  
   const renderPersonalInfoForm = () => (
     <div className="space-y-6">
       <div className="flex justify-center items-center">
@@ -251,7 +263,7 @@ export default function RestaurantManagerRegisterPage() {
           onChange={(e) => setName(e.target.value)} 
           type="text" 
           id="name" 
-          placeholder="Full Name"
+          placeholder="Name"
           value={name}
           disabled={isSubmitting}
           className={inputClass}
@@ -326,6 +338,17 @@ export default function RestaurantManagerRegisterPage() {
           value={restaurantName}
           disabled={isSubmitting}
           className={inputClass}
+        />
+      </div>
+      <div className="flex justify-center items-center">
+        <textarea 
+          onChange={(e) => setDescription(e.target.value)} 
+          id="restaurant-description" 
+          placeholder="Restaurant Description (Optional)"
+          value={description}
+          disabled={isSubmitting}
+          className={textareaClass}
+          rows={3}
         />
       </div>
       <div className="flex justify-center items-center">
@@ -422,6 +445,25 @@ export default function RestaurantManagerRegisterPage() {
             value={closeTime}
             disabled={isSubmitting}
             className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-1"
+          />
+        </div>
+      </div>
+
+      {/* Max Reservation Field */}
+      <div className="flex justify-center items-center">
+        <div className="w-4/5">
+          <label htmlFor="max-reservation" className="block text-sm font-medium text-gray-700 mb-1">
+            Maximum Reservation (minimum 0)
+          </label>
+          <input 
+            onChange={(e) => setMaxReservation(parseInt(e.target.value) || 0)} 
+            type="number" 
+            id="max-reservation" 
+            placeholder="Maximum number of reservations"
+            value={maxReservation}
+            min="0"
+            disabled={isSubmitting}
+            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3"
           />
         </div>
       </div>

@@ -21,10 +21,11 @@ interface Review {
   createdAt: string;
 }
 
-export default function AdminReviewsTable() {
+export default function ManagerReviewsTable() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [restaurantDetails, setRestaurantDetails] = useState<{name: string, province: string} | null>(null);
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   
@@ -34,25 +35,12 @@ export default function AdminReviewsTable() {
       
       try {
         setLoading(true);
-        
-        const restaurantParam = searchParams.get('restaurant');
         const ratingParam = searchParams.get('rating');
+        const fromDateParam = searchParams.get('from');
+        const toDateParam = searchParams.get('to');
         
-        let apiUrl = `${process.env.BACKEND_URL}api/v1/reviews`;
-        
-        if (restaurantParam) {
-          const restaurantsRes = await fetch(`${process.env.BACKEND_URL}api/v1/restaurants?name=${encodeURIComponent(restaurantParam)}`, {
-            headers: {
-              Authorization: `Bearer ${session.user.token}`,
-            },
-          });
-          
-          const restaurantsData = await restaurantsRes.json();
-          
-          if (restaurantsData.success && restaurantsData.data.length > 0) {
-            apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants/${restaurantsData.data[0]._id}/reviews`;
-          }
-        }
+
+        const apiUrl = `${process.env.BACKEND_URL}api/v1/reviews`;
         
         const response = await fetch(apiUrl, {
           headers: {
@@ -68,12 +56,33 @@ export default function AdminReviewsTable() {
         
         let filteredReviews = data.data;
         
-        // Client-side filtering by minimum rating if needed
         if (ratingParam) {
           const minRating = parseInt(ratingParam);
           filteredReviews = filteredReviews.filter(
             (review: Review) => review.rating >= minRating
           );
+        }
+        
+        if (fromDateParam) {
+          const fromDate = new Date(fromDateParam);
+          filteredReviews = filteredReviews.filter(
+            (review: Review) => new Date(review.createdAt) >= fromDate
+          );
+        }
+        
+        if (toDateParam) {
+          const toDate = new Date(toDateParam);
+          toDate.setHours(23, 59, 59, 999);
+          filteredReviews = filteredReviews.filter(
+            (review: Review) => new Date(review.createdAt) <= toDate
+          );
+        }
+        
+        if (filteredReviews.length > 0 && filteredReviews[0].restaurantId) {
+          setRestaurantDetails({
+            name: filteredReviews[0].restaurantId.name,
+            province: filteredReviews[0].restaurantId.province
+          });
         }
         
         setReviews(filteredReviews);
@@ -87,32 +96,6 @@ export default function AdminReviewsTable() {
     fetchReviews();
   }, [searchParams, session]);
   
-  const handleDeleteReview = async (reviewId: string) => {
-    if (!session?.user?.token) return;
-    
-    if (confirm('Are you sure you want to delete this review?')) {
-      try {
-        const response = await fetch(`${process.env.BACKEND_URL}api/v1/reviews/${reviewId}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${session.user.token}`,
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to delete review');
-        }
-        
-        // Remove the deleted review from state
-        setReviews(prevReviews => prevReviews.filter(review => review._id !== reviewId));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete review');
-      }
-    }
-  };
-  
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
@@ -124,6 +107,13 @@ export default function AdminReviewsTable() {
   return (
     <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
       <div className="w-full">
+        {restaurantDetails && (
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-black">{restaurantDetails.name}</h2>
+            <p className="text-black">{restaurantDetails.province}</p>
+          </div>
+        )}
+        
         <h2 className="text-xl font-semibold mb-4 text-black">
           {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'} Found
         </h2>
@@ -135,29 +125,18 @@ export default function AdminReviewsTable() {
             {reviews.map((review) => (
               <div key={review._id} className="border rounded-lg p-4 shadow-sm">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-bold text-lg text-black">{review.restaurantId.name}</h3>
-                    <p className="text-sm text-black">{review.restaurantId.province}</p>
-                  </div>
-                  <button
-                    onClick={() => handleDeleteReview(review._id)}
-                    className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-                  >
-                    delete
-                  </button>
-                </div>
-                
-                <div className="mt-3">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-black">Customer Name: </p>
-                    <span className="text-black">{review.customerId?.name || 'Unknown Customer'}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 mt-2">
                     <StarRating rating={review.rating} />
                     <span className="text-black text-sm">
                       {formatDate(review.createdAt)}
                     </span>
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-black">Customer: </p>
+                    <span className="text-black">{review.customerId?.name || 'Anonymous Customer'}</span>
                   </div>
                   
                   <p className="mt-3 text-black">{review.review}</p>

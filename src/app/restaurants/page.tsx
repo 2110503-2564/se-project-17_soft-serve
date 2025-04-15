@@ -21,12 +21,12 @@ export default async function RestaurantList() {
 
             <div className="restaurant-list">
                 {
-                    restaurantJson.data
-                    .filter((restaurantItem: RestaurantItem) => restaurantItem.verified)
-                    .map((restaurantItem : RestaurantItem) => (
-                        <div key={restaurantItem.id}>
-                            <RestaurantListItem restaurantItem={restaurantItem}/>
-                        </div>
+                    restaurantJson.data.map((restaurantItem : RestaurantItem) => (
+                        restaurantItem.verified ? (
+                            <div key={restaurantItem.id}>
+                                <RestaurantListItem restaurantItem={restaurantItem}/>
+                            </div>
+                        ) : null
                     ))
                 }
             </div>

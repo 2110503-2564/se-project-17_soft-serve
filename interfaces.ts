@@ -11,6 +11,7 @@ export interface RestaurantItem {
     openTime?: string,
     closeTime?: string,
     rating?: number,
+    reviewCount?: number,
     maxReservation: number,
     imgPath: string,
     verified: boolean,
@@ -89,5 +90,26 @@ export interface NotificationItem{
 
 export interface NotificationJson {
     success: boolean,
+    count: number,
     data : NotificationItem[]
+}
+
+export interface ReviewItem {
+  _id: string;
+  rating: number;
+  review: string;
+  customerId: User;
+  restaurantId: RestaurantItem;
+  createdAt: string;
+}
+
+export interface ReviewJson {
+    success: boolean,
+    count: number,
+    data : ReviewItem[]
+}
+
+export interface OneRestaurantJson {
+    success: boolean,
+    data: RestaurantItem
 }
