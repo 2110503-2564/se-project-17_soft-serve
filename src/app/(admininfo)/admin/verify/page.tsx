@@ -1,4 +1,4 @@
-import VerifyCard from "@/components/VerifyCard";
+import VerifyCard from "@/components/AdminVerifyCard";
 
 export default function Verify() {
     return (
