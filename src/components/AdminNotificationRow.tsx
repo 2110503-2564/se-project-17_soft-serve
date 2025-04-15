@@ -1,8 +1,9 @@
 import AdminNotificationBox from "./AdminNotificationBox";
 import AdminNotificationPanel from "./AdminNotificationPanel";
 import getNotifications from "@/libs/getNotifications";
-import { NotificationJson, NotificationItem } from "../../interfaces";
 import getUserProfile from "@/libs/getUserProfile";
+import { redirect } from 'next/navigation';
+import { NotificationJson, NotificationItem } from "../../interfaces";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 
@@ -13,6 +14,10 @@ export default async function AdminNotificationRow() {
 
   const token = session.user.token;
   const user = await getUserProfile(token);
+  if (user.data.role !== 'restaurantManager' && user.data.role !== 'admin') {
+    redirect('/');
+    return null;
+  }
   const notificationJson: NotificationJson = await getNotifications({ token });
 
   return (

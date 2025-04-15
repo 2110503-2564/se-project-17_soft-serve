@@ -33,10 +33,20 @@ export default function CreateNotification() {
             return;
         }
 
-        const apiTargetAudience = 
-            targetAudience === 'customer' ? 'Customers' : 
-            targetAudience === 'manager' ? 'RestaurantManagers' : 'All';
+        let apiTargetAudience: 'Customers' | 'RestaurantManagers' | 'All' | undefined;
+        if (targetAudience === 'customer') {
+            apiTargetAudience = 'Customers';
+        } else if (targetAudience === 'manager') {
+            apiTargetAudience = 'RestaurantManagers';
+        } else if (targetAudience === 'all') {
+            apiTargetAudience = 'All';
+        }
 
+        if (!apiTargetAudience) {
+            setError('Please select a target audience');
+            return;
+        }
+        
         setIsSubmitting(true);
         setError('');
         setSuccess('');
@@ -187,6 +197,21 @@ export default function CreateNotification() {
                             />
                             <label htmlFor="manager" className="ml-2 text-lg text-gray-800">
                                 restaurant managers
+                            </label>
+                        </div>
+                        <div className="flex items-center">
+                            <input 
+                                id="all" 
+                                type="checkbox" 
+                                value="all" 
+                                name="target"
+                                className="w-5 h-5 ml-12 border-gray-300 rounded-xl" 
+                                style={{accentColor:'red'}}
+                                checked={targetAudience === 'all'}
+                                onChange={handleCheckboxChange}
+                            />
+                            <label htmlFor="all" className="ml-2 text-lg text-gray-800">
+                                All
                             </label>
                         </div>
                     </div>
