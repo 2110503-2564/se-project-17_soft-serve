@@ -5,6 +5,7 @@ import getUserProfile from "@/libs/getUserProfile";
 import { OneRestaurantJson, RestaurantItem } from "../../interfaces";
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
 
 export default function EditRestaurantBox({ restaurantId, token }: { restaurantId: string, token: string }) {
   const router = useRouter();
@@ -68,6 +69,15 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
   };
 
   const handleSaveClick = async () => {
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+    if (!timeRegex.test(editOpenTime)) {
+      alert('Open Time must be in the format hh:mm');
+      return;
+    }
+    if (!timeRegex.test(editCloseTime)) {
+      alert('Close Time must be in the format hh:mm');
+      return;
+    }
     const updatedData = {
       description: editDescription,
       foodType: editFoodType,
@@ -77,7 +87,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
       postalcode: editPostalcode,
       tel: editTel,
       openTime: editOpenTime,
-      //closeTime: editCloseTime
+      closeTime: editCloseTime
     } as RestaurantItem;
     try {
       console.log("Updated Data:", updatedData);
@@ -98,6 +108,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         }
       } else {
         const errorData = await response.json();
+        console.error("Backend Error Data:", errorData);
         setError(`Failed to update restaurant: ${errorData.message || response.statusText}`);
       }
     } catch (err) {
@@ -133,7 +144,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
   return (
     <div className="flex flex-col p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto">
       <div className="flex justify-center items-center mt-8 mb-4">
-        <img className="w-[25vw] h-[25vw] rounded-lg" src={restaurant.data.imgPath} alt={restaurant.data.name} />
+        <Image src={restaurant.data.imgPath} alt={restaurant.data.name} width={300} height={300} className="rounded-lg"/>                    
       </div>
       <div className="text-3xl text-center font-bold text-myred my-5">{restaurant.data.name}</div>
       <div className="px-12 py-2">
@@ -273,14 +284,14 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
               Cancel
             </button>
             <button
-              className='block bg-green-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-green-600 hover:border hover:border-green-600'
+              className='block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'
               onClick={handleSaveClick}>
               Save
             </button>
           </>
         ) : (
-          <button className='block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
-            Confirm and Submit
+          <button onClick={handleEditClick} className='block bg-gray-400 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+            Edit
           </button>
         )}
       </div>
