@@ -12,7 +12,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
   useEffect(() => {
     const fetchProfile = async () => {
       const user = await getUserProfile(token);
-      if (user.data.role !== 'admin') {
+      if (user.data.role !== 'restaurantManager' && user.data.role !== 'admin') {
         router.push('/');
       }
     }
