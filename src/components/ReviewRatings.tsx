@@ -5,18 +5,18 @@ import { ChangeEvent, useState } from 'react';
 
 interface RateProps {
     ratingName: string;
-    onCompare: (ratingName: string, rating: number) => void;
-    initialRating?: number;  
+    onCompare: (ratingName: string, rating: number | null) => void;
+    initialRating: number | null;
 }
 
-export default function ReviewRating({ ratingName, onCompare, initialRating = 0 }: RateProps) {
+export default function ReviewRating({ ratingName, onCompare, initialRating = null }: RateProps) {
     const [value, setValue] = useState<number | null>(initialRating);
 
     const handleRatingChange = (event: ChangeEvent<{}>, newValue: number | null) => {
         setValue(newValue);
-        if (newValue !== null) {
+        //if (newValue !== null) {
             onCompare(ratingName, newValue);
-        }
+        //}
     };
 
     return (
@@ -33,7 +33,7 @@ export default function ReviewRating({ ratingName, onCompare, initialRating = 0 
                         color: '#FFDD00', // Filled star color
                     },
                     '& .MuiRating-iconEmpty': {
-                        color: 'lightgray', // Empty star color (optional)
+                        color: '#b0b0b0', // Empty star color (optional)
                     },
                 }}
             />

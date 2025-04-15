@@ -16,7 +16,7 @@ export default function OverallRating({ value }: { value : number}) {
                         color: '#FFDD00', // Filled star color
                     },
                     '& .MuiRating-iconEmpty': {
-                        color: 'lightgray', // Empty star color (optional)
+                        color: '#b0b0b0', // Empty star color (optional)
                     },
                 }}
             />

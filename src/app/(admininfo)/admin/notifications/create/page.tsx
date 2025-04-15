@@ -46,7 +46,7 @@ export default function CreateNotification() {
             setError('Please select a target audience');
             return;
         }
-        
+
         setIsSubmitting(true);
         setError('');
         setSuccess('');
@@ -181,7 +181,7 @@ export default function CreateNotification() {
                                 onChange={handleCheckboxChange}
                             />
                             <label htmlFor="customer" className="ml-2 text-lg text-gray-800">
-                                customers
+                                Customers
                             </label>
                         </div>
                         <div className="flex items-center">
@@ -196,7 +196,7 @@ export default function CreateNotification() {
                                 onChange={handleCheckboxChange}
                             />
                             <label htmlFor="manager" className="ml-2 text-lg text-gray-800">
-                                restaurant managers
+                                Restaurant managers
                             </label>
                         </div>
                         <div className="flex items-center">

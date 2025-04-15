@@ -18,7 +18,6 @@ export default function ReviewBox({
   rating: number;
 }) {
   const { data: session } = useSession();
-  
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -51,7 +50,9 @@ export default function ReviewBox({
       autoComplete="off"
     >
       <div>
-        <div className="text-xl font-bold scale-150">Review</div>
+        <div className="text-[26px] font-bold">
+          Review
+        </div>
         <TextField
           id="outlined-multiline-static"
           multiline
@@ -59,10 +60,9 @@ export default function ReviewBox({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={`How was your dining experience?\nTell us what you loved (or didn’t)!`}
+          className="w-full px-2 py-2 bg-white border border-gray-300 rounded-xl focus:border-red-500 sm:text-sm"
         />
       </div>
-
-    
     </Box>
   );
 }
