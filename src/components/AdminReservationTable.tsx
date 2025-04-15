@@ -16,7 +16,6 @@ export default async function AdminReservationTable() {
 
     if (user.data.role !== 'admin') {
         redirect('/');
-        return null;
     }
 
     const reservationJson: ReservationJson = await getReservations({ token });

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ export default function Verify() {
         const checkAdmin = async () => {
             if (!session || !session.user?.token) {
                 setIsAdmin(false);
+                router.push('/');
                 return;
             }
 

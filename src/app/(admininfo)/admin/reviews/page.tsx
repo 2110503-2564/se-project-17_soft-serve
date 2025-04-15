@@ -9,14 +9,13 @@ import AdminReviewsFilter from "@/components/AdminReviewsFilter";
 export default async function AdminReviewsDashboard() {
     const session = await getServerSession(authOptions);
     
-    if (!session || !session.user || !session.user.token) return null;
+    if (!session || !session.user || !session.user.token) redirect('/');
 
     const token = session.user.token;
     const user = await getUserProfile(token);
 
     if (user.data.role !== 'admin') {
         redirect('/');
-        return null;
     }
 
     return (

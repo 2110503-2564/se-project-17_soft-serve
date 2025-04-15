@@ -90,6 +90,7 @@ export default function CreateNotification() {
         const checkAdmin = async () => {
             if (!session || !session.user?.token) {
                 setIsAdmin(false);
+                router.push('/');
                 return;
             }
 

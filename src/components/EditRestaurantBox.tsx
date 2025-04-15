@@ -290,7 +290,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
             </button>
           </>
         ) : (
-          <button onClick={handleEditClick} className='block bg-gray-400 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+          <button onClick={handleEditClick} className='block bg-[#838383] border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
             Edit
           </button>
         )}

@@ -7,12 +7,12 @@ import getUserProfile from "@/libs/getUserProfile";
 
 export default async function RestaurantsList() {
     const session = await getServerSession(authOptions);
-    console.log('session', session);
+    //console.log('session', session);
     if (!session || !session.user || !session.user.token) redirect('/');
     
     const token = session.user.token;
     const user = await getUserProfile(token);
-    console.log('role', user.data.role);
+    //console.log('role', user.data.role);
     if (user.data.role !== 'admin') {
         redirect('/');
     }
