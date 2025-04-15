@@ -9,6 +9,14 @@ import getRestaurants from "@/libs/getRestaurants";
 import verifyRestaurant from "@/libs/verifyRestaurant";
 import getAllRestaurantManagers from '@/libs/getAllRestaurantManagers';
 
+import { StarIcon } from '@heroicons/react/20/solid'
+import { ClockIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon } from '@heroicons/react/24/outline'
+import { PhoneIcon } from '@heroicons/react/24/outline'
+import { EnvelopeIcon } from '@heroicons/react/24/outline'
+import { CalendarIcon } from '@heroicons/react/24/outline'
+
+
 import { User, RestaurantItem } from "@../../../interfaces";
 
 export default function VerifyCard() {
@@ -121,9 +129,19 @@ export default function VerifyCard() {
                                     </div>
                                 </div>
                                 <div className="pt-2 pb-2">
-                                    <div>Tel: {userItem.tel}</div>
-                                    <div>Email: {userItem.email}</div>
-                                    <div>createdAt: {new Date(userItem.createdAt).toLocaleDateString()}</div>
+                                    <div className='flex'>
+                                        <PhoneIcon className="h-5 w-5 mr-3 mt-0.5"/>
+                                        {userItem.tel}
+                                    </div>
+                                    
+                                    <div className='flex'>
+                                        <EnvelopeIcon className="h-5 w-5 mr-3 mt-0.5"/>
+                                        {userItem.email}
+                                    </div>
+                                    <div className='flex'>
+                                        <CalendarIcon className="h-5 w-5 mr-3 mt-0.5"/>
+                                        {new Date(userItem.createdAt).toLocaleDateString()}
+                                    </div>
                                 </div>
                             </div>
 
@@ -148,17 +166,27 @@ export default function VerifyCard() {
                                             <div className="text-3xl font-bold">{matchedRestaurant.name}</div>
                                         </div>
 
-                                        <div className="pt-2 pb-2">
-                                            {matchedRestaurant.address}, {matchedRestaurant.province}, {matchedRestaurant.district}, {matchedRestaurant.postalcode}
+                                        <div className='flex'>
+                                            <MapPinIcon className="h-5 w-5 mr-3 mt-2.5"/>
+                                            <div className="pt-2 pb-2">
+                                                {matchedRestaurant.address}, {matchedRestaurant.province}, {matchedRestaurant.district}, {matchedRestaurant.postalcode}
+                                            </div>    
                                         </div>
+                                        
                                         <div className="text-xl font-bold">About the restaurant</div>
                                         <div className="pt-2 pb-2">{matchedRestaurant.description}</div>
                                         <div className="font-semibold">
                                             Food Type |
                                             <span className="font-normal ml-1">{matchedRestaurant.foodType}</span>
                                         </div>
-                                        <div>{matchedRestaurant.openTime} - {matchedRestaurant.closeTime}</div>
-                                        <div>{matchedRestaurant.tel}</div>
+                                        <div className='flex'>
+                                            <ClockIcon className="h-5 w-5 mr-3 mt-0.5"/>
+                                            {matchedRestaurant.openTime} - {matchedRestaurant.closeTime}
+                                        </div>
+                                        <div className='flex'>
+                                            <PhoneIcon className="h-5 w-5 mr-3 mt-0.5"/>
+                                            {matchedRestaurant.tel}
+                                        </div>
                                     </div>
                                 </div>
                             )}
