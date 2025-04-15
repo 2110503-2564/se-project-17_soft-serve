@@ -11,6 +11,15 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
     const [isDeleting, setIsDeleting] = useState(false);
 
     if(isDeleting) return null;
+
+    const handleEditReservation = async () => {
+        if (!session || !session.user.token) return;
+        try {
+            router.push(`/restaurants/edit/${restaurantItem.id}`);
+        } catch (error) {
+            console.error('Failed to edit restaurant:', error);
+        }
+    }
     
     const handleCancelReservation = async () => {
         if (!session || !session.user.token) return;
@@ -34,7 +43,8 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
             <td className="border border-gray-300 px-8 py-2 text-gray-800">{restaurantItem.name}</td>
             <td className="border border-gray-300 px-4 py-2 text-gray-800 text-center">
                 {restaurantItem.verified === true && (
-                <button className="bg-[#838383] w-[100px] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-[#707070]">
+                <button className="bg-[#838383] w-[100px] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-[#707070]"
+                    onClick={handleEditReservation}>
                     Edit
                 </button>
                 )}
