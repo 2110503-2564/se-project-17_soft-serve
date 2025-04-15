@@ -1,116 +1,289 @@
 'use client'
 import { useState, useEffect } from "react";
-import Image from "next/image"
 import getRestaurant from "@/libs/getRestaurant";
-import { RestaurantItem } from '../../interfaces';
+import getUserProfile from "@/libs/getUserProfile";
+import { OneRestaurantJson, RestaurantItem } from "../../interfaces";
 import { PencilIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation';
 
-export default function EditRestaurantBox({/*{ restaurantId, token }: { restaurantId: string, token: string }*/}) {
-    
-    const mockRestaurantData: RestaurantItem = {
-      _id: "a1b2c3d4e5f67890",
-      name: "The Spicy Spoon",
-      description: "Authentic Thai cuisine with a modern twist.",
-      foodType: "Thai",
-      address: "123 Sukhumvit Road",
-      province: "Bangkok",
-      district: "Wattana",
-      postalcode: "10110",
-      tel: "02-XXX-XXXX",
-      openTime: "11:00",
-      closeTime: "22:00",
-      rating: 4.5,
-      maxReservation: 20,
-      imgPath: '/img/tomyum_seafood.jpg',
-      id: "a1b2c3d4e5f67890",
-      verified: true,
-      reviewCount: 100,
-    };
-    const { imgPath, name, address, province, district, postalcode, description, foodType, openTime, closeTime, tel } = mockRestaurantData;
-
-    return (
-        <div className="flex flex-col p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto">
-          <div className="flex justify-center items-center mt-8 mb-4">
-            <img className="w-[25vw] h-[25vw] rounded-lg" src={imgPath} alt={name}/>
-          </div>
-          <div className="text-3xl text-center font-bold text-myred my-5">{name}</div>
-            <div className="px-12 py-2">
-              {/*Address*/}
-              <div className="font-semibold text-myred text-xl mb-2">
-                Address:
-              </div>
-              <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
-                <span>{address}, {district}, {province}, Thailand {postalcode}</span>
-                <PencilIcon className="h-5 w-5 mr-2 cursor-pointer"/>
-              </div>  
-              {/*Description*/}
-              <div className="font-semibold text-myred text-xl mt-5 mb-2">
-              Description:
-              </div>
-              <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
-                <span>{description}</span>
-                <PencilIcon className="h-5 w-5 mr-2 cursor-pointer"/>
-              </div>  
-              {/*Food Type*/}
-              <div className="font-semibold text-myred text-xl mt-5 mb-2">
-                Food Type:
-              </div>
-              <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
-                <span>{foodType}</span>
-                <PencilIcon className="h-5 w-5 mr-2 cursor-pointer"/>
-              </div>  
-              {/*Opening Hours*/}
-              <div className="font-semibold text-myred text-xl mt-5 mb-2">
-                Opening Hours:
-              </div>
-              <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
-                <span>{openTime} - {closeTime}</span>
-                <PencilIcon className="h-5 w-5 mr-2 cursor-pointer"/>
-              </div>  
-              {/*Tel*/}
-              <div className="font-semibold text-myred text-xl mt-5 mb-2">
-                Tel:
-              </div>
-              <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
-                <span>{tel}</span>
-                <PencilIcon className="h-5 w-5 mr-2"/>
-              </div>  
-            </div>
-            {/*Submit Button*/}
-            <div className="flex justify-center">
-              <button className='block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
-                  Confirm and Submit
-              </button>
-            </div>
-        </div>
-    );
-}
-
-/*
 export default function EditRestaurantBox({ restaurantId, token }: { restaurantId: string, token: string }) {
-    const [reservation, setReservation] = useState<OneReservationJson | null>(null);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = await getUserProfile(token);
+      if (user.data.role !== 'admin') {
+        router.push('/');
+      }
+    }
+    fetchProfile();
+  }, [token, router]);
 
-    useEffect(() => {
-        const fetchReservation = async () => {
-            try {
-                const fetchedReservation : OneReservationJson = await getReservation({ id: reservationId, token: token });
-                // console.log(fetchedReservation);
-                setReservation(fetchedReservation);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchReservation();
-    }, [restaurantId, token]);
+  const [restaurant, setRestaurant] = useState<OneRestaurantJson | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    if (!reservation || !reservation.data) return;
-    const restaurant = reservation.data.restaurant;
-    // console.log(restaurant);
-    return (
-        <main>
-            <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-6 py-6">
-                
-            </div>
-        </main>
-    );
-}*/
+  const [isEditing, setIsEditing] = useState(false);
+  const [editAddress, setEditAddress] = useState('');
+  const [editDistrict, setEditDistrict] = useState('');
+  const [editProvince, setEditProvince] = useState('');
+  const [editPostalcode, setEditPostalcode] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editFoodType, setEditFoodType] = useState('');
+  const [editOpenTime, setEditOpenTime] = useState('');
+  const [editCloseTime, setEditCloseTime] = useState('');
+  const [editTel, setEditTel] = useState('');
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      if (restaurantId) {
+        try {
+          const fetchedRestaurant = await getRestaurant(restaurantId.toString());
+          if (fetchedRestaurant) {
+            setRestaurant(fetchedRestaurant);
+            // Initialize edit states with current data
+            setEditAddress(fetchedRestaurant.data.address);
+            setEditDistrict(fetchedRestaurant.data.district);
+            setEditProvince(fetchedRestaurant.data.province);
+            setEditPostalcode(fetchedRestaurant.data.postalcode);
+            setEditDescription(fetchedRestaurant.data.description);
+            setEditFoodType(fetchedRestaurant.data.foodType);
+            setEditOpenTime(fetchedRestaurant.data.openTime);
+            setEditCloseTime(fetchedRestaurant.data.closeTime);
+            setEditTel(fetchedRestaurant.data.tel);
+          } else {
+            setError("Restaurant not found");
+          }
+        } catch (err) {
+          setError("Failed to load restaurant data");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchRestaurant();
+  }, [restaurantId]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = async () => {
+    const updatedData = {
+      description: editDescription,
+      foodType: editFoodType,
+      address: editAddress,
+      province: editProvince,
+      district: editDistrict,
+      postalcode: editPostalcode,
+      tel: editTel,
+      openTime: editOpenTime,
+      //closeTime: editCloseTime
+    } as RestaurantItem;
+    try {
+      console.log("Updated Data:", updatedData);
+      const response = await fetch(process.env.BACKEND_URL+`api/v1/restaurants/${restaurantId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+      if (response.ok) {
+        if (restaurant?.data) {
+          const updatedRestaurant = { ...restaurant, data: { ...restaurant.data, ...updatedData } };
+          setRestaurant(updatedRestaurant as OneRestaurantJson);
+          setIsEditing(false);
+          alert('Restaurant updated successfully!');
+        }
+      } else {
+        const errorData = await response.json();
+        setError(`Failed to update restaurant: ${errorData.message || response.statusText}`);
+      }
+    } catch (err) {
+      setError("Failed to update restaurant");
+      console.error("Update error:", err);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    if (restaurant && restaurant.data) {
+      setEditAddress(restaurant.data.address || '');
+      setEditDistrict(restaurant.data.district || '');
+      setEditProvince(restaurant.data.province || '');
+      setEditPostalcode(restaurant.data.postalcode || '');
+      setEditDescription(restaurant.data.description || '');
+      setEditFoodType(restaurant.data.foodType || '');
+      setEditOpenTime(restaurant.data.openTime || '');
+      setEditCloseTime(restaurant.data.closeTime || '');
+      setEditTel(restaurant.data.tel || '');
+    }
+  };
+  if (loading) {
+    return <div className="m-5 text-white text-xl">Loading Restaurant...</div>;
+  }
+  if (error) {
+    return <div className="m-5 text-white text-xl">{error}</div>;
+  }
+  if (!restaurant || !restaurant.data) {
+    return <div className="m-5 text-white text-xl">Invalid Restaurant ID</div>;
+  }
+
+  return (
+    <div className="flex flex-col p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto">
+      <div className="flex justify-center items-center mt-8 mb-4">
+        <img className="w-[25vw] h-[25vw] rounded-lg" src={restaurant.data.imgPath} alt={restaurant.data.name} />
+      </div>
+      <div className="text-3xl text-center font-bold text-myred my-5">{restaurant.data.name}</div>
+      <div className="px-12 py-2">
+        {/*Address*/}
+        <div className="font-semibold text-myred text-xl mb-2">
+          Address
+        </div>
+        <div className="text-gray-700 border-b border-gray-300">
+          {isEditing ? (
+          <div className="flex flex-col gap-2 p-1">
+          <label htmlFor="editAddress" className="text-sm text-gray-600">Address:</label>
+          <input
+            type="text"
+            id="editAddress"
+            className="w-full p-1 border border-gray-300 rounded"
+            value={editAddress}
+            onChange={(e) => setEditAddress(e.target.value)}
+          />
+          <label htmlFor="editDistrict" className="text-sm text-gray-600">District:</label>
+          <input
+            type="text"
+            id="editDistrict"
+            className="w-full p-1 border border-gray-300 rounded"
+            value={editDistrict}
+            onChange={(e) => setEditDistrict(e.target.value)}
+          />
+          <label htmlFor="editProvince" className="text-sm text-gray-600">Province:</label>
+          <input
+            type="text"
+            id="editProvince"
+            className="w-full p-1 border border-gray-300 rounded"
+            value={editProvince}
+            onChange={(e) => setEditProvince(e.target.value)}
+          />
+          <label htmlFor="editPostalcode" className="text-sm text-gray-600">Postal Code:</label>
+          <input
+            type="text"
+            id="editPostalcode"
+            className="w-full p-1 border border-gray-300 rounded"
+            value={editPostalcode}
+            onChange={(e) => setEditPostalcode(e.target.value)}
+          />
+        </div>
+      ) : (
+      <div className="flex justify-between items-center p-1">
+        <span>{restaurant.data.address}, {restaurant.data.district}, {restaurant.data.province}, Thailand {restaurant.data.postalcode}</span>
+        <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />
+      </div>
+      )}
+      </div>
+        {/*Description*/}
+        <div className="font-semibold text-myred text-xl mt-5 mb-2">
+          Description
+        </div>
+        <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
+          {isEditing ? (
+            <textarea
+              className="w-full p-1"
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+            />
+          ) : (
+            <span>{restaurant.data.description}</span>
+          )}
+          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+        </div>
+        {/*Food Type*/}
+        <div className="font-semibold text-myred text-xl mt-5 mb-2">
+          Food Type
+        </div>
+        <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
+          {isEditing ? (
+            <input
+              type="text"
+              className="w-full p-1"
+              value={editFoodType}
+              onChange={(e) => setEditFoodType(e.target.value)}
+            />
+          ) : (
+            <span>{restaurant.data.foodType}</span>
+          )}
+          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+        </div>
+        {/*Opening Hours*/}
+        <div className="font-semibold text-myred text-xl mt-5 mb-2">
+          Opening Hours
+        </div>
+        <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                className="w-1/2 p-1"
+                placeholder="Open Time"
+                value={editOpenTime}
+                onChange={(e) => setEditOpenTime(e.target.value)}
+              />
+              <span className="mx-2">-</span>
+              <input
+                type="text"
+                className="w-1/2 p-1"
+                placeholder="Close Time"
+                value={editCloseTime}
+                onChange={(e) => setEditCloseTime(e.target.value)}
+              />
+            </>
+          ) : (
+            <span>{restaurant.data.openTime} - {restaurant.data.closeTime}</span>
+          )}
+          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+        </div>
+        {/*Tel*/}
+        <div className="font-semibold text-myred text-xl mt-5 mb-2">
+          Tel
+        </div>
+        <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
+          {isEditing ? (
+            <input
+              type="text"
+              className="w-full p-1"
+              value={editTel}
+              onChange={(e) => setEditTel(e.target.value)}
+            />
+          ) : (
+            <span>{restaurant.data.tel}</span>
+          )}
+          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+        </div>
+      </div>
+      {/*Submit/Cancel Buttons*/}
+      <div className="flex justify-center">
+        {isEditing ? (
+          <>
+            <button
+              className='block bg-gray-400 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-gray-400 hover:border hover:border-gray-400'
+              onClick={handleCancelClick}>
+              Cancel
+            </button>
+            <button
+              className='block bg-green-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-green-600 hover:border hover:border-green-600'
+              onClick={handleSaveClick}>
+              Save
+            </button>
+          </>
+        ) : (
+          <button className='block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+            Confirm and Submit
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
