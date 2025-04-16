@@ -52,7 +52,7 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
                     Edit
                 </button>
                 ) : (
-                <button className="bg-[#FF3300] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#DD3300]"
+                <button className="bg-[#00C642] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#7AF1A2]"
                     onClick={handleVerifyReservation}>
                     Verify
                 </button>
@@ -60,7 +60,7 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
             </td>
             <td className="border border-gray-300 px-4 py-2 text-gray-800 text-center">
                 {restaurantItem.verified === true && (
-                <button className="bg-myred w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-red-700"
+                <button className="bg-myred w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#F97F7F]"
                     onClick={handleCancelReservation}>
                     Delete
                 </button>
