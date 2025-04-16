@@ -26,6 +26,9 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
       };
     
     const handleCancelReservation = async () => {
+        const confirmed = window.confirm("Are you sure you want to DELETE the restaurant?");
+        if (!confirmed) return;
+
         if (!session || !session.user.token) return;
         setIsDeleting(true);
         try {
