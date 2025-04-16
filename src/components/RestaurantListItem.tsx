@@ -16,7 +16,7 @@ export default function RestaurantListItem({ restaurantItem }: { restaurantItem:
                 <div>Food Type | {restaurantItem.foodType}</div>
                 <div className="flex items-center">
                     <Image className="mr-2" src="/icons/star_icon.png" alt="Star Icon" width={20} height={20} />
-                    {restaurantItem.rating} • {restaurantItem.province}
+                    {restaurantItem.ratingrating} • {restaurantItem.province}
                 </div>
                 <div className="flex items-center">
                     <Image className="mr-2" src="/icons/clock_icon.png" alt="Clock Icon" width={18} height={18} />

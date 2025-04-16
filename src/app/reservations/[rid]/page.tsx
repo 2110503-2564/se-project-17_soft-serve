@@ -65,7 +65,7 @@ export default function Reservation() {
                         {restaurantDetail.name}
                         <StarIcon className="h-6 w-6 text-yellow-400 mt-0.5 ml-2"/>
                         <span className="font-normal text-2xl mt-2 ml-1.5">
-                            {restaurantDetail.rating}
+                            {restaurantDetail.ratingrating}
                         </span>
                     </div>
                     <div className="text-lg pt-2 flex"

@@ -1,13 +1,12 @@
-import React from 'react';
-
 interface StarRatingProps {
   rating: number;
   maxStars?: number;
+  showRatingNumber?: boolean;
 }
 
-export default function StarRating({ rating, maxStars = 5 }: StarRatingProps) {
+export default function StarRating({ rating, maxStars = 5, showRatingNumber = true }: StarRatingProps) {
   return (
-    <div className="flex">
+    <div className="flex items-center">
       {[...Array(maxStars)].map((_, i) => (
         <span key={i} className="text-xl">
           {i < Math.floor(rating) ? (
@@ -19,7 +18,9 @@ export default function StarRating({ rating, maxStars = 5 }: StarRatingProps) {
           )}
         </span>
       ))}
-      <span className="ml-1 text-sm text-gray-600">({rating.toFixed(1)})</span>
+      {showRatingNumber && (
+        <span className="ml-1 text-sm text-gray-600">({rating.toFixed(1)})</span>
+      )}
     </div>
   );
 }

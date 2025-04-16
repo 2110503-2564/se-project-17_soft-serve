@@ -10,7 +10,7 @@ export interface RestaurantItem {
     tel?: string,
     openTime?: string,
     closeTime?: string,
-    rating?: number,
+    ratingrating?: number,
     reviewCount?: number,
     maxReservation: number,
     imgPath: string,
