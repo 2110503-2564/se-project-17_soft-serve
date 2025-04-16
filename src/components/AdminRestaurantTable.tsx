@@ -20,32 +20,39 @@ export default function AdminRestaurantTable() {
                 setIsLoading(false);
                 return;
             }
-
+    
             try {
                 setIsLoading(true);
                 const apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants`;
-
+    
                 const response = await fetch(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${session.user.token}`,
                     },
                 });
-
+    
                 const data = await response.json();
-
+    
                 if (!response.ok) {
                     throw new Error(data.message || 'Failed to fetch restaurants data.');
                 }
-
+    
                 let formattedData = Array.isArray(data.data) ? data.data : [data.data];
-
+    
                 const restaurantParam = searchParams.get('restaurant');
                 if (restaurantParam) {
                     formattedData = formattedData.filter((item: RestaurantItem) =>
                         item.name.toLowerCase().includes(restaurantParam.toLowerCase())
                     );
                 }
-
+    
+                const statusParam = searchParams.get('status');
+                if (statusParam) {
+                    formattedData = formattedData.filter((item: RestaurantItem) =>
+                        item.verified.toString() === statusParam // Use 'true'/'false' for Approved/Pending
+                    );
+                }
+    
                 setRestaurants(formattedData);
             } catch (err: any) {
                 setError(`Error fetching restaurants: ${err.message}`);
@@ -54,9 +61,10 @@ export default function AdminRestaurantTable() {
                 setIsLoading(false);
             }
         };
-
+    
         fetchRestaurantsData();
     }, [session, searchParams]);
+    
 
     if (isLoading) {
         return <div className='text-lg text-white m-10'>Loading restaurants...</div>;
