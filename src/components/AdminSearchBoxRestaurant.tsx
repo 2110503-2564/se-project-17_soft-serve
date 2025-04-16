@@ -14,6 +14,11 @@ export default function AdminSearchBox({token}: {token: string}) {
     const searchParams = useSearchParams();
     
     useEffect(() => {
+        // Set initial values from URL params
+        const restaurantParam = searchParams.get('restaurant') || "";
+        setSelectedRestaurant(restaurantParam);
+
+        // Fetch restaurants for filter
         const fetchRestaurants = async () => {
         const restaurantJson = await getRestaurants();
         const names = restaurantJson.data.map((restaurant: any) => restaurant.name);
@@ -21,12 +26,17 @@ export default function AdminSearchBox({token}: {token: string}) {
         setRestaurantNames(sortedNames);
         };
         fetchRestaurants();
-    }, []);
+    }, [searchParams]);
 
     const handleSearch = () => {
         const params = new URLSearchParams();
         if (selectedRestaurant) params.set('restaurant', selectedRestaurant);
-        router.push(`/admin?${params.toString()}`);
+        router.push(`/admin/restaurants?${params.toString()}`);
+    };
+
+    const handleClearFilters = () => {
+        setSelectedRestaurant("");
+        router.push('/admin/restaurants');
     };
 
     return (
@@ -41,7 +51,7 @@ export default function AdminSearchBox({token}: {token: string}) {
                         options={restaurantNames}
                         value={selectedRestaurant}
                         onChange={(_, value) => setSelectedRestaurant(value || "")}
-                        renderInput={(params) => (<TextField {...params} required />)}
+                        renderInput={(params) => (<TextField {...params} placeholder="All restaurants" />)}
                         sx={{
                             flex: 1,
                             '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
@@ -52,9 +62,23 @@ export default function AdminSearchBox({token}: {token: string}) {
                             },
                         }}/>
                 </div>
-                <button onClick={handleSearch}className="bg-myred text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700">
+                {/* <button onClick={handleSearch}className="bg-myred text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700">
                     Search
-                </button>
+                </button> */}
+                <div className="flex gap-4">
+                    <button
+                    onClick={handleSearch}
+                    className="bg-[#D40303] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700"
+                    >
+                    Search
+                    </button>
+                    <button
+                    onClick={handleClearFilters}
+                    className="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded shadow-lg hover:bg-gray-300"
+                    >
+                    Clear
+                    </button>
+                </div>
             </Stack>
         </main>
     );
