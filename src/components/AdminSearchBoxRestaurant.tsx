@@ -11,7 +11,6 @@ export default function AdminSearchBox({token}: {token: string}) {
     const router = useRouter();
     const [restaurantNames, setRestaurantNames] = useState<string[]>([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
     const searchParams = useSearchParams();
     
     useEffect(() => {
@@ -27,7 +26,6 @@ export default function AdminSearchBox({token}: {token: string}) {
     const handleSearch = () => {
         const params = new URLSearchParams();
         if (selectedRestaurant) params.set('restaurant', selectedRestaurant);
-        if (selectedDate) params.set('date', selectedDate);
         router.push(`/admin?${params.toString()}`);
     };
 

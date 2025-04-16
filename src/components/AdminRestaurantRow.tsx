@@ -32,15 +32,15 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
         }
     }
     
-    const statusColor = restaurantItem.verified === true ? 'text-orange-600' :
-        (restaurantItem.verified === false ? 'text-green-700' : 'text-gray-800');
+    const statusColor = restaurantItem.verified === true ? 'text-[#009900]' :
+        (restaurantItem.verified === false ? 'text-[#FF3300]' : 'text-gray-800');
     
     return (
         <tr key={restaurantItem.id} className="border-t border-gray-300">
+            <td className={`border border-gray-300 px-4 py-2 text-gray-800 text-center font-medium ${statusColor}`}>{restaurantItem.verified ? 'Approved' : 'Pending'}</td>
             <td className="border border-gray-300 px-2 py-2 text-gray-800 text-center">{restaurantItem.id}</td>
-            <td className={`border border-gray-300 px-4 py-2 text-gray-800 text-center font-medium  ${statusColor}`}>{restaurantItem.verified ? 'Approved' : 'Pending'}</td>
             <td className="border border-gray-300 px-10 py-2 text-gray-800">{restaurantItem.name}</td>
-            <td className="border border-gray-300 px-8 py-2 text-gray-800">{restaurantItem.name}</td>
+            <td className="border border-gray-300 px-8 py-2 text-gray-800">{restaurantItem.tel}</td>
             <td className="border border-gray-300 px-4 py-2 text-gray-800 text-center">
                 {restaurantItem.verified === true && (
                 <button className="bg-[#838383] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#707070]"

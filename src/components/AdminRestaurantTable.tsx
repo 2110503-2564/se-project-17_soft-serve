@@ -41,10 +41,10 @@ export default function AdminRestaurantTable() {
                 <table className="w-full border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-gray-100 text-gray-800">
-                        <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Manager Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Status</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Restaurant Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Name</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Email</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Tel</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Delete</th>
                         </tr>

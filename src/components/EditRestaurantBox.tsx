@@ -105,6 +105,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
           setRestaurant(updatedRestaurant as OneRestaurantJson);
           setIsEditing(false);
           alert('Restaurant updated successfully!');
+          router.push('/admin/restaurants');
         }
       } else {
         const errorData = await response.json();
