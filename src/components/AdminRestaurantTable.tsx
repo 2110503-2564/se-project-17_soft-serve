@@ -45,7 +45,7 @@ export default function AdminRestaurantTable() {
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Restaurant Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Name</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Tel</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit / Verify</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Delete</th>
                         </tr>
                     </thead>
