@@ -26,6 +26,9 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
       };
     
     const handleCancelReservation = async () => {
+        const confirmed = window.confirm("Are you sure you want to DELETE the restaurant?");
+        if (!confirmed) return;
+
         if (!session || !session.user.token) return;
         setIsDeleting(true);
         try {
@@ -52,7 +55,7 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
                     Edit
                 </button>
                 ) : (
-                <button className="bg-[#00C642] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#7AF1A2]"
+                <button className="bg-[#F4D400] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#FFEF89]"
                     onClick={handleVerifyReservation}>
                     Verify
                 </button>
