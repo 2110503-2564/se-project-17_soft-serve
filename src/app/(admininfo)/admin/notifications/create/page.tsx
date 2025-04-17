@@ -7,6 +7,34 @@ import getUserProfile from '@/libs/getUserProfile';
 export default function CreateNotification() {
     const router = useRouter();
     const { data: session } = useSession();
+
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    useEffect(() => {
+        const checkAdmin = async () => {
+            if (!session || !session.user?.token) {
+                setIsAdmin(false);
+                router.push('/');
+                return;
+            }
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                const isUserAdmin = userProfile.data.role === 'admin';
+                setIsAdmin(isUserAdmin);
+                // redirect only after role is known
+                if (!isUserAdmin) {
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAdmin(false);
+                router.push('/');
+            }
+        };
+        checkAdmin();
+    }, [session, router]);
+
+    if (isAdmin === null) return <div>Loading...</div>;
+    if (!isAdmin) return null; // wait for router.push to trigger
     
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
@@ -83,40 +111,6 @@ export default function CreateNotification() {
             setIsSubmitting(false);
         }
     }
-
-    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-    
-    useEffect(() => {
-        const checkAdmin = async () => {
-            if (!session || !session.user?.token) {
-                setIsAdmin(false);
-                router.push('/');
-                return;
-            }
-
-            try {
-                const userProfile = await getUserProfile(session.user.token);
-                const isUserAdmin = userProfile.data.role === 'admin';
-                setIsAdmin(isUserAdmin);
-
-                // ❗ redirect only after role is known
-                if (!isUserAdmin) {
-                    router.push('/');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user profile:", error);
-                setIsAdmin(false);
-                router.push('/');
-            }
-        };
-
-        checkAdmin();
-    }, [session, router]);
-
-    if (isAdmin === null) return <div>Loading...</div>;
-
-    if (!isAdmin) return null; // wait for router.push to trigger
-
 
     return (
         <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 overflow-auto">

@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { redirect } from 'next/navigation';
+import getUserProfile from '@/libs/getUserProfile';
 
 // Reducer for ratings
 const ratingReducer = (
@@ -32,6 +33,35 @@ export default function RatingDetailPage() {
     if (!session || !session.user || !session.user.token) {
         redirect('/');
     }
+
+    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    useEffect(() => {
+        const checkRole = async () => {
+            if (!session || !session.user?.token) {
+                redirect('/');
+            }
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
+                    setIsAuthorized(true);
+                } else {
+                    redirect('/');
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAuthorized(false);
+                redirect('/');
+            } finally {
+                setIsLoadingRoleCheck(false);
+            }
+        };
+        checkRole();
+    }, [session]);
+    if (isLoadingRoleCheck) return <div>Loading...</div>; // Or a spinner
+    if (isAuthorized === null) return <div>Loading...</div>;
+    if (!isAuthorized) return null; // wait for router.push to trigger
+
     const token = session.user.token;
 
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
@@ -96,7 +126,7 @@ export default function RatingDetailPage() {
             });
 
             alert(`Review submitted successfully!\nOverall Rating: ${res.data.rating}/5`);
-            router.push("/");
+            router.push("/restaurants");
         } catch (error: any) {
             alert(`Error submitting review: ${error.message}`);
         }

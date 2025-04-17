@@ -18,13 +18,11 @@ export default function Verify() {
                 router.push('/');
                 return;
             }
-
             try {
                 const userProfile = await getUserProfile(session.user.token);
                 const isUserAdmin = userProfile.data.role === 'admin';
                 setIsAdmin(isUserAdmin);
-
-                // ❗ redirect only after role is known
+                // redirect only after role is known
                 if (!isUserAdmin) {
                     router.push('/');
                 }
@@ -34,12 +32,10 @@ export default function Verify() {
                 router.push('/');
             }
         };
-
         checkAdmin();
     }, [session, router]);
 
     if (isAdmin === null) return <div>Loading...</div>;
-
     if (!isAdmin) return null; // wait for router.push to trigger
 
     return (
