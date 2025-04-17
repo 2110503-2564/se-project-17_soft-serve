@@ -14,6 +14,8 @@ export default function AdminNotificationBox({notificationItem}: { notificationI
   if (isDeleting) return null;
 
   const handleDeleteClick = async () => {
+    const confirmed = window.confirm("Are you sure you want to DELETE this notification?");
+    if (!confirmed) return;
     if (!session) return;
     setIsDeleting(true);
     try {
