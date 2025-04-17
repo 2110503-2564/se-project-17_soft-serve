@@ -12,7 +12,13 @@ export default function RestaurantListItem({ restaurantItem }: { restaurantItem:
                 </Link>
             </div>
             <div className="ml-10 font-bold font-inter text-[18px] flex flex-col justify-center text-gray-600">
-                <div className="font-bold text-[36px] text-black">{restaurantItem.name}</div>
+                <div className="flex">
+                <div className="font-bold text-[36px] text-black">{restaurantItem.name}</div>   
+                <Link href={`/rating/${restaurantItem._id}/view`} passHref>
+                    <div className="text-xl text-myred cursor-pointer mt-4 ml-4 font-medium hover:underline">( View more reviews )</div>
+                </Link> 
+                </div>
+                
                 <div>Food Type | {restaurantItem.foodType}</div>
                 <div className="flex items-center">
                     <Image className="mr-2" src="/icons/star_icon.png" alt="Star Icon" width={20} height={20} />
