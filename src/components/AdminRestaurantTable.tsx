@@ -76,14 +76,14 @@ export default function AdminRestaurantTable() {
 
     return (
         <main>
-            <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-6 py-6">
-                <table className="w-full border-collapse border border-gray-300">
+            <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-6 py-6 overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 min-w-[600px]">
                     <thead>
                         <tr className="bg-gray-100 text-gray-800">
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Status</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Restaurant Id</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Name</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Tel</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '15%' }}>Tel</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit / Verify</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Delete</th>
                         </tr>
