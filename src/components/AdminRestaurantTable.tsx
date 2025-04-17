@@ -1,24 +1,59 @@
 'use client';
 import { useEffect, useState } from 'react';
 import AdminRow from './AdminRestaurantRow';
-import { RestaurantItem, RestaurantJson } from "../../interfaces";
-import getRestaurants from '@/libs/getRestaurants';
+import { RestaurantItem } from "../../interfaces";
+import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function AdminRestaurantTable() {
     const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const searchParams = useSearchParams();
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         const fetchRestaurantsData = async () => {
-            setIsLoading(true);
+            if (status === "loading") return;
+            if (!session?.user?.token) {
+                setError("User not authenticated");
+                setIsLoading(false);
+                return;
+            }
+    
             try {
-                const restaurantJson: RestaurantJson = await getRestaurants();
-                if (restaurantJson.success && restaurantJson.data) {
-                    setRestaurants(restaurantJson.data);
-                } else {
-                    setError('Failed to fetch restaurants data.');
+                setIsLoading(true);
+                const apiUrl = `${process.env.BACKEND_URL}api/v1/restaurants`;
+    
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${session.user.token}`,
+                    },
+                });
+    
+                const data = await response.json();
+    
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to fetch restaurants data.');
                 }
+    
+                let formattedData = Array.isArray(data.data) ? data.data : [data.data];
+    
+                const restaurantParam = searchParams.get('restaurant');
+                if (restaurantParam) {
+                    formattedData = formattedData.filter((item: RestaurantItem) =>
+                        item.name.toLowerCase().includes(restaurantParam.toLowerCase())
+                    );
+                }
+    
+                const statusParam = searchParams.get('status');
+                if (statusParam) {
+                    formattedData = formattedData.filter((item: RestaurantItem) =>
+                        item.verified.toString() === statusParam // Use 'true'/'false' for Approved/Pending
+                    );
+                }
+    
+                setRestaurants(formattedData);
             } catch (err: any) {
                 setError(`Error fetching restaurants: ${err.message}`);
                 console.error(err);
@@ -26,11 +61,15 @@ export default function AdminRestaurantTable() {
                 setIsLoading(false);
             }
         };
+    
         fetchRestaurantsData();
-    }, []);
+    }, [session, searchParams]);
+    
+
     if (isLoading) {
         return <div className='text-lg text-white m-10'>Loading restaurants...</div>;
     }
+
     if (error) {
         return <div className='text-lg text-white m-10'>Error: {error}</div>;
     }
@@ -41,20 +80,24 @@ export default function AdminRestaurantTable() {
                 <table className="w-full border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-gray-100 text-gray-800">
-                        <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Manager Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Status</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Restaurant Id</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Restaurant Name</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Email</th>
-                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '18%' }}>Tel</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Edit / Verify</th>
                             <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {restaurants.map((restaurantItem: RestaurantItem) => {
-                            return (
-                                <AdminRow restaurantItem={restaurantItem} key={restaurantItem.id}/>
-                            );
-                        })}
+                        {restaurants.length > 0 ? (
+                            restaurants.map((restaurantItem: RestaurantItem) => (
+                                <AdminRow restaurantItem={restaurantItem} key={restaurantItem._id || restaurantItem.name} />
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={6} className="text-center py-4">No restaurants found</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

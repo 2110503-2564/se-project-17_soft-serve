@@ -66,7 +66,13 @@ export default function RestaurantDetailPage() {
                     <StarIcon className="h-6 w-6 text-yellow-400 ml-2"/>
                     <span className="font-semibold text-2xl mt-1 ml-1.5">
                         {restaurantDetail.data.rating}
+                        {/* View More Reviews Link */}
+                <Link href={`/rating/${restaurantDetail.data._id}/view`} passHref>
+                    <div className="text-sm text-[#D40303] cursor-pointer mt-1">( View more reviews )</div>
+                </Link>
+
                     </span>
+                    
                 </div> 
                 <div className="pt-2 flex">
                     <MapPinIcon className="h-5 w-5 mr-2 mt-0.5"/>

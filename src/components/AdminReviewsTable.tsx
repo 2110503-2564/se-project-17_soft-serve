@@ -140,16 +140,16 @@ export default function AdminReviewsTable() {
                 key={review._id}
                 className="w-full bg-white border border-gray-300 py-4 px-6 rounded-md shadow-sm"
               >
-                <div className="flex items-start">
-                  {/* Left Column - Review Info */}
-                  <div className="w-48 flex flex-col items-start mr-5">
+                <div className="flex items-center">
+                  {/* Left Column - Review Info (centered) */}
+                  <div className="w-48 flex flex-col justify-center items-center text-center mr-5">
                     <div className="text-lg font-semibold text-black mb-1">
                       {review.restaurantId.name}
                     </div>
                     <div className="text-sm text-gray-700 mb-1">
                       Customer: {review.customerId?.name || 'Unknown Customer'}
                     </div>
-                    <StarRating rating={review.rating} />
+                    <StarRating rating={review.rating} showRatingNumber={false}/>
                     <div className="text-xs text-gray-600 mt-1">
                       {formatDate(review.createdAt)}
                     </div>
