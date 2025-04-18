@@ -8,6 +8,7 @@ import addReview from "@/libs/addReview";
 import { useSession } from "next-auth/react";
 import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { redirect } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
 
 // Reducer for ratings
@@ -22,39 +23,12 @@ const ratingReducer = (
         default:
             return state;
     }
-}
+};
 
 export default function RatingDetailPage() {
     const { rid } = useParams();
     const { data: session } = useSession();
     const router = useRouter();
-
-    if (!session || !session.user || !session.user?.token) {
-        router.push('/');
-        return;
-    }
-    const token = session.user.token;
-
-    const [isAuthorized, setIsAuthorized] = useState(false);
-    useEffect(() => {
-        const checkRole = async () => {
-            try {
-                const user = await getUserProfile(session.user.token);
-                if (user.data.role === 'admin' || user.data.role === 'user') {
-                    setIsAuthorized(true);
-                } else {
-                    router.push('/');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user profile:", error);
-                setIsAuthorized(false);
-                router.push('/');
-            }
-        };
-        checkRole();
-    }, [session, router]);
-    if (isAuthorized === null) return <div>Loading...</div>;
-    //if (!isAuthorized) return null; // wait for router.push to trigger
 
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -62,10 +36,36 @@ export default function RatingDetailPage() {
     const [overallRating, setOverallRating] = useState(0);
     const [comment, setComment] = useState("");
 
-    // const token = typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : "";
-
+    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    useEffect(() => {
+        if (!session || !session.user?.token) {
+            return;
+        }
+        const checkRole = async () => {
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
+                    setIsAuthorized(true);
+                } else {
+                    alert(`Your role (${session.user.role}) is not authorized to access this page.`);
+                    router.replace('/');
+                }
+                
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAuthorized(false);
+                router.replace('/');
+            } finally {
+                setIsLoadingRoleCheck(false);
+            }
+        };
+        checkRole();
+    }, [session]);
+    
     // Fetch restaurant data
     useEffect(() => {
+        if (!rid) return;
         const fetchRestaurant = async () => {
             setIsLoading(true);
             try {
@@ -86,10 +86,7 @@ export default function RatingDetailPage() {
         fetchRestaurant();
     }, [rid]);
 
-    const handleRatingChange = (ratingName: string, value: number | null) => {
-        dispatch({ type: 'update', ratingName, value });
-    };
-
+    
     // Calculate Overall Rating
     useEffect(() => {
         const validRatings = Array.from(ratings.values()).filter(value => value !== null);
@@ -102,6 +99,21 @@ export default function RatingDetailPage() {
             setOverallRating(0);
         }
     }, [ratings]);
+    if (!session || !session.user?.token || isLoadingRoleCheck) {
+        return <div>Loading...</div>;
+    }
+
+    if (!isAuthorized) return null;
+    if (isLoading) {
+        return (
+            <main className="text-center p-5">
+                <h1 className="text-lg font-medium">Loading...</h1>
+            </main>
+        );
+    }
+    const handleRatingChange = (ratingName: string, value: number | null) => {
+        dispatch({ type: 'update', ratingName, value });
+    };
 
     const handleSubmit = async () => {
         if (overallRating <= 0 || !comment.trim()) {
@@ -114,7 +126,7 @@ export default function RatingDetailPage() {
                 restaurantId: rid as string,
                 rating: overallRating,
                 review: comment,
-                token: token,
+                token: session.user.token,
             });
 
             alert(`Review submitted successfully!\nOverall Rating: ${res.data.rating}/5`);
@@ -139,7 +151,6 @@ export default function RatingDetailPage() {
             </main>
         );
     }
-
 
     return (
         <main className="text-center text-gray-800">
