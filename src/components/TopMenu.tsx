@@ -8,14 +8,15 @@ import getUserProfile from "@/libs/getUserProfile";
 
 export default async function TopMenu() {
     const session = await getServerSession(authOptions);
-    
-    let isAdmin = false;
+    if (!session || !session.user || !session.user.token) return;
 
-    if (!session || !session.user || !session.user.token) {}
-    else{
-    const token = session.user.token;
-    const user = await getUserProfile(token);
-    isAdmin = user.data.role === 'admin';
+    const token = session?.user.token;
+    let isAdmin = false;
+    let isManager = false;
+    if (token) {
+        const user = await getUserProfile(token);
+        isAdmin = user.data.role === 'admin';
+        isManager = user.data.role === 'restaurantManager';
     }
 
     return (
@@ -29,11 +30,11 @@ export default async function TopMenu() {
                 </Link>
             </div>
             <div className="flex items-center">
-                {isAdmin && <TopMenuItem title='Admin' pageRef='/admin' />}
                 <TopMenuItem title='Home' pageRef='/' />
                 <TopMenuItem title='Restaurants' pageRef='/restaurants' />
                 <TopMenuItem title='Reservations' pageRef='/reservations' />
-
+                {isAdmin && <TopMenuItem title='Admin' pageRef='/admin'/>}
+                {isManager && <TopMenuItem title='Manager' pageRef='/manager'/>}
                 <Link href={'/user'}>
                     <UserCircleIcon className="w-[70px] h-[70px] ml-1 pr-4 text-[#d42d2d] hover:text-myred" />
                 </Link>
