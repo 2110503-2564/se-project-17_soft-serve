@@ -53,7 +53,7 @@ export default function RestaurantCardPanel() {
                                 imgSrc={restaurantItem.imgPath} 
                                 onCompare={(restaurant, rating) => dispatchCompare({ type: 'add', restaurantName: restaurant, rating })} 
                                 rid={restaurantItem.id}
-                                overallRating={restaurantItem.rating} 
+                                overallRating={restaurantItem.ratingrating} 
                             />
                         </Link>
                     ))
