@@ -113,3 +113,11 @@ export interface OneRestaurantJson {
     success: boolean,
     data: RestaurantItem
 }
+
+export interface RestaurantAvailabilityJson {
+    restaurantId: string,
+    date: string,
+    maxReservation: number,
+    reserved: number,
+    available: number
+}

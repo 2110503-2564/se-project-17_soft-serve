@@ -65,13 +65,11 @@ export default function RestaurantDetailPage() {
                     {restaurantDetail.data.name}
                     <StarIcon className="h-6 w-6 text-yellow-400 ml-2"/>
                     <span className="font-semibold text-2xl mt-1 ml-1.5">
-                        {restaurantDetail.data.rating}
-                        {/* View More Reviews Link */}
+                        {restaurantDetail.data.ratingrating}
+                        {/* View More Reviews Link */}</span>
                 <Link href={`/rating/${restaurantDetail.data._id}/view`} passHref>
-                    <div className="text-sm text-[#D40303] cursor-pointer mt-1">( View more reviews )</div>
-                </Link>
-
-                    </span>
+                    <div className="text-xl text-myred cursor-pointer mt-1 ml-4 font-medium hover:underline">( View more reviews )</div>
+                </Link> 
                     
                 </div> 
                 <div className="pt-2 flex">
