@@ -50,9 +50,9 @@ export default function RegisterPage() {
     };
 
     return (
-        <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col px-80 pt-[80px] overflow-auto">
-            <div className="w-full bg-white text-gray-800 py-10 px-20 rounded-3xl shadow-2xl relative">
-                <div className="text-3xl font-bold text-center mt-6 mb-12">
+        <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 overflow-auto">
+            <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
+                <div className="text-3xl font-bold text-center mt-6 mb-10">
                     Create an account
                 </div>
                 <form onSubmit={handleSubmit}>
@@ -72,13 +72,13 @@ export default function RegisterPage() {
                         <input onChange={(e) => setName(e.target.value)} type="text" id="name" placeholder="Name"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
-                    <div className="flex justify-center items-center block mb-6">
+                    <div className="flex justify-center items-center block mb-4">
                         <input onChange={(e) => setTel(e.target.value)} type="tel" id="tel" placeholder="Tel"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
 
                     {message && (
-                        <div className={`text-center w-4/5 mx-auto mb-4 py-2 px-4 rounded-xl ${
+                        <div className={`text-center w-4/5 mx-auto mb-4 px-4 rounded-xl ${
                             message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
                         }`}>
                             {message.text}
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                         </div>
                     </div>
                 </form>
-                <div className="text-center text-slate-500 mb-6">
+                <div className="text-center text-slate-500 mb-2">
                     Already have an account?
                     <Link href="/login" className="text-slate-800 hover:underline ml-2">
                         Log in

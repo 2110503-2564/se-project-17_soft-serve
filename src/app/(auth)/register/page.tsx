@@ -11,8 +11,8 @@ export default function SelectUserTypePage() {
     };
 
     return (
-        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col px-4 md:px-20 lg:px-80 pt-[80px] py-10">
-            <div className="w-full max-w-2xl bg-white text-gray-800 py-10 px-6 md:px-20 rounded-3xl shadow-2xl">
+        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col px-4 md:px-20 lg:px-80">
+            <div className="w-full max-w-2xl bg-white text-gray-800 py-8 px-20 md:px-20 rounded-3xl shadow-2xl">
                 <div className="text-3xl font-bold text-center mt-6 mb-10">
                     Select Account Type
                 </div>
