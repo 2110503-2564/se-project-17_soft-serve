@@ -8,7 +8,6 @@ import addReview from "@/libs/addReview";
 import { useSession } from "next-auth/react";
 import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { redirect } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
 
 // Reducer for ratings
@@ -23,46 +22,39 @@ const ratingReducer = (
         default:
             return state;
     }
-};
+}
 
 export default function RatingDetailPage() {
     const { rid } = useParams();
     const { data: session } = useSession();
     const router = useRouter();
 
-    if (!session || !session.user || !session.user.token) {
-        redirect('/');
+    if (!session || !session.user || !session.user?.token) {
+        router.push('/');
+        return;
     }
+    const token = session.user.token;
 
-    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
     useEffect(() => {
         const checkRole = async () => {
-            if (!session || !session.user?.token) {
-                redirect('/');
-            }
             try {
-                const userProfile = await getUserProfile(session.user.token);
-                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
+                const user = await getUserProfile(session.user.token);
+                if (user.data.role === 'admin' || user.data.role === 'user') {
                     setIsAuthorized(true);
                 } else {
-                    redirect('/');
+                    router.push('/');
                 }
             } catch (error) {
                 console.error("Failed to fetch user profile:", error);
                 setIsAuthorized(false);
-                redirect('/');
-            } finally {
-                setIsLoadingRoleCheck(false);
+                router.push('/');
             }
         };
         checkRole();
-    }, [session]);
-    if (isLoadingRoleCheck) return <div>Loading...</div>; // Or a spinner
+    }, [session, router]);
     if (isAuthorized === null) return <div>Loading...</div>;
-    if (!isAuthorized) return null; // wait for router.push to trigger
-
-    const token = session.user.token;
+    //if (!isAuthorized) return null; // wait for router.push to trigger
 
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -147,6 +139,7 @@ export default function RatingDetailPage() {
             </main>
         );
     }
+
 
     return (
         <main className="text-center text-gray-800">
