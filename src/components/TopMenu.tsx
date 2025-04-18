@@ -8,7 +8,7 @@ import getUserProfile from "@/libs/getUserProfile";
 
 export default async function TopMenu() {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user || !session.user.token) return;
+    // if (!session || !session.user || !session.user.token) return;
 
     const token = session?.user.token;
     let isAdmin = false;
