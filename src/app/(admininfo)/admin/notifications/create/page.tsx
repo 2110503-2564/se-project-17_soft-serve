@@ -42,8 +42,17 @@ export default function CreateNotification() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         
-        if (!title || !message || !targetAudience) {
+        if (!title && !message && !targetAudience) {
             setError('Please complete all fields');
+            return;
+        } else if(!title) {
+            setError('Please enter a title');
+            return;
+        } else if(!message) {
+            setError('Please enter a message');
+            return;
+        } else if(!targetAudience) {
+            setError('Please select a target audience');
             return;
         }
 
