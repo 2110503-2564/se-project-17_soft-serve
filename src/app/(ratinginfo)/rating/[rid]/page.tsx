@@ -86,14 +86,14 @@ export default function RatingDetailPage() {
         fetchRestaurant();
     }, [rid]);
 
-    
+    // Edit here
     // Calculate Overall Rating
     useEffect(() => {
         const validRatings = Array.from(ratings.values()).filter(value => value !== null);
         // console.log("validRatings.length", validRatings.length)
         if (validRatings.length > 0) {
-            const total = validRatings.reduce((acc, value) => acc + value, 0);
-            const newOverallRating = total / validRatings.length;
+            const sumRatings = validRatings.reduce((sum, value) => sum + (value as number), 0);
+            const newOverallRating = sumRatings / 4;
             setOverallRating(parseFloat(newOverallRating.toFixed(1)));
         } else {
             setOverallRating(0);
@@ -116,8 +116,8 @@ export default function RatingDetailPage() {
     };
 
     const handleSubmit = async () => {
-        if (overallRating <= 0 || !comment.trim()) {
-            alert('Please provide a rating and a comment.');
+        if (overallRating <= 1 || !comment.trim()) {
+            alert("Please provide a comment and rate all categories before submitting your review.");
             return;
         }
 
