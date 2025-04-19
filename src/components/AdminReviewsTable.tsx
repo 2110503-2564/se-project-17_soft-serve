@@ -132,7 +132,7 @@ export default function AdminReviewsTable() {
         </h2>
 
         {reviews.length === 0 ? (
-          <div className="text-center py-10 text-black">No reviews found matching your criteria</div>
+          <div className="text-center py-10 text-black">No reviews found.</div>
         ) : (
           <div className="space-y-6">
             {reviews.map((review) => (
