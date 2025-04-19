@@ -21,7 +21,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
 
   const [restaurant, setRestaurant] = useState<OneRestaurantJson | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
 
   const [isEditing, setIsEditing] = useState(false);
   const [editAddress, setEditAddress] = useState('');
@@ -78,6 +78,28 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
       alert('Close Time must be in the format hh:mm');
       return;
     }
+
+    if(!editAddress || !editDistrict || !editProvince || !editPostalcode || !editDescription || !editFoodType || !editTel) {
+      if(!editAddress) {
+        alert('Address is required');
+      }else if(!editDistrict) {
+        alert('District is required');
+      }else if(!editProvince) {
+        alert('Province is required');
+      }else if(!editPostalcode) {
+        alert('Postal Code is required');
+      }else if(!editFoodType) {
+        alert('Food Type is required');
+      }else if(!editOpenTime) {
+        alert('Open Time is required');
+      }else if(!editCloseTime) {
+        alert('Close Time is required');
+      }else if(!editTel) {
+        alert('Tel is required');
+      }
+      return ;
+    }
+
     const updatedData = {
       description: editDescription,
       foodType: editFoodType,
@@ -109,8 +131,8 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         }
       } else {
         const errorData = await response.json();
-        console.error("Backend Error Data:", errorData);
-        setError(`Failed to update restaurant: ${errorData.message || response.statusText}`);
+        // console.error("Backend Error Data:", errorData.msg);
+        alert(`Failed to update restaurant: ${errorData.msg || response.statusText}`);
       }
     } catch (err) {
       setError("Failed to update restaurant");
