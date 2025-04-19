@@ -14,17 +14,29 @@ export default function AdminNotificationBox({notificationItem}: { notificationI
   if (isDeleting) return null;
 
   const handleDeleteClick = async () => {
+    if (!session) return;
+  
+    const reason = window.prompt("Please enter the reason for deleting this notification:");
+    if (!reason || reason.trim() === "") {
+      alert("Deletion cancelled. A reason is required.");
+      return;
+    }
+  
     const confirmed = window.confirm("Are you sure you want to DELETE this notification?");
     if (!confirmed) return;
-    if (!session) return;
+  
     setIsDeleting(true);
     try {
-      await deleteNotification({notificationId: notificationItem._id, token: session?.user.token});
+      await deleteNotification({
+        notificationId: notificationItem._id,
+        token: session.user.token
+      });
       router.refresh();
     } catch (error) {
       console.error('Failed to delete notification:', error);
     }
   };
+  
 
   return (
     <div className="w-full bg-white border border-gray-300 px-8 py-4 rounded-md shadow-sm">
