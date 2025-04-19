@@ -33,7 +33,7 @@ export default function LoginPage() {
                     return;
                 }
                 if (response.error === 'Invalid credentials') {
-                    setMessage({ text: 'Invalid credentials. Please change the email or password.', type: 'error' });
+                    setMessage({ text: 'Login failed. Please make sure your email and password are correct.', type: 'error' });
                     return;
                 }
                 setMessage({ text: 'Error logging in, please try again.(failed to fetch)', type: 'error' });
