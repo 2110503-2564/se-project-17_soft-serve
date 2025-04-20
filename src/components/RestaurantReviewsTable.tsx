@@ -6,6 +6,7 @@ import StarRating from '@/components/StarRating';
 import { ReviewJson, ReviewItem } from '../../interfaces';
 import { useEffect } from 'react';
 import getReviewOneRestaurant from '@/libs/getReviewsOneRestaurant';
+import Loader from './Loader';
 
 export default function RestaurantReviewsTable({ restaurantId}: { restaurantId: string}) {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
@@ -68,7 +69,7 @@ export default function RestaurantReviewsTable({ restaurantId}: { restaurantId: 
   }
 
   if (loading) {
-    return <div className="flex justify-center p-10">{loading ? 'Loading reviews...' : error}</div>;
+    return <Loader loadingtext='Loading Restaurant...'/>;
   }
 
   return (

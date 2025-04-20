@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import StarRating from '@/components/StarRating';
+import Loader from './Loader';
 
 interface Review {
   _id: string;
@@ -100,7 +101,7 @@ export default function ManagerReviewsTable() {
     return new Date(dateString).toLocaleDateString();
   };
   
-  if (loading) return <div className="flex justify-center p-10">Loading reviews...</div>;
+  if (loading) return <Loader loadingtext="Loading Reviews..." />;
   
   if (error) return <div className="bg-red-100 p-4 text-red-700 rounded mt-5">{error}</div>;
   

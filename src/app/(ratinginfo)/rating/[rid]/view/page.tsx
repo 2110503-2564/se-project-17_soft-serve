@@ -9,6 +9,7 @@ import getRestaurant from "@/libs/getRestaurant";
 import { OneRestaurantJson, RestaurantItem } from "../../../../../../interfaces";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import Loader from "@/components/Loader";
 
 export default function RestaurantReviewsView() {
     const [restaurantDetail, setRestaurantDetail] = useState<RestaurantItem>();
@@ -46,7 +47,7 @@ export default function RestaurantReviewsView() {
     }, [rid]);
 
     if (loading) {
-        return <div className="m-5 text-lg text-medium">Loading Review Page...</div>;
+        return <Loader loadingtext='Loading Reviews...'/>;
     }
 
     if (error) {

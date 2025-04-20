@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
 import { useSession } from "next-auth/react"
 import getUserProfile from "@/libs/getUserProfile"
+import Loader from "@/components/Loader"
 
 export default function RestaurantDetailPage() {
     const [restaurantDetail, setRestaurantDetail] = useState<any>(null);
@@ -65,7 +66,7 @@ export default function RestaurantDetailPage() {
     }, [rid]);
 
     if (loading) {
-        return <div className="m-5 text-lg text-medium">Loading Restaurant...</div>;
+        return <Loader loadingtext='Loading Restaurants...'/>;
     }
 
     if (error) {

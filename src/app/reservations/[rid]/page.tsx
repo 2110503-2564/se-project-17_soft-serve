@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ReserveBox from '@/components/ReserveBox';
 import dayjs from 'dayjs';
+import Loader from "@/components/Loader"
 
 export default function Reservation() {
     const [restaurantDetail, setRestaurantDetail] = useState<RestaurantItem | null>(null);
@@ -39,7 +40,7 @@ export default function Reservation() {
     }, [rid]);
     
     if (loading) {
-        return <div className="m-5 text-lg text-medium">Loading Restaurant...</div>;
+        return <Loader loadingtext='Loading Reservations...'/>;
     }
     if (error) {
         return <div className="m-5 text-lg text-medium">{error}</div>;

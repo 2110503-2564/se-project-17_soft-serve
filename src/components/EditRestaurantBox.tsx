@@ -6,6 +6,7 @@ import { OneRestaurantJson, RestaurantItem } from "../../interfaces";
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
+import Loader from "./Loader";
 
 export default function EditRestaurantBox({ restaurantId, token }: { restaurantId: string, token: string }) {
   const router = useRouter();
@@ -155,7 +156,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
     }
   };
   if (loading) {
-    return <div className="m-5 text-white text-xl">Loading Restaurant...</div>;
+    return <Loader loadingtext="Loading Restaurant..." />;
   }
   if (error) {
     return <div className="m-5 text-white text-xl">{error}</div>;
