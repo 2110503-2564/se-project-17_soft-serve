@@ -8,7 +8,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
-import { OneReservationJson } from "../../interfaces";
+import { OneReservationJson, RestaurantAvailabilityJson } from "../../interfaces";
 dayjs.extend(localizedFormat);
 dayjs.extend(isSameOrAfter)
 dayjs.extend(timezone)
@@ -20,6 +20,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect } from "react";
 
+import getRestaurantAvailability from '@/libs/getRestaurantAvailability';
+
 export default function ReserveBox({restaurantId, isUpdate, reservationId, reservationData} : {restaurantId:string, isUpdate:boolean, reservationId?:string, reservationData?:OneReservationJson}){
     const router = useRouter();
     const { data: session } = useSession();
@@ -28,6 +30,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [timeValue, setTimeValue] = useState('12:00');
     const [count, setCount] = useState<number>(1);
+    const [availableSeats, setAvailableSeats] = useState<number>(0);
 
     useEffect(() => {
         if (reservationData) {
@@ -37,7 +40,21 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
             setTimeValue(dayjs(tempReservationData).format('HH:mm'));
             setCount(reservationData.data.numberOfPeople);
         }
-    }, [reservationData]);
+    }, [reservationData, availableSeats]);
+
+    useEffect(() => {
+        fetchRestaurantAvailability(restaurantId, dateValue.format('YYYY-MM-DD'));
+    }, [dateValue]);
+
+    const fetchRestaurantAvailability = async (restaurantId: string, date: string) => {
+        try {
+            const response : RestaurantAvailabilityJson = await getRestaurantAvailability(restaurantId, date);
+            setAvailableSeats(response.available);
+        } catch (error) {
+            console.error("Error fetching availability:", error);
+            setAvailableSeats(0);
+        }
+    };
 
     // Date
     const today = new Date()
@@ -91,16 +108,22 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
         setCount(isNaN(value) || value < 1 ? 1 : value);
     };
     const handleIncrement = () => {
-        setCount((prevCount) => prevCount + 1);
+        setCount((prevCount) => (prevCount < availableSeats ? prevCount + 1 : prevCount));
     };
+    
     const handleDecrement = () => {
-        setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 1));
+        setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 0));
     };
 
     const handleMakeReservation = async () => {
         if (!dateValue || !timeValue) {
             return null;
         }
+
+        if(!availableSeats || availableSeats < 1 || count > availableSeats) { 
+            return null;
+        }
+
         const [hours, minutes] = timeValue.split(':').map(Number);
         const tempDate = new Date(dateValue.toDate());
         tempDate.setHours(hours+7, minutes, 0, 0);
@@ -220,6 +243,11 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
             <div className="text-md text-gray-700 flex justify-center pb-5">
                 Guests
             </div>
+            <div className="text-sm text-gray-500 flex justify-center pb-4">
+                Available: {availableSeats}
+            </div>
+
+            {/* Confirm */}
             <button name="Confirm" onClick={isUpdate ? handleEditReservation : handleMakeReservation}
                 className="'block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600">
                 {isUpdate ? 'Update Reservation' : 'Confirm Reservation'}
