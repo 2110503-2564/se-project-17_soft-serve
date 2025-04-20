@@ -133,7 +133,10 @@ export default function RestaurantDetailPage() {
                             Edit
                         </button>
                     </Link>
-                    : (userRole === 'user' || userRole === 'admin') ?
+                    : null
+                }
+                {
+                    (userRole === 'user' || userRole === 'admin') ?
                         <Link href={`/reservations/${rid}`}>
                             <button name="Reserve" className='bg-myred border border-white text-white text-xl font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
                                 Reserve
