@@ -10,12 +10,38 @@ import Link from "next/link"
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation"
+import { useSession } from "next-auth/react"
+import getUserProfile from "@/libs/getUserProfile"
 
 export default function RestaurantDetailPage() {
     const [restaurantDetail, setRestaurantDetail] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { rid } = useParams();
+
+    const { data: session } = useSession();
+    const [ userRole, setUserRole ] = useState<string | null>(null);
+
+    useEffect(() => {
+        const checkRole = async () => {
+            try {
+                if (session && session.user?.token) {
+                    const user = await getUserProfile(session.user.token);
+                    if (user && user.data.role) {
+                        setUserRole(user.data.role);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+            }
+        }
+
+        if(session && session.user?.token) {
+            checkRole();
+        }
+
+        console.log(userRole);
+    }, [session])
 
     useEffect(() => {
         const fetchRestaurant = async () => {
@@ -99,11 +125,24 @@ export default function RestaurantDetailPage() {
                     </div>
                 </div>
             </div>
-            <Link href={`/reservations/${rid}`}>
-                <button name="Reserve" className='block bg-myred border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl z-30 absolute bottom-1 right-14 shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
-                    Reserve
-                </button>
-            </Link>
+            <div className="flex justify-end space-x-4 p-5 absolute bottom-1 right-14">
+                {
+                    (userRole === 'restaurantManager' || userRole === 'admin') ? 
+                    <Link href={`/restaurants/edit/${rid}`}>
+                        <button className='bg-[#838383] border border-white text-white text-xl font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+                            Edit
+                        </button>
+                    </Link>
+                    : (userRole === 'user' || userRole === 'admin') ?
+                        <Link href={`/reservations/${rid}`}>
+                            <button name="Reserve" className='bg-myred border border-white text-white text-xl font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+                                Reserve
+                            </button>
+                        </Link>
+
+                    : null
+                }
+            </div>
         </main>
     )
 }
