@@ -42,6 +42,7 @@ export default function LoginPage() {
 
             setMessage({ text: 'Login successful!', type: 'success' });
             router.replace('/');
+            router.refresh();
         } catch (error) {
             console.error('Error logging in:', error);
             setMessage({ text: 'Error logging in, please try again.', type: 'error' });
