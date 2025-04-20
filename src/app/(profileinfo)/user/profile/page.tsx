@@ -10,7 +10,8 @@ export default async function Editing() {
         
     if(!session || !session.user.token) return null;
 
-    const profile = await getUserProfile(session.user.token);
+    const token = session.user.token;
+    const profile = await getUserProfile(token);
 
     return (
         <main className="bg-[#D40303] h-screen">
@@ -20,7 +21,7 @@ export default async function Editing() {
                 </div>
                  
                 <div className='ml-10'>
-                    <EditingMenu user={profile.data}/>
+                    <EditingMenu token={token} user={profile.data}/>
                 </div>      
             </div>
 
