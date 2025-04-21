@@ -18,6 +18,7 @@ import { CalendarIcon } from '@heroicons/react/24/outline'
 
 
 import { User, RestaurantItem } from "@../../../interfaces";
+import Loader from './Loader';
 
 export default function VerifyCard() {
     const { data: session } = useSession();
@@ -81,7 +82,7 @@ export default function VerifyCard() {
     };
 
     if (!session || !session.user.token) return <div>No token</div>;
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loader loadingtext="Loading ..." />;
 
     const unverifiedUsers = userData.filter((userItem) => !userItem.verified);
     if (unverifiedUsers.length === 0) {

@@ -121,7 +121,7 @@ export default function AdminReviewsTable() {
     });
   };
 
-  if (loading) <Loader loadingtext='Loading Reviews...'/>;
+  if (loading) return <Loader loadingtext='Loading Reviews...'/>;
 
   if (error) return <div className="bg-red-100 p-4 text-red-700 rounded mt-5">{error}</div>;
 

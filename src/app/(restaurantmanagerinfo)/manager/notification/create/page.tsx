@@ -34,7 +34,7 @@ export default function RestaurantManagerNotification() {
 
   // Only render the form if the user is authenticated
   if (!session || !session.user?.token) {
-    return null; // Or a loading state
+    return null;
   }
 
   return (

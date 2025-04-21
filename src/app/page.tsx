@@ -3,12 +3,13 @@ import RestaurantCardPanel from "@/components/RestaurantCardPanel";
 import getRestaurants from "@/libs/getRestaurants";
 import { RestaurantJson } from "../../interfaces";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 export default async function Home() {
   const restaurantJson: RestaurantJson = await getRestaurants();
   
   if(!restaurantJson){
-    return <div className="m-5 text-lg text-medium">Loading Restaurants...</div>;
+    return <Loader loadingtext="Loading restaurants..." />;
   }
   
   const verifiedRestaurants = restaurantJson.data.filter(item => item.verified).slice(0, 8);

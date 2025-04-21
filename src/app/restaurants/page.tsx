@@ -2,12 +2,13 @@ import getRestaurants from "../../libs/getRestaurants";
 import { RestaurantItem, RestaurantJson } from "../../../interfaces";
 import RestaurantListItem from "@/components/RestaurantListItem";
 import SearchBox from "@/components/SearchBox";
+import Loader from "@/components/Loader";
 
 export default async function RestaurantList() {
     const restaurantJson : RestaurantJson = await getRestaurants();
 
     if(!restaurantJson){
-        return <div className="m-5 text-lg text-medium">Loading Restaurants...</div>;
+        return <Loader loadingtext="Loading restaurants..." />;
     }
 
     return (

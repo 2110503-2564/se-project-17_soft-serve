@@ -65,7 +65,7 @@ export default function RestaurantReviewsTable({ restaurantId}: { restaurantId: 
   };
 
   if (status === 'loading') {
-    return <div className="flex justify-center p-10">Loading session...</div>;
+    return <Loader loadingtext="Loading ..." />;
   }
 
   if (loading) {

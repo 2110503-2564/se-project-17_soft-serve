@@ -10,6 +10,7 @@ import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { redirect } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
+import Loader from "@/components/Loader";
 
 // Reducer for ratings
 const ratingReducer = (
@@ -100,16 +101,12 @@ export default function RatingDetailPage() {
         }
     }, [ratings]);
     if (!session || !session.user?.token || isLoadingRoleCheck) {
-        return <div>Loading...</div>;
+        return <Loader loadingtext="Loading ..." />;;
     }
 
     if (!isAuthorized) return null;
     if (isLoading) {
-        return (
-            <main className="text-center p-5">
-                <h1 className="text-lg font-medium">Loading...</h1>
-            </main>
-        );
+        return <Loader loadingtext="Loading ..." />;
     }
     const handleRatingChange = (ratingName: string, value: number | null) => {
         dispatch({ type: 'update', ratingName, value });
@@ -137,11 +134,7 @@ export default function RatingDetailPage() {
     };
 
     if (isLoading) {
-        return (
-            <main className="text-center p-5">
-                <h1 className="text-lg font-medium">Loading...</h1>
-            </main>
-        );
+        return <Loader loadingtext="Loading ..." />;
     }
 
     if (!restaurant) {

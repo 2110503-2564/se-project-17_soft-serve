@@ -1,4 +1,5 @@
 'use client'
+import Loader from "@/components/Loader";
 import getUserProfile from "@/libs/getUserProfile";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -36,7 +37,7 @@ export default function Admin() {
         checkAdmin();
     }, [session, router]);
 
-    if (isAdmin === null) return <div>Loading...</div>;
+    if (isAdmin === null) return <Loader loadingtext="Loading ..." />;;
 
     if (!isAdmin) return null; // wait for router.push to trigger
 
