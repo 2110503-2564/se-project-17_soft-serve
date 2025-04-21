@@ -57,7 +57,7 @@ export default function AdminSearchBox({ token }: { token: string }) {
             <Stack spacing={2} sx={{ width: "100%" }}>
                 <div className="flex items-center">
                     <label className="w-40 mr-5 font-semibold text-gray-800">
-                        Restaurant Name *
+                        Restaurant Name
                     </label>
                     <Autocomplete
                         freeSolo
@@ -78,7 +78,7 @@ export default function AdminSearchBox({ token }: { token: string }) {
                 </div>
                 <div className="flex items-center">
                     <label className="w-40 mr-5 font-semibold text-gray-800">
-                        Status *
+                        Status
                     </label>
                     <Autocomplete
                         freeSolo
