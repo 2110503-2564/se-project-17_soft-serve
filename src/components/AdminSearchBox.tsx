@@ -35,7 +35,7 @@ export default function AdminSearchBox() {
       <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
         <Stack spacing={2} sx={{ width: "100%" }}>
           <div className="flex items-center">
-            <label className="w-28 mr-5 font-medium">Restaurant Name *</label>
+            <label className="w-28 mr-5 font-medium">Restaurant Name</label>
             <Autocomplete
               freeSolo
               options={restaurantNames}
@@ -48,7 +48,7 @@ export default function AdminSearchBox() {
             />
           </div>
           <div className="flex items-center">
-            <label className="w-28 mr-5 font-medium">Date *</label>
+            <label className="w-28 mr-5 font-medium">Date</label>
             <TextField
               type="date"
               value={selectedDate}
