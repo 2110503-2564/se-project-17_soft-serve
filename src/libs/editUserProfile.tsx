@@ -16,7 +16,7 @@ export default async function editUserProfile(
 
     if (!response.ok) {
         const errorData = json.catch(() => ({}));
-        const errorMessage = errorData?.msg || 'Cannot edit user profile';
+        const errorMessage = errorData?.message || 'Cannot edit user profile';
         console.log(errorMessage);
         throw new Error(errorMessage);
     }
