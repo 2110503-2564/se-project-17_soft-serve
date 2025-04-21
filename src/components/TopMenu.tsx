@@ -17,7 +17,7 @@ export default async function TopMenu() {
         const user = await getUserProfile(token);
         isAdmin = user.data.role === 'admin';
         isManager = user.data.role === 'restaurantManager';
-        if(isManager)res = "/restaurants/" + user.data.restaurant;
+        if(isManager)res = "/restaurants/own/" + user.data.restaurant;
     }
 
 
