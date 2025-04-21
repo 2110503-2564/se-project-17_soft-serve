@@ -86,12 +86,12 @@ export default function MyRestaurantPage() {
             </div>
 
             <div className="text-[19px] text-gray-800 px-12 mx-5">
-                <div className="flex justify-center text-4xl font-bold m-5">
+                <div className="flex justify-center text-4xl font-bold pt-8">
                     {restaurantDetail.data.name}
                 </div>
 
                 <div className="flex items-center pt-8">
-                    <ReviewRestaurantBox restaurantDetail={restaurantDetail}/>
+                    <ReviewRestaurantBox/>
                 </div>
 
                 <div className="text-xl font-bold pt-4">

@@ -1,19 +1,64 @@
 'use client'
-import { StarIcon } from '@heroicons/react/20/solid'
-import React from "react";
+import { StarIcon } from '@heroicons/react/20/solid';
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import { useParams } from "next/navigation";
-import TotalRate from '@/components/OverallRating';
 import Link from "next/link";
+import getReviewOneRestaurant from '@/libs/getReviewsOneRestaurant';
+import { ReviewJson } from '@../../../interfaces';
+import { useSession } from 'next-auth/react';
 
-export default function ReviewRestaurantBox({
-  restaurantDetail,
-}: {
-  restaurantDetail: any;
-}) {
+export default function ReviewRestaurantBox() {
   const { rid } = useParams();
+  const { data: session, status } = useSession();
 
-  if (!restaurantDetail) return null;
+  const [reviewStats, setReviewStats] = useState<{
+    rating: number;
+    reviewCount: number;
+    starCount: { [key: number]: number };
+  } | null>(null);
+
+  useEffect(() => {
+    if (status === 'loading') return;
+
+    const fetchReviewStats = async () => {
+      try {
+        if (!session?.user?.token) return;
+
+        const data: ReviewJson = await getReviewOneRestaurant({
+          restaurantId: rid as string,
+          token: session.user.token,
+        });
+
+        const reviews = data.data;
+        const reviewCount = reviews.length;
+
+        const totalRating = reviews.reduce((acc, cur) => acc + cur.rating, 0);
+        const avgRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+
+        const starCount: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        reviews.forEach(review => {
+          const rating = Math.floor(review.rating);
+          starCount[rating] = (starCount[rating] || 0) + 1;
+        });
+
+        setReviewStats({
+          rating: parseFloat(avgRating.toFixed(1)),
+          reviewCount,
+          starCount
+        });
+
+      } catch (err) {
+        console.error('Error fetching review stats:', err);
+      }
+    };
+
+    fetchReviewStats();
+  }, [rid, session, status]);
+
+  if (!reviewStats) {
+    return null;
+  }
 
   return (
     <Box
@@ -21,73 +66,68 @@ export default function ReviewRestaurantBox({
       sx={{ '& .MuiTextField-root': { m: 2, width: 'full' } }}
       className='border border-gray-300 py-2 px-10 rounded-xl items-center'
     >
-        <div className="text-[26px] font-bold">Reviews & Ratings</div>
+      <div className="text-[26px] font-bold pt-5">Reviews & Ratings</div>
 
-        <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center">
+        {/* Left: Average Score */}
         <Box
-        component="div"
-        sx={{ '& .MuiTextField-root': { m: 2, width: '50ch' } }}
-        className="flex flex-col w-[400px] py-2 px-10 mt-3 space-y-2">
-            <div className="flex flex-col items-center">
+          component="div"
+          className="flex flex-col w-[400px] pb-10 py-2 px-10 mt-3 space-y-2">
+          <div className="flex flex-col items-center">
             <div className="text-5xl font-bold">
-                {restaurantDetail.data.ratingrating}
+              {reviewStats.rating}
             </div>
             <h2 className="text-sm font-normal mb-4 text-gray-500 ">
-            {restaurantDetail.data.reviewCount} Ratings
+              {reviewStats.reviewCount} Ratings
             </h2>
             <Link href={`/rating/${rid}/view`}>
-                <button className='bg-white border border-[#00C642] text-[#00C642] text-sm font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-[#00C642] hover:text-white'>
-                    View more reviews
-                </button>
+              <button className='bg-white border border-[#00C642] text-[#00C642] text-sm font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-[#00C642] hover:text-white'>
+                View more reviews
+              </button>
             </Link>
-            </div>  
+          </div>
         </Box>
 
+        {/* Right: Bar Chart */}
         <Box
-        component="div"
-        sx={{ '& .MuiTextField-root': { m: 2, width: '50ch' } }}
-        className="flex flex-col py-2 px-10 mt-3 space-y-2">
-            
-            <div className="mt-4 space-y-3">
+          component="div"
+          className="flex flex-col pb-10 py-2 px-10 mt-3 space-y-2">
+          <div className="space-y-3 pb-5">
             {[5, 4, 3, 2, 1].map((star) => {
-                const count = restaurantDetail.data.starCount?.[star] || 0;
-                const total = restaurantDetail.data.reviewCount || 1;
-                const percent = (count / total) * 100;
+              const count = reviewStats.starCount?.[star] || 0;
+              const total = reviewStats.reviewCount || 1;
+              const percent = (count / total) * 100;
 
-                return (
+              return (
                 <div key={star} className="flex items-center gap-4">
-                    {/* Star Icons (Always show 5 stars, some grayed out) */}
-                    <div className="flex w-[700px] justify-end mx-3">
+                  {/* Star Icons */}
+                  <div className="flex w-[700px] justify-end mx-3">
                     {[...Array(5)].map((_, i) => (
-                        <StarIcon
+                      <StarIcon
                         key={i}
-                        className={`h-10 w-10 ${
-                            i < star ? "text-yellow-400" : "text-gray-300"
-                        }`}
-                        />
+                        className={`h-10 w-10 pr-2 ${i < star ? "text-yellow-400" : "text-gray-300"}`}
+                      />
                     ))}
-                    </div>
+                  </div>
 
-                    {/* Progress Bar */}
-                    <div className="w-full bg-gray-200 rounded-full h-3">
+                  {/* Progress Bar */}
+                  <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
-                        className="bg-yellow-400 h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${percent}%` }}
+                      className="bg-[#00C642] h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${percent}%` }}
                     />
-                    </div>
+                  </div>
 
-                    {/* Count */}
-                    <span className="text-sm text-gray-600 w-[40px] text-right">
+                  {/* Count */}
+                  <span className="text-sm text-gray-600 w-[40px] text-right">
                     {count}
-                    </span>
+                  </span>
                 </div>
-                );
+              );
             })}
-            </div>
-            
+          </div>
         </Box>
-        </div>
+      </div>
     </Box>
-    
   );
 }
