@@ -3,37 +3,46 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
+import Loader from "@/components/Loader";
 
 export default function CreateNotification() {
     const router = useRouter();
     const { data: session } = useSession();
+    const [loading, setLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-    useEffect(() => {
-        const checkAdmin = async () => {
-            if (!session || !session.user?.token) {
-                router.push('/');
-                return;
-            }
-            try {
-                const user = await getUserProfile(session.user.token);
-                // redirect only after role is known
-                if (user.data.role !== 'admin') {
-                    router.push('/');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user profile:", error);
-                router.push('/');
-            }
-        };
-        checkAdmin();
-    }, [session, router]);
-    
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [targetAudience, setTargetAudience] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+  
+    useEffect(() => {
+        const checkAdmin = async () => {
+            if (!session || !session.user?.token) {
+                setIsAdmin(false);
+                router.push('/');
+                return;
+            }
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                const isUserAdmin = userProfile.data.role === 'admin';
+                setIsAdmin(isUserAdmin);
+                // redirect only after role is known
+                if (!isUserAdmin) {
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAdmin(false);
+                router.push('/');
+            }
+        };
+        checkAdmin();
+    }, [session, router]);
+    if (isAdmin === null) return <Loader loadingtext="Loading ..." />;;
+    if (!isAdmin) return null; // wait for router.push to trigger
 
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTargetAudience(event.target.value === targetAudience ? null : event.target.value);
