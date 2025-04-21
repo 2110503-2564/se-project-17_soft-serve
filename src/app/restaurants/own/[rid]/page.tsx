@@ -125,7 +125,7 @@ export default function MyRestaurantPage() {
                     </div>
                 </div>
             </div>
-            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center space-x-4 p-5">
+            <div className="flex justify-center space-x-4 py-5">
                 {
                     (userRole === 'restaurantManager' || userRole === 'admin') ? 
                     <Link href={`/restaurants/edit/${rid}`}>

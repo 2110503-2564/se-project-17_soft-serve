@@ -132,8 +132,8 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         }
       } else {
         const errorData = await response.json();
-        // console.error("Backend Error Data:", errorData.msg);
-        alert(`Failed to update restaurant: ${errorData.msg || response.statusText}`);
+        // console.error("Backend Error Data:", errorData.message);
+        alert(`Failed to update restaurant: ${errorData.message || response.statusText}`);
       }
     } catch (err) {
       setError("Failed to update restaurant");

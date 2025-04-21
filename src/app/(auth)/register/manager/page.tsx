@@ -222,7 +222,7 @@ export default function RestaurantManagerRegisterPage() {
               await deleteRestaurant(restaurantId);
             }
             
-            throw new Error(errorData.message || errorData.msg || 'Registration failed');
+            throw new Error(errorData.message || errorData.message || 'Registration failed');
           } catch (jsonError) {
             // If user creation fails, delete the restaurant that was just created
             if (restaurantId) {

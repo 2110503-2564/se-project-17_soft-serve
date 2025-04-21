@@ -1,24 +1,96 @@
-import { ReservationJson, ReservationItem } from "@/../interfaces";
-import getReservations from "@/libs/getReservations";
-import getUserProfile from "@/libs/getUserProfile";
-import { getServerSession } from "next-auth";
-import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
-import { redirect } from 'next/navigation';
-import AdminRow from "./AdminReservationRow";
+'use client';
+import { useEffect, useState } from 'react';
+import AdminRow from './AdminReservationRow';
+import { ReservationItem } from "../../interfaces";
+import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Loader from './Loader';
 
-export default async function AdminReservationTable() {
-    const session = await getServerSession(authOptions);
-    
-    if (!session || !session.user || !session.user.token) return null;
+// Function to format the date for comparison
+const formatDateForComparison = (date: Date) => {
+    return date.toISOString().split('T')[0]; // Convert to YYYY-MM-DD
+};
 
-    const token = session.user.token;
-    const user = await getUserProfile(token);
+export default function AdminReservationTable() {
+    const [reservations, setReservations] = useState<ReservationItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const searchParams = useSearchParams();
+    const { data: session, status } = useSession();
 
-    if (user.data.role !== 'admin') {
-        redirect('/');
+    useEffect(() => {
+        const fetchReservationsData = async () => {
+            if (status === "loading") return;
+            if (!session?.user?.token) {
+                setError("User not authenticated");
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+                const apiUrl = `${process.env.BACKEND_URL}api/v1/reservations`;
+
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        Authorization: `Bearer ${session.user.token}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to fetch reservations data.');
+                }
+
+                let formattedData = Array.isArray(data.data) ? data.data : [data.data];
+
+                // Filter by restaurant
+                const restaurantParam = searchParams.get('restaurant');
+                if (restaurantParam) {
+                    formattedData = formattedData.filter((item: ReservationItem) =>
+                        item.restaurant.name.toLowerCase().includes(restaurantParam.toLowerCase())
+                    );
+                }
+
+                // Filter by date
+                const dateParam = searchParams.get('date');
+                if (dateParam) {
+                    formattedData = formattedData.filter((item: ReservationItem) => {
+                        const formattedRevDate = formatDateForComparison(new Date(item.revDate)); // Convert revDate to YYYY-MM-DD
+                        const formattedDateParam = dateParam.split('/').reverse().join('-'); // Convert input date (20/04/2025) to YYYY-MM-DD
+                        return formattedRevDate === formattedDateParam; // Compare dates
+                    });
+                }
+
+                // Filter by time
+                const timeParam = searchParams.get('time');
+                if (timeParam) {
+                    formattedData = formattedData.filter((item: ReservationItem) => {
+                        const reservationTime = new Date(item.revDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        return reservationTime === timeParam;
+                    });
+                }
+
+                setReservations(formattedData);
+            } catch (err: any) {
+                setError(`Error fetching reservations: ${err.message}`);
+                console.error(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchReservationsData();
+    }, [session, searchParams]);
+
+    if (isLoading) {
+        return <Loader loadingtext="Loading reservations..." />;
     }
 
-    const reservationJson: ReservationJson = await getReservations({ token });
+    if (error) {
+        return <div className='text-lg text-white m-10'>Error: {error}</div>;
+    }
 
     return (
         <main>
@@ -26,22 +98,26 @@ export default async function AdminReservationTable() {
                 <table className="w-full border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-gray-100">
-                        <th className="border border-gray-300 px-4 py-2">Reservation Id</th>
+                            <th className="border border-gray-300 px-4 py-2">Reservation Id</th>
                             <th className="border border-gray-300 px-4 py-2">Date</th>
                             <th className="border border-gray-300 px-4 py-2">Time</th>
                             <th className="border border-gray-300 px-4 py-2">User Id</th>
                             <th className="border border-gray-300 px-4 py-2">Guests</th>
                             <th className="border border-gray-300 px-4 py-2">Restaurant</th>
                             <th className="border border-gray-300 px-4 py-2">Edit</th>
-                            <th className="border border-gray-300 px-4 py-2">Cancle</th>
+                            <th className="border border-gray-300 px-4 py-2">Cancel</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {reservationJson.data.map((reservationItem: ReservationItem) => {
-                            return (
-                                <AdminRow reservationItem={reservationItem} key={reservationItem._id}/>
-                            );
-                        })}
+                        {reservations.length > 0 ? (
+                            reservations.map((reservationItem: ReservationItem) => (
+                                <AdminRow reservationItem={reservationItem} key={reservationItem._id} />
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={8} className="text-center py-4">No reservations found</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
