@@ -27,7 +27,7 @@ body {
 /* Apply Noto Sans Thai font to the whole website */
 body {
   color: var(--foreground);
-  background-color: white;
+  background-color: #ffffff;
   margin-top: 60px;
   font-family: 'Noto Sans Thai', sans-serif;
 }
