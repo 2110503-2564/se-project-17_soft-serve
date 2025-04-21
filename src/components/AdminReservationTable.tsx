@@ -39,7 +39,7 @@ export default async function AdminReservationTable() {
                     <tbody>
                         {reservationJson.data.map((reservationItem: ReservationItem) => {
                             return (
-                                <AdminRow reservationItem={reservationItem} key={reservationItem.id}/>
+                                <AdminRow reservationItem={reservationItem} key={reservationItem._id}/>
                             );
                         })}
                     </tbody>
