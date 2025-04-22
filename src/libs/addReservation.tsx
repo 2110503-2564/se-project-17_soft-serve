@@ -14,7 +14,7 @@ export default async function addReservation ({restaurantId, revDate, numberOfPe
     const json = await response.json();
 
     if(!response.ok){
-        throw new Error(json.message || 'Failed to make reservation');
+        throw new Error(json.message || "Reservation failed");
     }
 
     return json;
