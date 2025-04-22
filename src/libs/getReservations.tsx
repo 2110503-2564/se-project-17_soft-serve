@@ -9,7 +9,9 @@ export default async function getReservations({token} : {token: string}){
     });
 
     if(!response.ok){
-        throw new Error('Failed to fetch reservations');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch reservations');
+    
     }
 
     return await response.json();
