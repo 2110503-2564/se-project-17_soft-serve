@@ -59,7 +59,7 @@
                 console.log('Updated user:', response.data);
             } catch (error: any) {
                 console.error(error);
-                alert(error.message || 'An error occurred while saving the data.');
+                alert(error);
             }
 
             setHasChanges(false);
