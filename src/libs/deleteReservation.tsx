@@ -7,7 +7,8 @@ export default async function deleteReservation ({reservationId, token} : {reser
     });
 
     if(!response.ok){
-        throw new Error('Failed to delete reservation');
+        const err = await  response.json();
+        throw new Error(err.message || 'Failed to delete reservation');
     }
 
     return await response.json();
