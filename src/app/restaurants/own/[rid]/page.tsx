@@ -91,7 +91,7 @@ export default function MyRestaurantPage() {
                 </div>
 
                 <div className="flex items-center pt-8">
-                    <ReviewRestaurantBox/>
+                    <ReviewRestaurantBox avgRating={restaurantDetail.data.ratingrating}/>
                 </div>
 
                 <div className="text-xl font-bold pt-4">

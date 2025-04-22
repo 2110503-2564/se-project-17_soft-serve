@@ -8,7 +8,7 @@ import getReviewOneRestaurant from '@/libs/getReviewsOneRestaurant';
 import { ReviewJson } from '@../../../interfaces';
 import { useSession } from 'next-auth/react';
 
-export default function ReviewRestaurantBox() {
+export default function ReviewRestaurantBox({avgRating} : {avgRating : number}) {
   const { rid } = useParams();
   const { data: session, status } = useSession();
 
@@ -25,25 +25,16 @@ export default function ReviewRestaurantBox() {
       try {
         if (!session?.user?.token) return;
 
-        const data: ReviewJson = await getReviewOneRestaurant({
+        const reviews: ReviewJson = await getReviewOneRestaurant({
           restaurantId: rid as string,
           token: session.user.token,
         });
 
-        const reviews = data.data;
-        const reviewCount = reviews.length;
-
-        const totalRating = reviews.reduce((acc, cur) => acc + cur.rating, 0);
-        const avgRating = reviewCount > 0 ? totalRating / reviewCount : 0;
-
-        const starCount: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-        reviews.forEach(review => {
-          const rating = Math.floor(review.rating);
-          starCount[rating] = (starCount[rating] || 0) + 1;
-        });
+        const reviewCount = reviews.count;
+        const starCount = reviews.starCount;
 
         setReviewStats({
-          rating: parseFloat(avgRating.toFixed(1)),
+          rating: avgRating,
           reviewCount,
           starCount
         });
