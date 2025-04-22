@@ -14,6 +14,10 @@ export default function RestaurantList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    //pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 25;
+
     useEffect(() => {
         const fetchAndFilterRestaurants = async () => {
             setLoading(true);
@@ -28,7 +32,12 @@ export default function RestaurantList() {
                         restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
                     );
                 }
-                setRestaurants(filteredRestaurants);
+                // setRestaurants(filteredRestaurants);
+                // Only include verified restaurants for pagination
+                const verifiedRestaurants = filteredRestaurants.filter(r => r.verified);
+
+                setRestaurants(verifiedRestaurants);
+                setCurrentPage(1);
             } catch (err) {
                 setError("Failed to load restaurant data");
             } finally {
@@ -37,6 +46,18 @@ export default function RestaurantList() {
         };
         fetchAndFilterRestaurants();
     }, [searchTerm]); // useEffect จะทำงานใหม่เมื่อ searchTerm เปลี่ยนแปลง
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentRestaurants = restaurants.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(restaurants.length / itemsPerPage);
+    const handleNext = () => {
+        if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+    };
+    const handlePrev = () => {
+        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    };
 
     if (loading) {
         return <Loader loadingtext="Loading restaurants..." />;
@@ -57,17 +78,37 @@ export default function RestaurantList() {
             {restaurants.length === 0 ? (
                 <div className="text-center py-10 text-gray-800 text-lg">No restaurants found.</div>
             ) : (
-            <div className="restaurant-list">
-                {
-                    restaurants.map((restaurantItem : RestaurantItem) => ( // เปลี่ยนจาก restaurantJson.data เป็น restaurants
-                        restaurantItem.verified ? (
-                            <div key={restaurantItem.id}>
-                                <RestaurantListItem restaurantItem={restaurantItem}/>
-                            </div>
-                        ) : null
-                    ))
-                }
-            </div>
+            <>
+                    <div className="restaurant-list mb-4">
+                        {currentRestaurants.map((restaurantItem: RestaurantItem) => (
+                            restaurantItem.verified ? (
+                                <div key={restaurantItem.id}>
+                                    <RestaurantListItem restaurantItem={restaurantItem} />
+                                </div>
+                            ) : null
+                        ))}
+                    </div>
+
+                    <div className="flex justify-center mt-0 space-x-4">
+                        <button
+                            onClick={handlePrev}
+                            disabled={currentPage === 1}
+                            className="px-4 py-2 bg-gray-200 rounded border border-gray-200 hover:border-gray-400 disabled:opacity-50 "
+                        >
+                            Previous
+                        </button>
+                        <span className="flex items-center text-sm">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <button
+                            onClick={handleNext}
+                            disabled={currentPage === totalPages}
+                            className="px-4 py-2 bg-gray-200 rounded border border-gray-200 hover:border-gray-400 disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </>
             )}
         </main>
     );
