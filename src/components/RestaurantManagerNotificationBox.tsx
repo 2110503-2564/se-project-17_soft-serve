@@ -26,19 +26,19 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
     }
   };
 
-  const isFromResM = notificationItem.creatorId === 'manager';
+  const isFromResM = notificationItem.createdBy === 'restaurantManager';
 
   return (
-    <div className="w-full bg-white border border-gray-300 px-8 py-4 rounded-md shadow-sm">
+    <div className="w-full bg-white border border-gray-300 px-8 py-4 shadow-sm">
       <div className="flex justify-between items-center">
         <div className="flex flex-col w-full">
           <h2 className="text-lg font-semibold mb-2">
             {notificationItem.title}
           </h2>
-          <p className="text-gray-700 mb-4">{notificationItem.message}</p>
+          <p className="text-gray-700 mb-1.35">{notificationItem.message}</p>
 
           {isFromResM && (
-            <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
+            <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600 mt-4">
               <div>
                 <span className="font-medium">Publish At:</span>{" "}
                 {notificationItem.publishAt

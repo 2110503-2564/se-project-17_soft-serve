@@ -20,8 +20,6 @@ export default async function RestaurantManagerNotificationRow() {
   }
   const notificationJson: NotificationJson = await getNotifications({ token });
 
-
-
   const adminNotifications = notificationJson.data.filter(
     (item: NotificationItem) => item.createdBy === 'admin'
   );
@@ -31,15 +29,13 @@ export default async function RestaurantManagerNotificationRow() {
   );
 
   return (
-    <main className="w-screen m-0 p-0">
-      <RestaurantManagerNotificationPanel/>
+    <main className="w-screen m-0 p-0 bg-white">
       {adminNotifications.map((notificationItem: NotificationItem) => (
         <RestaurantManagerNotificationBox
           key={notificationItem._id}
           notificationItem={notificationItem}
         />
       ))}
-      <RestaurantManagerNotificationPanel/>
       {managerNotifications.map((notificationItem: NotificationItem) => (
         <RestaurantManagerNotificationBox
           key={notificationItem._id}
