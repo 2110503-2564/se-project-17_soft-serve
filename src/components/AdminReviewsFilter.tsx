@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, KeyboardEventHandler } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -44,6 +44,12 @@ export default function AdminReviewsFilter() {
     router.push('/admin/reviews');
   };
 
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <main>
       <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
@@ -56,9 +62,16 @@ export default function AdminReviewsFilter() {
               value={selectedRestaurant}
               onChange={(_, value) => setSelectedRestaurant(value || "")}
               renderInput={(params) => (
-                <TextField {...params} placeholder="All restaurants" />
+                <TextField {...params} placeholder="All restaurants" onKeyDown={handleKeyDown}/>
               )}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1,
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'gray',
+                },
+                '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'red',
+                },
+              }}
             />
           </div>
           <div className="flex items-center">
@@ -67,10 +80,18 @@ export default function AdminReviewsFilter() {
               select
               value={minRating}
               onChange={(e) => setMinRating(e.target.value)}
+              onKeyDown={handleKeyDown}
               SelectProps={{
                 native: true,
               }}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1,
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'gray',
+                },
+                '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'red',
+                },
+              }}
             >
               <option value="">All ratings</option>
               <option value="1">1 star & above</option>

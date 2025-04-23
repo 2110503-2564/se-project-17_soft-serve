@@ -30,13 +30,13 @@ export default function RestaurantListItem({ restaurantItem }: { restaurantItem:
                 </div>
                 <div className="flex flex-row">
                 <Link href={`/restaurants/${restaurantItem.id}`}>
-                    <button className="mt-4 mr-5 px-6 py-2 text-white bg-[#D40303] rounded-xl hover:bg-red-700 transition-shadow shadow-lg hover:shadow-2xl w-[150px]">
-                        รายละเอียด
+                    <button className="mt-4 mr-5 px-6 py-2 text-white bg-mygray rounded-xl hover:bg-red-700 transition-shadow shadow-lg hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray w-[150px]">
+                        Details
                     </button>
                 </Link>
                 <Link href={`/rating/${restaurantItem.id}`}>
-                    <button className="mt-4 px-6 py-2 text-white bg-green-600 rounded-xl hover:bg-green-700 transition-shadow shadow-lg hover:shadow-2xl w-[150px]">
-                        ให้คะแนน
+                    <button className="mt-4 px-6 py-2 text-white bg-mygreen rounded-xl hover:bg-green-700 transition-shadow shadow-lg hover:shadow-2xl hover:bg-white hover:text-mygreen hover:border hover:border-mygreen w-[150px]">
+                        Rate
                     </button>
                 </Link>    
                 </div>

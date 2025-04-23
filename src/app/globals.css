@@ -9,6 +9,8 @@
   --background: #ffffff;
   --foreground: #171717;
   --myred: #D40303;
+  --mygray: #898989;
+  --mygreen: #4CBB17;
 }
 
 @media (prefers-color-scheme: dark) {

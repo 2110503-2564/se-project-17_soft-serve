@@ -39,11 +39,11 @@ export default function AdminReservationRow({reservationItem} : {reservationItem
             <td className="border border-gray-300 px-4 py-2">{reservationItem.restaurant.name}</td> 
             <td className="border border-gray-300 px-4 py-2 text-center">
                 <Link href={`/reservations/edit/${reservationItem._id}`} passHref>
-                <button className="bg-green-600 text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-green-700">Edit</button>
+                <button className="bg-mygray text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-gray-600">Edit</button>
                 </Link>
             </td>
             <td className="border border-gray-300 px-4 py-2 text-center">
-                <button onClick={handleCancelReservation} className="bg-[#D40303] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700">Cancle</button>
+                <button onClick={handleCancelReservation} className="bg-myred text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700">Cancel</button>
             </td>
         </tr>
     );

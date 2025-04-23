@@ -215,7 +215,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
       ) : (
       <div className="flex justify-between items-center p-1">
         <span>{restaurant.data.address}, {restaurant.data.district}, {restaurant.data.province}, Thailand {restaurant.data.postalcode}</span>
-        <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />
+        <PencilIcon className="text-gray-600 hover:text-gray-800 h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />
       </div>
       )}
       </div>
@@ -233,7 +233,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
           ) : (
             <span>{restaurant.data.description}</span>
           )}
-          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+          {!isEditing && <PencilIcon className="text-gray-600 hover:text-gray-800 h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
         </div>
         {/*Food Type*/}
         <div className="font-semibold text-myred text-xl mt-5 mb-2">
@@ -250,7 +250,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
           ) : (
             <span>{restaurant.data.foodType}</span>
           )}
-          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+          {!isEditing && <PencilIcon className="text-gray-600 hover:text-gray-800 h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
         </div>
         {/*Opening Hours*/}
         <div className="font-semibold text-myred text-xl mt-5 mb-2">
@@ -259,26 +259,32 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         <div className="text-gray-700 border-b border-gray-300 flex justify-between items-center">
           {isEditing ? (
             <>
+            <div className="flex flex-col w-1/2 mr-2">
+            <label className="text-sm text-gray-600">Open Time:</label>
               <input
                 type="text"
-                className="w-1/2 p-1"
+                className="w-full p-1"
                 placeholder="Open Time"
                 value={editOpenTime}
                 onChange={(e) => setEditOpenTime(e.target.value)}
               />
-              <span className="mx-2">-</span>
+            </div>
+            <span className="mx-2">-</span>
+            <div className="flex flex-col w-1/2 mr-2">
+            <label className="text-sm text-gray-600">Close Time:</label>
               <input
                 type="text"
-                className="w-1/2 p-1"
+                className="w-full p-1"
                 placeholder="Close Time"
                 value={editCloseTime}
                 onChange={(e) => setEditCloseTime(e.target.value)}
               />
+            </div>
             </>
           ) : (
             <span>{restaurant.data.openTime} - {restaurant.data.closeTime}</span>
           )}
-          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+          {!isEditing && <PencilIcon className="text-gray-600 hover:text-gray-800 h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
         </div>
         {/*Tel*/}
         <div className="font-semibold text-myred text-xl mt-5 mb-2">
@@ -295,7 +301,7 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
           ) : (
             <span>{restaurant.data.tel}</span>
           )}
-          {!isEditing && <PencilIcon className="h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
+          {!isEditing && <PencilIcon className="text-gray-600 hover:text-gray-800 h-5 w-5 mr-2 cursor-pointer" onClick={handleEditClick} />}
         </div>
       </div>
       {/*Submit/Cancel Buttons*/}
