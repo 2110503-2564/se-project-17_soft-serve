@@ -40,7 +40,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
             setTimeValue(dayjs(tempReservationData).format('HH:mm'));
             setCount(reservationData.data.numberOfPeople);
         }
-    }, [reservationData, availableSeats]);
+    }, [reservationData]);
 
     useEffect(() => {
         fetchRestaurantAvailability(restaurantId, dateValue.format('YYYY-MM-DD'));
