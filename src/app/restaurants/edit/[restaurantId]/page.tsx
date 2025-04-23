@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react'
 import EditRestaurantBox from "@/components/EditRestaurantBox";
 import getUserProfile from '@/libs/getUserProfile';
+import Loader from "@/components/Loader";
 
 export default function EditRestaurant() {
     const { data: session } = useSession();
@@ -50,13 +51,13 @@ export default function EditRestaurant() {
         checkRole();
     }, [restaurantId, session, router]);
     if (isLoadingRoleCheck) {
-        return <div>Loading...</div>; // Or a spinner
+        return <Loader loadingtext="Loading restaurant..." />;
     }
     if (!isAuthorized) {
         return null; // Or maybe a "Not Authorized" message, though the redirect should handle this
     }
     if (!restaurantId || !session || !session.user?.token) {
-        return null; // Or a loading state, or a message
+        return null;
     }
 
     return (

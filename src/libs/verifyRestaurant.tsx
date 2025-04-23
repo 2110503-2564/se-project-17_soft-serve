@@ -16,7 +16,7 @@ interface VerifyRestaurantParams {
   
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.msg || "Failed to verify/reject restaurant");
+      throw new Error(errorData.message || "Failed to verify/reject restaurant");
     }
   
     return response.json();

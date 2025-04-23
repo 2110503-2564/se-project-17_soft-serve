@@ -10,6 +10,7 @@ import { useEffect, useReducer, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { redirect } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
+import Loader from "@/components/Loader";
 
 // Reducer for ratings
 const ratingReducer = (
@@ -30,6 +31,7 @@ export default function RatingDetailPage() {
     const { data: session, status } = useSession(); // Added status
     const router = useRouter();
 
+<<<<<<< HEAD
     // 🛡 Protect route: redirect if session is not valid
     useEffect(() => {
         if (status !== "loading" && (!session || !session.user || !session.user.token)) {
@@ -69,14 +71,85 @@ export default function RatingDetailPage() {
 
     const token = session?.user?.token || "";
 
+||||||| 22b71a5
+    if (!session || !session.user || !session.user.token) {
+        redirect('/');
+    }
+
+    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    useEffect(() => {
+        const checkRole = async () => {
+            if (!session || !session.user?.token) {
+                redirect('/');
+            }
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
+                    setIsAuthorized(true);
+                } else {
+                    redirect('/');
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAuthorized(false);
+                redirect('/');
+            } finally {
+                setIsLoadingRoleCheck(false);
+            }
+        };
+        checkRole();
+    }, [session]);
+    if (isLoadingRoleCheck) return <div>Loading...</div>; // Or a spinner
+    if (isAuthorized === null) return <div>Loading...</div>;
+    if (!isAuthorized) return null; // wait for router.push to trigger
+
+    const token = session.user.token;
+
+=======
+>>>>>>> 0c2400b79e0dc104fcd7e9868deea11cccce302b
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [ratings, dispatch] = useReducer(ratingReducer, new Map<string, number | null>());
     const [overallRating, setOverallRating] = useState(0);
     const [comment, setComment] = useState("");
 
+<<<<<<< HEAD
+||||||| 22b71a5
+    // const token = typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : "";
+
+=======
+    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    useEffect(() => {
+        if (!session || !session.user?.token) {
+            return;
+        }
+        const checkRole = async () => {
+            try {
+                const userProfile = await getUserProfile(session.user.token);
+                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
+                    setIsAuthorized(true);
+                } else {
+                    alert(`Your role (${session.user.role}) is not authorized to access this page.`);
+                    router.replace('/');
+                }
+                
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+                setIsAuthorized(false);
+                router.replace('/');
+            } finally {
+                setIsLoadingRoleCheck(false);
+            }
+        };
+        checkRole();
+    }, [session]);
+    
+>>>>>>> 0c2400b79e0dc104fcd7e9868deea11cccce302b
     // Fetch restaurant data
     useEffect(() => {
+        if (!rid) return;
         const fetchRestaurant = async () => {
             setIsLoading(true);
             try {
@@ -97,25 +170,33 @@ export default function RatingDetailPage() {
         fetchRestaurant();
     }, [rid]);
 
-    const handleRatingChange = (ratingName: string, value: number | null) => {
-        dispatch({ type: 'update', ratingName, value });
-    };
-
+    // Edit here
     // Calculate Overall Rating
     useEffect(() => {
         const validRatings = Array.from(ratings.values()).filter(value => value !== null);
         if (validRatings.length > 0) {
-            const total = validRatings.reduce((acc, value) => acc + value, 0);
-            const newOverallRating = total / validRatings.length;
+            const sumRatings = validRatings.reduce((sum, value) => sum + (value as number), 0);
+            const newOverallRating = sumRatings / 4;
             setOverallRating(parseFloat(newOverallRating.toFixed(1)));
         } else {
             setOverallRating(0);
         }
     }, [ratings]);
+    if (!session || !session.user?.token || isLoadingRoleCheck) {
+        return <Loader loadingtext="Loading ..." />;;
+    }
+
+    if (!isAuthorized) return null;
+    if (isLoading) {
+        return <Loader loadingtext="Loading ..." />;
+    }
+    const handleRatingChange = (ratingName: string, value: number | null) => {
+        dispatch({ type: 'update', ratingName, value });
+    };
 
     const handleSubmit = async () => {
-        if (overallRating <= 0 || !comment.trim()) {
-            alert('Please provide a rating and a comment.');
+        if (overallRating <= 1 || !comment.trim()) {
+            alert("Please provide a comment and rate all categories before submitting your review.");
             return;
         }
 
@@ -124,7 +205,7 @@ export default function RatingDetailPage() {
                 restaurantId: rid as string,
                 rating: overallRating,
                 review: comment,
-                token: token,
+                token: session.user.token,
             });
 
             alert(`Review submitted successfully!\nOverall Rating: ${res.data.rating}/5`);
@@ -135,11 +216,7 @@ export default function RatingDetailPage() {
     };
 
     if (isLoading) {
-        return (
-            <main className="text-center p-5">
-                <h1 className="text-lg font-medium">Loading...</h1>
-            </main>
-        );
+        return <Loader loadingtext="Loading ..." />;
     }
 
     if (!restaurant) {

@@ -3,12 +3,21 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import getUserProfile from '@/libs/getUserProfile';
+import Loader from "@/components/Loader";
 
 export default function CreateNotification() {
     const router = useRouter();
     const { data: session } = useSession();
-
+    const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+    const [title, setTitle] = useState('');
+    const [message, setMessage] = useState('');
+    const [targetAudience, setTargetAudience] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+  
     useEffect(() => {
         const checkAdmin = async () => {
             if (!session || !session.user?.token) {
@@ -32,16 +41,8 @@ export default function CreateNotification() {
         };
         checkAdmin();
     }, [session, router]);
-
-    if (isAdmin === null) return <div>Loading...</div>;
+    if (isAdmin === null) return <Loader loadingtext="Loading ..." />;;
     if (!isAdmin) return null; // wait for router.push to trigger
-    
-    const [title, setTitle] = useState('');
-    const [message, setMessage] = useState('');
-    const [targetAudience, setTargetAudience] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
 
     const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
         setTargetAudience(event.target.value === targetAudience ? null : event.target.value);
@@ -50,8 +51,17 @@ export default function CreateNotification() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         
-        if (!title || !message || !targetAudience) {
+        if (!title && !message && !targetAudience) {
             setError('Please complete all fields');
+            return;
+        } else if(!title) {
+            setError('Please enter a title');
+            return;
+        } else if(!message) {
+            setError('Please enter a message');
+            return;
+        } else if(!targetAudience) {
+            setError('Please select a target audience');
             return;
         }
 

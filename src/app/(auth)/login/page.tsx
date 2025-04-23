@@ -33,7 +33,7 @@ export default function LoginPage() {
                     return;
                 }
                 if (response.error === 'Invalid credentials') {
-                    setMessage({ text: 'Invalid credentials. Please change the email or password.', type: 'error' });
+                    setMessage({ text: 'Login failed. Please make sure your email and password are correct.', type: 'error' });
                     return;
                 }
                 setMessage({ text: 'Error logging in, please try again.(failed to fetch)', type: 'error' });
@@ -42,6 +42,7 @@ export default function LoginPage() {
 
             setMessage({ text: 'Login successful!', type: 'success' });
             router.replace('/');
+            router.refresh();
         } catch (error) {
             console.error('Error logging in:', error);
             setMessage({ text: 'Error logging in, please try again.', type: 'error' });
@@ -49,8 +50,8 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col px-80">
-            <div className="w-full bg-white text-gray-800 py-10 px-20 rounded-3xl shadow-2xl relative">
+        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80">
+            <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
                 <div className="text-3xl font-bold text-center mt-6 mb-8">
                     Login to your account
                 </div>
@@ -65,7 +66,7 @@ export default function LoginPage() {
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
                         />
                     </div>
-                    <div className="flex justify-center items-center block mb-6">
+                    <div className="flex justify-center items-center block mb-4">
                         <input 
                             type="password" 
                             id="password" 
@@ -105,7 +106,7 @@ export default function LoginPage() {
                 <div className="text-3xl font-bold text-center mb-2">
                     Create an account
                 </div>
-                <div className="flex flex-col justify-center items-center mb-2">
+                <div className="flex flex-col justify-center items-center">
                     <Link href="/register">
                         <button className="block bg-myred border border-white text-white text-xl font-semibold w-[150px] py-2 px-4 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600">
                             Sign up

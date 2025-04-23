@@ -16,20 +16,25 @@ export default async function AdminNotificationRow() {
   const user = await getUserProfile(token);
   if (user.data.role !== 'restaurantManager' && user.data.role !== 'admin') {
     redirect('/');
-    return null;
   }
   const notificationJson: NotificationJson = await getNotifications({ token });
 
 
   return (
     <main className="w-screen m-0 p-0">
-      <AdminNotificationPanel/>
-      {notificationJson.data.map((notificationItem: NotificationItem) => (
-        <AdminNotificationBox
-          key={notificationItem._id}
-          notificationItem={notificationItem}
-        />
-      ))}
+      <AdminNotificationPanel />
+      {notificationJson.count === 0 ? (
+        <div className="text-center py-10 text-gray-500 text-lg">
+          No notifications available.
+        </div>
+      ) : (
+        notificationJson.data.map((notificationItem: NotificationItem) => (
+          <AdminNotificationBox
+            key={notificationItem._id}
+            notificationItem={notificationItem}
+          />
+        ))
+      )}
     </main>
   );
 }

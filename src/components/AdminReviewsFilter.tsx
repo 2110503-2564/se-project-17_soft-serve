@@ -62,7 +62,7 @@ export default function AdminReviewsFilter() {
             />
           </div>
           <div className="flex items-center">
-            <label className="w-28 mr-5 font-medium text-black">Min Rating</label>
+            <label className="w-28 mr-5 font-medium text-black">Rating</label>
             <TextField
               select
               value={minRating}

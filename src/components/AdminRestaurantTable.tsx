@@ -4,6 +4,7 @@ import AdminRow from './AdminRestaurantRow';
 import { RestaurantItem } from "../../interfaces";
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Loader from './Loader';
 
 export default function AdminRestaurantTable() {
     const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
@@ -67,7 +68,7 @@ export default function AdminRestaurantTable() {
     
 
     if (isLoading) {
-        return <div className='text-lg text-white m-10'>Loading restaurants...</div>;
+        return <Loader loadingtext="Loading restaurants..." />;
     }
 
     if (error) {

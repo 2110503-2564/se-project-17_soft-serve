@@ -78,14 +78,16 @@ export interface UserJson {
 }
 
 export interface NotificationItem{
-    _id: string;
-  title: string;
-  message: string;
-  creatorId: string;
-  createdBy: string;
-  targetAudience: string;
-  createdAt: Date;
-  __v: number;
+    _id: string,
+  title: string,
+  message: string,
+  creatorId: string,
+  createdBy: string,
+  restaurant?: RestaurantItem
+  targetAudience: string,
+  publishAt: Date,
+  createdAt: Date,
+  __v: number
 }
 
 export interface NotificationJson {
@@ -106,6 +108,13 @@ export interface ReviewItem {
 export interface ReviewJson {
     success: boolean,
     count: number,
+    starCount : {
+        oneStar : number,
+        twoStar : number,
+        threeStar : number,
+        fourStar : number,
+        fiveStar : number;
+    }
     data : ReviewItem[]
 }
 

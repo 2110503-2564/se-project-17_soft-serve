@@ -20,28 +20,6 @@ export default function ReviewBox({
   const { data: session } = useSession();
   const router = useRouter();
 
-  const handleSubmit = async () => {
-    if (rating <= 0 || !value.trim()) {
-      alert("Please provide a rating and a comment.");
-      return;
-    }
-    if(!session || !session.user || !session.user.token) return null;
-    const token = session.user.token;
-    try {
-      const res = await addReview({
-        restaurantId,
-        rating,
-        review: value,
-        token,
-      });
-
-      alert(`Review submitted successfully!\nOverall Rating: ${res.data.rating}/5`);
-      router.push("/");
-    } catch (error: any) {
-      alert(`Error submitting review: ${error.message}`);
-    }
-  };
-
   return (
     <Box
       component="form"

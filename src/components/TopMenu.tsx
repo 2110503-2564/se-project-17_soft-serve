@@ -10,13 +10,18 @@ export default async function TopMenu() {
     const session = await getServerSession(authOptions);
     
     let isAdmin = false;
-
-    if (!session || !session.user || !session.user.token) {}
-    else{
-    const token = session.user.token;
-    const user = await getUserProfile(token);
-    isAdmin = user.data.role === 'admin';
+    let isManager = false;
+    let res = "";
+    let jong = "";
+    if(session){
+        const token = session.user.token;
+        const user = await getUserProfile(token);
+        isAdmin = user.data.role === 'admin';
+        isManager = user.data.role === 'restaurantManager';
+        if(isManager)res = "/restaurants/own/" + user.data.restaurant;
+        if(isManager)jong = "/reservations/manager";
     }
+
 
     return (
         <div className="w-full h-[60px] bg-white flex flex-row justify-between items-center z-50 fixed top-0 left-0 right-0">
@@ -30,9 +35,10 @@ export default async function TopMenu() {
             </div>
             <div className="flex items-center">
                 {isAdmin && <TopMenuItem title='Admin' pageRef='/admin' />}
+                {isManager && <TopMenuItem title='Your Restaurants' pageRef= {res} />}
                 <TopMenuItem title='Home' pageRef='/' />
                 <TopMenuItem title='Restaurants' pageRef='/restaurants' />
-                <TopMenuItem title='Reservations' pageRef='/reservations' />
+                <TopMenuItem title='Reservations' pageRef={isManager ? jong : '/reservations'} />
 
                 <Link href={'/user'}>
                     <UserCircleIcon className="w-[70px] h-[70px] ml-1 pr-4 text-[#d42d2d] hover:text-myred" />

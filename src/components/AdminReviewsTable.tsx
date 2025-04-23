@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import StarRating from '@/components/StarRating';
+import Loader from './Loader';
 
 interface Review {
   _id: string;
@@ -120,7 +121,7 @@ export default function AdminReviewsTable() {
     });
   };
 
-  if (loading) return <div className="flex justify-center p-10">Loading reviews...</div>;
+  if (loading) return <Loader loadingtext='Loading Reviews...'/>;
 
   if (error) return <div className="bg-red-100 p-4 text-red-700 rounded mt-5">{error}</div>;
 
@@ -132,7 +133,7 @@ export default function AdminReviewsTable() {
         </h2>
 
         {reviews.length === 0 ? (
-          <div className="text-center py-10 text-black">No reviews found matching your criteria</div>
+          <div className="text-center py-10 text-black">No reviews found.</div>
         ) : (
           <div className="space-y-6">
             {reviews.map((review) => (

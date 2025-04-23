@@ -12,7 +12,7 @@ export default async function userLogIn ({userEmail, userPassword} : {userEmail 
 
     const data = await response.json();
 
-    if(data.msg == 'not verified'){
+    if(data.message == 'not verified'){
         throw new Error('not verified')
     }
 

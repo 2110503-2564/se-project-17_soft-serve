@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import getUserProfile from '@/libs/getUserProfile';
 import VerifyCard from '@/components/AdminVerifyCard';
+import Loader from '@/components/Loader';
 
 export default function Verify() {
     const { data: session } = useSession();
@@ -35,7 +36,7 @@ export default function Verify() {
         checkAdmin();
     }, [session, router]);
 
-    if (isAdmin === null) return <div>Loading...</div>;
+    if (isAdmin === null) return <Loader loadingtext="Loading ..." />;;
     if (!isAdmin) return null; // wait for router.push to trigger
 
     return (
