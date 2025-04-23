@@ -12,6 +12,7 @@ export default async function addReservation ({restaurantId, revDate, numberOfPe
     });
 
     if(!response.ok){
+        console.log(response.text);
         throw new Error('Failed to make reservation');
     }
 
