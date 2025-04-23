@@ -9,8 +9,8 @@ import Loader from "@/components/Loader";
 
 export default function RestaurantList() {
     const searchParams = useSearchParams();
-    const searchTerm = searchParams.get('restaurant'); // ดึงค่า parameter 'restaurant' จาก URL
-    const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]); // กำหนด Type ให้ State restaurants
+    const searchTerm = searchParams.get('restaurant');
+    const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,6 @@ export default function RestaurantList() {
                 const restaurantJson : RestaurantJson = await getRestaurants();
                 let filteredRestaurants = restaurantJson.data;
 
-                // กรองร้านอาหารถ้ามี searchTerm ใน URL
                 if (searchTerm) {
                     filteredRestaurants = filteredRestaurants.filter(restaurant =>
                         restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -35,7 +34,6 @@ export default function RestaurantList() {
                 // setRestaurants(filteredRestaurants);
                 // Only include verified restaurants for pagination
                 const verifiedRestaurants = filteredRestaurants.filter(r => r.verified);
-
                 setRestaurants(verifiedRestaurants);
                 setCurrentPage(1);
             } catch (err) {
@@ -45,7 +43,7 @@ export default function RestaurantList() {
             }
         };
         fetchAndFilterRestaurants();
-    }, [searchTerm]); // useEffect จะทำงานใหม่เมื่อ searchTerm เปลี่ยนแปลง
+    }, [searchTerm]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

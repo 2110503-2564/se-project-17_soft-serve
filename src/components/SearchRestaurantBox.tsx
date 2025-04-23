@@ -43,7 +43,7 @@ export default function SearchBox() {
     };
 
     const handleBlur: FocusEventHandler<HTMLInputElement> = () => {
-        // Delay เล็กน้อยเพื่อให้แน่ใจว่า onClick ของ suggestion ทำงานก่อน blur
+        // To ensure the onClick of the suggestion works before blur
         setTimeout(() => {
             setShowSuggestions(false);
         }, 100);
@@ -54,7 +54,7 @@ export default function SearchBox() {
         if (searchTerm) {
           params.set('restaurant', searchTerm);
         } else {
-          params.delete('restaurant'); // ลบ parameter ถ้าไม่มีคำค้นหา
+          params.delete('restaurant'); // Remove parameter if there is no search term.
         }
         router.push(`/restaurants?${params.toString()}`);
     }
@@ -69,7 +69,7 @@ export default function SearchBox() {
         <main className="flex-grow flex justify-end mx-10">
             <div className="relative flex-row w-[25%] flex items-center">
                 <input
-                    className="bg-white rounded-lg w-full py-2 px-3"
+                    className="bg-white rounded-lg w-full py-2 px-3 focus:outline-myred"
                     type="text"
                     placeholder="Restaurant Name"
                     value={searchTerm}
@@ -91,7 +91,7 @@ export default function SearchBox() {
                     </ul>
                 )}
                 <MagnifyingGlassIcon onClick={handleSearch}
-                    className="text-gray-500 dark:text-gray-400 right-2 top-1/2 h-5 w-5 ml-2 cursor-pointer transform -translate-y-1/2 absolute" />
+                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 right-2 top-1/2 h-5 w-5 ml-2 cursor-pointer transform -translate-y-1/2 absolute" />
             </div>
         </main>
     );
