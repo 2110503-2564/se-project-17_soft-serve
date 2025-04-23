@@ -13,7 +13,7 @@ export interface RestaurantItem {
     ratingrating?: number,
     reviewCount?: number,
     maxReservation: number,
-    imgPath?: string,
+    imgPath: string,
     verified: boolean,
     __v?: number,
     id: string
