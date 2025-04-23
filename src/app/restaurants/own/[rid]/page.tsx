@@ -86,12 +86,12 @@ export default function MyRestaurantPage() {
             </div>
 
             <div className="text-[19px] text-gray-800 px-12 mx-5">
-                <div className="flex justify-center text-4xl font-bold m-5">
+                <div className="flex justify-center text-4xl font-bold pt-8">
                     {restaurantDetail.data.name}
                 </div>
 
                 <div className="flex items-center pt-8">
-                    <ReviewRestaurantBox restaurantDetail={restaurantDetail}/>
+                    <ReviewRestaurantBox avgRating={restaurantDetail.data.ratingrating}/>
                 </div>
 
                 <div className="text-xl font-bold pt-4">
@@ -125,7 +125,7 @@ export default function MyRestaurantPage() {
                     </div>
                 </div>
             </div>
-            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center space-x-4 p-5">
+            <div className="flex justify-center space-x-4 py-5">
                 {
                     (userRole === 'restaurantManager' || userRole === 'admin') ? 
                     <Link href={`/restaurants/edit/${rid}`}>

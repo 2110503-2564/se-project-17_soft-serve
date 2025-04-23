@@ -11,9 +11,11 @@ export default async function editReservation ({reservationId, revDate, numberOf
         }),
     });
 
+    const json = await response.json();
+
     if(!response.ok){
-        throw new Error('Failed to edit reservation');
+        throw new Error(json.message || 'Failed to edit reservation');
     }
 
-    return await response.json();
+    return json;
 }

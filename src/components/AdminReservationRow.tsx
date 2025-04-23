@@ -30,8 +30,10 @@ export default function AdminReservationRow({reservationItem} : {reservationItem
     return (
         <tr key={reservationItem._id} className="border-t border-gray-300">
             <td className="border border-gray-300 px-4 py-2">{reservationItem._id}</td>
-            <td className="border border-gray-300 px-4 py-2">{reservationDate.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'long', year: 'numeric' })}</td>
-            <td className="border border-gray-300 px-4 py-2 text-center">{reservationDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+            <td className="border border-gray-300 px-4 py-2">
+                {reservationDate.toLocaleDateString('en-GB', {timeZone:'UTC'})}
+            </td>
+            <td className="border border-gray-300 px-4 py-2 text-center">{reservationDate.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</td>
             <td className="border border-gray-300 px-4 py-2">{reservationItem.user}</td>
             <td className="border border-gray-300 px-4 py-2 text-center">{reservationItem.numberOfPeople}</td>
             <td className="border border-gray-300 px-4 py-2">{reservationItem.restaurant.name}</td> 

@@ -8,7 +8,9 @@ export default async function getReservation({id, token} : {id: string, token: s
     });
 
     if(!response.ok){
-        throw new Error('Failed to fetch reservation');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch reservation');
+    
     }
 
     return await response.json();

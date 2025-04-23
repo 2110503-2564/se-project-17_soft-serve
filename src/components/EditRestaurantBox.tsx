@@ -2,18 +2,26 @@
 import { useState, useEffect } from "react";
 import getRestaurant from "@/libs/getRestaurant";
 import getUserProfile from "@/libs/getUserProfile";
+import editRestaurant from "@/libs/editRestaurant";
 import { OneRestaurantJson, RestaurantItem } from "../../interfaces";
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import Loader from "./Loader";
+import Manager from "@/app/(restaurantmanagerinfo)/manager/page";
 
 export default function EditRestaurantBox({ restaurantId, token }: { restaurantId: string, token: string }) {
   const router = useRouter();
+  const [isManager, setIsManager] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   useEffect(() => {
     const fetchProfile = async () => {
       const user = await getUserProfile(token);
-      if (user.data.role !== 'restaurantManager' && user.data.role !== 'admin') {
+      const isManager = user.data.role === 'restaurantManager';
+      const isAdmin = user.data.role === 'admin';
+      setIsManager(isManager);
+      setIsAdmin(isAdmin);
+      if (!(isManager || isAdmin)) {
         router.push('/');
       }
     }
@@ -113,31 +121,23 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
       closeTime: editCloseTime
     } as RestaurantItem;
     try {
-      console.log("Updated Data:", updatedData);
-      const response = await fetch(process.env.BACKEND_URL+`api/v1/restaurants/${restaurantId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-      if (response.ok) {
-        if (restaurant?.data) {
-          const updatedRestaurant = { ...restaurant, data: { ...restaurant.data, ...updatedData } };
-          setRestaurant(updatedRestaurant as OneRestaurantJson);
-          setIsEditing(false);
-          alert('Restaurant updated successfully!');
+      // console.log("Updated Data:", updatedData);
+      await editRestaurant({restaurantId: restaurantId, description: editDescription, foodType: editFoodType, address: editAddress, province: editProvince, district: editDistrict, postalcode: editPostalcode, tel: editTel, openTime: editOpenTime, closeTime: editCloseTime, token});
+      if (restaurant?.data) {
+        const updatedRestaurant = { ...restaurant, data: { ...restaurant.data, ...updatedData } };
+        setRestaurant(updatedRestaurant as OneRestaurantJson);
+        setIsEditing(false);
+        alert('Restaurant updated successfully!');
+        if (isAdmin) {
           router.push('/admin/restaurants');
         }
-      } else {
-        const errorData = await response.json();
-        // console.error("Backend Error Data:", errorData.msg);
-        alert(`Failed to update restaurant: ${errorData.msg || response.statusText}`);
+        if (isManager) {
+          router.push(`/restaurants/own/${restaurantId}`);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
       setError("Failed to update restaurant");
-      console.error("Update error:", err);
+      alert(err.message || 'Failed to edit restaurant. Please try again.');
     }
   };
 
