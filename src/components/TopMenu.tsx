@@ -12,12 +12,14 @@ export default async function TopMenu() {
     let isAdmin = false;
     let isManager = false;
     let res = "";
+    let jong = "";
     if(session){
         const token = session.user.token;
         const user = await getUserProfile(token);
         isAdmin = user.data.role === 'admin';
         isManager = user.data.role === 'restaurantManager';
         if(isManager)res = "/restaurants/own/" + user.data.restaurant;
+        if(isManager)jong = "/reservations/manager";
     }
 
 
@@ -36,7 +38,7 @@ export default async function TopMenu() {
                 {isManager && <TopMenuItem title='Your Restaurants' pageRef= {res} />}
                 <TopMenuItem title='Home' pageRef='/' />
                 <TopMenuItem title='Restaurants' pageRef='/restaurants' />
-                <TopMenuItem title='Reservations' pageRef='/reservations' />
+                <TopMenuItem title='Reservations' pageRef={isManager ? jong : '/reservations'} />
 
                 <Link href={'/user'}>
                     <UserCircleIcon className="w-[70px] h-[70px] ml-1 pr-4 text-[#d42d2d] hover:text-myred" />
