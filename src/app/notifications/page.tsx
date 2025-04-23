@@ -16,7 +16,7 @@ export default async function Notification() {
         redirect('/');
     }
 
-    console.log("test user notipage1")
+
 
     return (
         <main>

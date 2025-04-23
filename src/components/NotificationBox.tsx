@@ -14,9 +14,10 @@ export default function NotificationBox({ notificationItem }: { notificationItem
 
   useEffect(() => {
     const checkExpiration = () => {
-      const createdAt = new Date(notificationItem.createdAt);
+      const publishAt= new Date(notificationItem.publishAt);
       const now = new Date();
-      const diffInHours = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
+      const diffInHours = (now.getTime() - publishAt.getTime()) / (1000 * 60 * 60);
+      //const diffInMins = (now.getTime() - publishAt.getTime()) / (1000 * 60);
 
       if(diffInHours >= 24)
       {
@@ -26,12 +27,14 @@ export default function NotificationBox({ notificationItem }: { notificationItem
 
     checkExpiration();
 
+    //optional: check every minute
+    //const interval = setInterval(checkExpiration, 1000);
 
     //optional: check every hour
     const interval = setInterval(checkExpiration, 1000 * 60 * 60);
 
     return () => clearInterval(interval);
-  }, [notificationItem.createdAt]);
+  }, [notificationItem.publishAt]);
 
   return (
     <div className="w-full bg-white border border-gray-300 px-8 py-4 rounded-md shadow-sm flex justify-between items-center justify-between">
@@ -40,7 +43,6 @@ export default function NotificationBox({ notificationItem }: { notificationItem
         <p className="text-gray-700 mb-1.25">{notificationItem.message}</p>
       </div>
 
-      {/* Green Circle */}
       <div className={`w-8 h-8 rounded-full ${isExpired ? 'bg-gray-400' : 'bg-green-500'} mr-8`}></div>
     </div>
   );

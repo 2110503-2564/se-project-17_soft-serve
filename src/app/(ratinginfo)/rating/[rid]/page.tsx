@@ -31,94 +31,12 @@ export default function RatingDetailPage() {
     const { data: session, status } = useSession(); // Added status
     const router = useRouter();
 
-<<<<<<< HEAD
-    // 🛡 Protect route: redirect if session is not valid
-    useEffect(() => {
-        if (status !== "loading" && (!session || !session.user || !session.user.token)) {
-            redirect('/');
-        }
-    }, [session, status]);
-
-    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
-    const [isAuthorized, setIsAuthorized] = useState(false);
-
-    useEffect(() => {
-        const checkRole = async () => {
-            if (!session || !session.user?.token) return;
-            try {
-                const userProfile = await getUserProfile(session.user.token);
-                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
-                    setIsAuthorized(true);
-                } else {
-                    redirect('/');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user profile:", error);
-                setIsAuthorized(false);
-                redirect('/');
-            } finally {
-                setIsLoadingRoleCheck(false);
-            }
-        };
-        checkRole();
-    }, [session]);
-
-    if (status === 'loading' || isLoadingRoleCheck) {
-        return <div className="text-center p-5">Loading...</div>;
-    }
-
-    if (!isAuthorized) return null;
-
-    const token = session?.user?.token || "";
-
-||||||| 22b71a5
-    if (!session || !session.user || !session.user.token) {
-        redirect('/');
-    }
-
-    const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
-    const [isAuthorized, setIsAuthorized] = useState(false);
-    useEffect(() => {
-        const checkRole = async () => {
-            if (!session || !session.user?.token) {
-                redirect('/');
-            }
-            try {
-                const userProfile = await getUserProfile(session.user.token);
-                if (userProfile?.data?.role === 'admin' || userProfile?.data?.role === 'user') {
-                    setIsAuthorized(true);
-                } else {
-                    redirect('/');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user profile:", error);
-                setIsAuthorized(false);
-                redirect('/');
-            } finally {
-                setIsLoadingRoleCheck(false);
-            }
-        };
-        checkRole();
-    }, [session]);
-    if (isLoadingRoleCheck) return <div>Loading...</div>; // Or a spinner
-    if (isAuthorized === null) return <div>Loading...</div>;
-    if (!isAuthorized) return null; // wait for router.push to trigger
-
-    const token = session.user.token;
-
-=======
->>>>>>> 0c2400b79e0dc104fcd7e9868deea11cccce302b
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [ratings, dispatch] = useReducer(ratingReducer, new Map<string, number | null>());
     const [overallRating, setOverallRating] = useState(0);
     const [comment, setComment] = useState("");
 
-<<<<<<< HEAD
-||||||| 22b71a5
-    // const token = typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : "";
-
-=======
     const [isLoadingRoleCheck, setIsLoadingRoleCheck] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
     useEffect(() => {
@@ -146,7 +64,6 @@ export default function RatingDetailPage() {
         checkRole();
     }, [session]);
     
->>>>>>> 0c2400b79e0dc104fcd7e9868deea11cccce302b
     // Fetch restaurant data
     useEffect(() => {
         if (!rid) return;

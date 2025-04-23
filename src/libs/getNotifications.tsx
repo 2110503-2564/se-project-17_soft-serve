@@ -1,3 +1,4 @@
+'use server'
 export default async function getNotifications({token} : {token: string}){
     const response = await fetch(process.env.BACKEND_URL+`api/v1/notifications`,{
         method: 'GET',

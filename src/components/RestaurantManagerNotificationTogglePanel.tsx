@@ -1,8 +1,62 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import getUserProfile from '@/libs/getUserProfile';
+import getNotifications from '@/libs/getNotifications';
+import { NotificationItem } from '../../interfaces';
+import { User } from '../../interfaces';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
+import { useSession } from 'next-auth/react';
 
 export default function RestaurantManagerNotificationTogglePanel() {
     const [selectedTab, setSelectedTab] = useState<'sent' | 'received'>('sent');
+    const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+    const {data: session}= useSession();
+
+    // Fetch user profile and notifications
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!session || !session.user?.token) {
+                    return;
+                }
+                const token = session.user.token;
+                const userProfile = await getUserProfile(token);
+
+                if (userProfile.data.role !== 'restaurantManager') {
+                    router.push('/');
+                    return;
+                }
+
+                setUser(userProfile.data);
+                const notificationJson = await getNotifications({token });
+
+                setNotifications(notificationJson.data);
+            } catch (error) {
+                console.error("Error fetching data", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [router]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    const adminNotifications = notifications.filter(
+        (item) => item.createdBy === 'admin'
+    );
+
+    const managerNotifications = notifications.filter(
+        (item) => item.createdBy === 'restaurantManager'
+    );
 
     const handleTabClick = (tab: 'sent' | 'received') => {
         setSelectedTab(tab);
@@ -17,12 +71,24 @@ export default function RestaurantManagerNotificationTogglePanel() {
                     {selectedTab === 'sent' ? (
                         <div>
                             {/* Replace with actual sent notifications */}
-                            <p className="text-gray-700">Showing sent notifications...</p>
+                            <ul>
+                                {adminNotifications.map((notification) => (
+                                    <li key={notification._id} className="text-gray-700">
+                                        {notification.message}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     ) : (
                         <div>
                             {/* Replace with actual received notifications */}
-                            <p className="text-gray-700">Showing received notifications...</p>
+                            <ul>
+                                {managerNotifications.map((notification) => (
+                                    <li key={notification._id} className="text-gray-700">
+                                        {notification.message}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     )}
                 </div>

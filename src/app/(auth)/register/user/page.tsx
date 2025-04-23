@@ -50,30 +50,45 @@ export default function RegisterPage() {
     };
 
     return (
-        <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 overflow-auto">
+        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 py-10 overflow-auto">
             <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
                 <div className="text-3xl font-bold text-center mt-6 mb-10">
                     Create an account
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex justify-center items-center block mb-6">
+                    <label htmlFor="email" className="block text-lg font-semibold mb-2 pl-20">
+                        Email
+                    </label>
+                    <div className="flex justify-center items-center block mb-4">
                         <input onChange={(e) => setEmail(e.target.value)} type="email" id="email" placeholder="Email"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
-                    <div className="flex justify-center items-center block mb-6">
+                    <label htmlFor="password" className="block text-lg font-semibold mb-2 pl-20">
+                        Password
+                    </label>
+                    <div className="flex justify-center items-center block mb-4">
                         <input onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder="Password"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
-                    <div className="flex justify-center items-center block mb-6">
+                    <label htmlFor="confirm-password" className="block text-lg font-semibold mb-2 pl-20">
+                        Confirm Password
+                    </label>
+                    <div className="flex justify-center items-center block mb-4">
                         <input onChange={(e) => setConfirmPassword(e.target.value)} type="password" id="confirm-password" placeholder="Confirm Password"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
-                    <div className="flex justify-center items-center block mb-6">
+                    <label htmlFor="name" className="block text-lg font-semibold mb-2 pl-20">
+                        Name
+                    </label>
+                    <div className="flex justify-center items-center block mb-4">
                         <input onChange={(e) => setName(e.target.value)} type="text" id="name" placeholder="Name"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
+                    <label htmlFor="tel" className="block text-lg font-semibold mb-2 pl-20">
+                        Phone Number
+                    </label>
                     <div className="flex justify-center items-center block mb-4">
-                        <input onChange={(e) => setTel(e.target.value)} type="tel" id="tel" placeholder="Tel"
+                        <input onChange={(e) => setTel(e.target.value)} type="tel" id="tel" placeholder="Phone Number"
                             className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800" />
                     </div>
 

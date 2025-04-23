@@ -26,6 +26,8 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
     }
   };
 
+  const isFromResM = notificationItem.creatorId === 'manager';
+
   return (
     <div className="w-full bg-white border border-gray-300 px-8 py-4 rounded-md shadow-sm">
       <div className="flex justify-between items-center">
@@ -34,30 +36,31 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
             {notificationItem.title}
           </h2>
           <p className="text-gray-700 mb-4">{notificationItem.message}</p>
-          <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
-            <div>
-              <span className="font-medium">Created By:</span>{" "}
-              {notificationItem.createdBy}
+
+          {isFromResM && (
+            <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
+              <div>
+                <span className="font-medium">Publish At:</span>{" "}
+                {notificationItem.publishAt
+                  //? new Date(notificationItem.publishAt).toLocaleString()
+                  ? new Date(notificationItem.publishAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                  : "N/A"},
+                  {notificationItem.publishAt
+                  ? new Date(notificationItem.publishAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true}).replace('am', 'AM').replace('pm', 'PM')
+                  : "N/A"}
+              </div>
             </div>
-            <div>
-              <span className="font-medium">Created At:</span>{" "}
-              {notificationItem.createdAt
-                //? new Date(notificationItem.createdAt).toLocaleString()
-                ? new Date(notificationItem.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
-                : "N/A"},
-                {notificationItem.createdAt
-                ? new Date(notificationItem.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true}).replace('am', 'AM').replace('pm', 'PM')
-                : "N/A"}
-            </div>
-          </div>
+          )}
         </div>
 
-        <div className="ml-4 self-center">
-          <button onClick={handleDeleteClick}
-            className="bg-myred border border-myred text-white text-lg font-semibold w-[120px] py-1 px-3 rounded-xl shadow-sm hover:bg-red-700 hover:border-red-700">
-            Delete
-          </button>
-        </div>
+        {isFromResM && (
+          <div className="ml-4 self-center">
+            <button onClick={handleDeleteClick}
+              className="bg-myred border border-myred text-white text-lg font-semibold w-[120px] py-1 px-3 rounded-xl shadow-sm hover:bg-red-700 hover:border-red-700">
+              Delete
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

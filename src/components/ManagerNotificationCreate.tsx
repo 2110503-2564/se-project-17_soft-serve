@@ -1,15 +1,19 @@
 'use client'
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import addNotification from '@/libs/addNotification';
 
 interface ManagerNotificationCreateProps {
   token: string;
+  restaurantId: string;
 }
 
-export default function ManagerNotificationCreate({ token }: ManagerNotificationCreateProps) {
+export default function ManagerNotificationCreate({ token, restaurantId }: ManagerNotificationCreateProps) {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
+  const [scheduledDateTime, setScheduledDateTime] = useState('');
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -30,31 +34,40 @@ export default function ManagerNotificationCreate({ token }: ManagerNotification
       return;
     }
 
+    // Set publishAt based on whether a datetime was provided
+    let publishAt = 'now';
+    
+    if (scheduledDateTime) {
+      const scheduledDate = new Date(scheduledDateTime);
+      const now = new Date();
+      
+      if (scheduledDate <= now) {
+        setError('Scheduled time must be in the future');
+        return;
+      }
+      
+      publishAt = scheduledDateTime;
+    }
+
     setIsSubmitting(true);
     setError('');
     setSuccess('');
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}api/v1/notifications`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          title,
-          message
-        })
+      await addNotification({
+        title,
+        message,
+        targetAudience: 'Customers', // Default for restaurant manager sending to customers
+        createdBy: 'restaurantManager',
+        publishAt,
+        token,
+        restaurant: restaurantId
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create notification');
-      }
 
       setSuccess('Notification created successfully!');
       setTitle('');
       setMessage('');
+      setScheduledDateTime('');
       router.replace('/');
     } catch (err: any) {
       setError(err.message || 'Failed to create notification');
@@ -62,6 +75,9 @@ export default function ManagerNotificationCreate({ token }: ManagerNotification
       setIsSubmitting(false);
     }
   };
+
+  // Common input field styles
+  const inputClass = "w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-500";
 
   return (
     <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
@@ -93,7 +109,7 @@ export default function ManagerNotificationCreate({ token }: ManagerNotification
             type="text" 
             id="title" 
             placeholder="Enter notification title"
-            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-500"
+            className={inputClass}
           />
         </div>
         
@@ -107,7 +123,21 @@ export default function ManagerNotificationCreate({ token }: ManagerNotification
             type="text" 
             id="message" 
             placeholder="Enter notification message"
-            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-500"
+            className={inputClass}
+          />
+        </div>
+        
+        <label htmlFor="scheduled-datetime" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
+          Schedule Time (Optional)
+        </label>
+        <div className="flex justify-center items-center block mb-6">
+          <input 
+            value={scheduledDateTime}
+            onChange={(e) => setScheduledDateTime(e.target.value)} 
+            type="datetime-local" 
+            id="scheduled-datetime" 
+            placeholder="Leave empty to send now" 
+            className={inputClass}
           />
         </div>
         
@@ -122,7 +152,7 @@ export default function ManagerNotificationCreate({ token }: ManagerNotification
         </div>
         
         <div className="text-center text-slate-500 mt-4 mb-4">
-          Please review your input carefully before sending the notification.
+          {scheduledDateTime ? 'Your notification will be sent at the scheduled time.' : 'Your notification will be sent immediately.'}
         </div>
       </form>
     </div>
