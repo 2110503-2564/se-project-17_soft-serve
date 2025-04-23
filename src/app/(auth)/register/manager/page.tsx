@@ -23,7 +23,7 @@ export default function RestaurantManagerRegisterPage() {
   const [restaurantTel, setRestaurantTel] = useState('');
   const [openTime, setOpenTime] = useState('');
   const [closeTime, setCloseTime] = useState('');
-  const [maxReservation, setMaxReservation] = useState(0); // New maxReservation field
+  const [maxReservation, setMaxReservation] = useState<number | null>(0); // New maxReservation field
   const [imgPath, setImgPath] = useState('');
   
   // UI control state
@@ -92,7 +92,7 @@ export default function RestaurantManagerRegisterPage() {
     }
     
     // Validate maxReservation is a non-negative number
-    if (isNaN(maxReservation) || maxReservation < 0) {
+    if (maxReservation === null || isNaN(maxReservation) || maxReservation < 0) {
       alert('Maximum reservation must be 0 or higher');
       return false;
     }
@@ -497,12 +497,13 @@ export default function RestaurantManagerRegisterPage() {
         </label>
         <div className="flex justify-center items-center block mb-4">
         <input 
-          onChange={(e) => setMaxReservation(parseInt(e.target.value) || 0)} 
+          onChange={(e) => {const parsedValue = parseInt(e.target.value);
+            setMaxReservation(isNaN(parsedValue) ? null : parsedValue);}} 
           type="number" 
           id="max-reservation" 
           placeholder="Maximum number of reservations"
-          value={maxReservation}
-          min="1"
+          value={maxReservation === null ? '' : maxReservation}
+          min="0"
           disabled={isSubmitting}
           className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3"
         />
