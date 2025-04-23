@@ -21,10 +21,10 @@ export default function ManagerReservationRow({reservationItem} : {reservationIt
 
             <td className="border border-gray-300 px-4 py-2 text-center">{reservationItem.numberOfPeople}</td>
             <td className="border border-gray-300 px-4 py-2">
-                {reservationDate.toLocaleDateString('en-GB')}
+                {reservationDate.toLocaleDateString('en-GB', {timeZone:'UTC'})}
             </td>
             <td className="border border-gray-300 px-4 py-2 text-center">
-                {reservationDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {reservationDate.toLocaleTimeString('en-GB', {timeZone:'UTC', hour: '2-digit', minute: '2-digit' })}
             </td>
         </tr>
     );

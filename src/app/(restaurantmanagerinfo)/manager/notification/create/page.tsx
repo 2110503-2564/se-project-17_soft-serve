@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,7 @@ export default function RestaurantManagerNotification() {
   const router = useRouter();
   const { data: session } = useSession();
   const [isManager, setIsManager] = useState<boolean | null>(null);
+  const [restaurant, setRestaurant] = useState<string | null>(null);
 
   useEffect(() => {
     const checkRestaurantManager = async () => {
@@ -18,12 +19,12 @@ export default function RestaurantManagerNotification() {
         router.push('/');
         return;
       }
-      
+
       try {
         const user = await getUserProfile(session.user.token);
         const isManager = user.data.role === 'restaurantManager';
         setIsManager(isManager);
-        // redirect only after role is known
+        setRestaurant(user.data.restaurant); // Make sure this is a string
         if (!isManager) {
           router.push('/');
         }
@@ -36,17 +37,16 @@ export default function RestaurantManagerNotification() {
     checkRestaurantManager();
   }, [session, router]);
 
-  // Only render the form if the user is authenticated
-  if (!session || !session.user?.token) {
-    return null;
-  }
-
-  if (isManager === null) return <Loader loadingtext="Loading ..." />;;
-  if (!isManager) return null; // wait for router.push to trigger
+  if (!session || !session.user?.token) return null;
+  if (isManager === null || restaurant === null) return <Loader loadingtext="Loading ..." />;
+  if (!isManager) return null;
 
   return (
     <main className="bg-myred h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-8 lg:px-16 overflow-auto">
-      <ManagerNotificationCreate token={session.user.token} />
+      <ManagerNotificationCreate 
+        token={session.user.token} 
+        restaurantId={restaurant} 
+      />
     </main>
   );
 }
