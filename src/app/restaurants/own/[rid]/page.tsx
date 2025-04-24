@@ -129,7 +129,7 @@ export default function MyRestaurantPage() {
                 {
                     (userRole === 'restaurantManager' || userRole === 'admin') ? 
                     <Link href={`/restaurants/edit/${rid}`}>
-                        <button className='bg-[#838383] border border-white text-white text-xl font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+                        <button className='bg-mygray border border-white text-white text-xl font-semibold py-2 px-10 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray'>
                             Edit
                         </button>
                     </Link>

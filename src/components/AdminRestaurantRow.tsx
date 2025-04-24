@@ -40,7 +40,7 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
     }
     
     const statusColor = restaurantItem.verified === true ? 'text-[#009900]' :
-        (restaurantItem.verified === false ? 'text-[#FF3300]' : 'text-gray-800');
+        (restaurantItem.verified === false ? 'text-myred' : 'text-gray-800');
     
     return (
         <tr key={restaurantItem.id} className="border-t border-gray-300">
@@ -50,12 +50,12 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
             <td className="border border-gray-300 px-8 py-2 text-gray-800">{restaurantItem.tel}</td>
             <td className="border border-gray-300 px-4 py-2 text-gray-800 text-center">
                 {restaurantItem.verified === true ? (
-                <button className="bg-[#838383] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#707070]"
+                <button className="bg-mygray w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray"
                     onClick={handleEditReservation}>
                     Edit
                 </button>
                 ) : (
-                <button className="bg-[#F4D400] w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#FFEF89]"
+                <button className="bg-[#F4D400] w-[100px] h-[40px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-yellow-500 hover:border hover:border-yellow-500"
                     onClick={handleVerifyReservation}>
                     Verify
                 </button>
@@ -63,7 +63,7 @@ export default function AdminRestaurantRow({restaurantItem}: {restaurantItem: Re
             </td>
             <td className="border border-gray-300 px-4 py-2 text-gray-800 text-center">
                 {restaurantItem.verified === true && (
-                <button className="bg-myred w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-[#F97F7F]"
+                <button className="bg-myred w-[100px] h-[40px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred"
                     onClick={handleCancelReservation}>
                     Delete
                 </button>
