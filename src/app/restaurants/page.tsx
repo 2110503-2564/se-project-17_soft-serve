@@ -10,13 +10,14 @@ import Loader from "@/components/Loader";
 export default function RestaurantList() {
     const searchParams = useSearchParams();
     const searchTerm = searchParams.get('restaurant');
+    const limitParam = searchParams.get('limit');
     const [restaurants, setRestaurants] = useState<RestaurantItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     //pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 25;
+    const itemsPerPage = limitParam? parseInt(limitParam,10) || 10 : 10 ;
 
     useEffect(() => {
         const fetchAndFilterRestaurants = async () => {
