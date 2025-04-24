@@ -130,3 +130,10 @@ export interface RestaurantAvailabilityJson {
     reserved: number,
     available: number
 }
+
+
+export interface SearchParams {
+    page?: string;
+    limit?: string;
+  }
+  

@@ -1,6 +1,11 @@
 'use server'
-export default async function getNotifications({token} : {token: string}){
-    const response = await fetch(process.env.BACKEND_URL+`api/v1/notifications`,{
+import { useSearchParams } from 'next/navigation';
+export default async function getNotifications({token , page = 1 , limit = 10 } : {token: string ; page?:number ;limit?:number}){
+    const url = new URL(`${process.env.BACKEND_URL}api/v1/notifications`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('limit', limit.toString());
+    
+    const response = await fetch(url.toString(),{
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,

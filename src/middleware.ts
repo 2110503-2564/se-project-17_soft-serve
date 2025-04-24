@@ -17,6 +17,7 @@ export const config = {
         "/rating/[rid]",
         "/user", 
         "/user/profile", 
-        "/user/changepassword"
+        "/user/changepassword",
+        "/notifications"
     ]
 };
