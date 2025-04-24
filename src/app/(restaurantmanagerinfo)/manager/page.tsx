@@ -48,9 +48,10 @@ export default function Manager() {
             </div>
             </div>
             <div>
-                <Link href={`/restaurants/${restaurantId}`} className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">View my Restaurant</Link>
+                <Link href={`/restaurants/own/${restaurantId}`} className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">View my Restaurant</Link>
                 <Link href={`/restaurants/edit/${restaurantId}`} className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">Edit my Restaurant</Link>
                 <Link href="/manager/reviews" className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">Reviews from Customers</Link>
+                <Link href="/reservations/manager" className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">reservations</Link>
                 <Link href="/manager/notifications" className="flex flex-col items-center text-myred text-2xl font-bold pt-10 hover:underline">View my Notifications</Link>
             </div>
         </main>
