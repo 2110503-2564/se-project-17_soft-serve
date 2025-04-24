@@ -18,8 +18,17 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Clear both messages before showing a new one
+  const clearMessages = () => {
+    setError('');
+    setSuccess('');
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    // Clear any existing messages
+    clearMessages();
     
     if (!title) {
       setError('Please enter a title');
@@ -40,9 +49,10 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
     if (scheduledDateTime) {
       const scheduledDate = new Date(scheduledDateTime);
       const now = new Date();
-      
-      if (scheduledDate <= now) {
-        setError('Scheduled time must be in the future');
+      const gracePeriodMs = 0.9 * 60 * 1000;
+
+      if (scheduledDate.getTime() < now.getTime() - gracePeriodMs) {
+        setError('Scheduled time must not be in the past');
         return;
       }
       
@@ -50,8 +60,6 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
     }
 
     setIsSubmitting(true);
-    setError('');
-    setSuccess('');
 
     try {
       await addNotification({
@@ -65,10 +73,7 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
       });
 
       setSuccess('Notification created successfully!');
-      setTitle('');
-      setMessage('');
-      setScheduledDateTime('');
-      router.replace('/');
+      
     } catch (err: any) {
       setError(err.message || 'Failed to create notification');
     } finally {
@@ -129,7 +134,7 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
         
         <div>
           <label htmlFor="scheduled-datetime" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
-            Schedule Time (Optional)
+            Publish Date
           </label>
           <div className="flex justify-center items-center block mb-6">
             <input 

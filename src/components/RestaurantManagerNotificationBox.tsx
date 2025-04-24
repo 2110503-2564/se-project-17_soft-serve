@@ -10,8 +10,27 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
   const { data: session } = useSession();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
-  if (isDeleting) return null;
+  if (isDeleted) {
+    return (
+      <div className="w-full bg-green-50 border border-green-200 px-8 py-4 shadow-sm transition-all duration-700">
+        <p className="text-green-700 font-medium text-center">
+          Notification successfully deleted!
+        </p>
+      </div>
+    );
+  }
+
+  if (isDeleting) {
+    return (
+      <div className="w-full bg-yellow-50 border border-yellow-200 px-8 py-4 shadow-sm">
+        <p className="text-yellow-700 font-medium text-center">
+          Deleting notification...
+        </p>
+      </div>
+    );
+  }
 
   const handleDeleteClick = async () => {
     if (!session) return;
@@ -31,9 +50,16 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
         notificationId: notificationItem._id,
         token: session.user.token
       });
-      router.refresh();
+      setIsDeleting(false);
+      setIsDeleted(true);
+      // Show the success message for 2 seconds before refreshing
+      setTimeout(() => {
+        router.refresh();
+      }, 2000);
     } catch (error) {
       console.error('Failed to delete notification:', error);
+      setIsDeleting(false);
+      alert('Failed to delete notification. Please try again.');
     }
   };
 
@@ -53,7 +79,6 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
               <div>
                 <span className="font-medium">Publish At:</span>{" "}
                 {notificationItem.publishAt
-                  //? new Date(notificationItem.publishAt).toLocaleString()
                   ? new Date(notificationItem.publishAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
                   : "N/A"},
                   {notificationItem.publishAt
