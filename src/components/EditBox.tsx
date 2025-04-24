@@ -76,7 +76,7 @@ export default function EditBox({ reservationId, token }: { reservationId: strin
             <div className="flex space-x-4 mb-4 font-semibold">
                 <button 
                     name="Discard Change" 
-                    className="block w-[280px] bg-gray-500 border border-white text-white text-xl px-8 py-2 rounded-xl shadow-sm hover:bg-white hover:text-gray-500 hover:border hover:border-gray-500"
+                    className="block w-[280px] bg-gray-500 border border-white text-white text-xl px-8 py-2 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray"
                     onClick={() => window.location.href = '/reservations'}>
                     Discard Change
                 </button>

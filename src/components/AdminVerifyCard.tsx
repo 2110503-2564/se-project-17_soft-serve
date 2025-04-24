@@ -117,13 +117,13 @@ export default function VerifyCard() {
                                     <div className="flex flex-row">
                                         <button
                                             onClick={() => handleVerify(userItem._id)}
-                                            className="ml-4 px-6 py-2 text-white font-bold bg-[#00C642] rounded-xl hover:bg-[#7AF1A2] shadow-lg w-[150px]"
+                                            className="ml-4 px-6 py-2 text-white font-bold bg-mygreen rounded-xl shadow-lg w-[150px] h-[45px] hover:shadow-xl hover:bg-white hover:text-mygreen hover:border hover:border-mygreen"
                                         >
                                             Approve
                                         </button>
                                         <button
                                             onClick={() => handleReject(userItem._id)}
-                                            className="ml-4 px-6 py-2 text-white font-bold bg-[#D40303] rounded-xl hover:bg-[#F97F7F] shadow-lg w-[150px]"
+                                            className="ml-4 px-6 py-2 text-white font-bold bg-myred rounded-xl shadow-lg w-[150px] h-[45px] hover:shadow-xl hover:bg-white hover:text-myred hover:border hover:border-myred"
                                         >
                                             Reject
                                         </button>

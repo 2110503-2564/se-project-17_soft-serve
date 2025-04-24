@@ -49,7 +49,14 @@ export default function ManagerReviewsFilter() {
               SelectProps={{
                 native: true,
               }}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1,
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'gray',
+                },
+                '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'red',
+                },
+              }}
             >
               <option value="">All ratings</option>
               <option value="1">1 star & above</option>
@@ -65,7 +72,14 @@ export default function ManagerReviewsFilter() {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1,
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'gray',
+                },
+                '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'red',
+                },
+              }}
             />
           </div>
           <div className="flex items-center">
@@ -74,19 +88,26 @@ export default function ManagerReviewsFilter() {
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1,
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'gray',
+                },
+                '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'red',
+                },
+              }}
             />
           </div>
           <div className="flex gap-4">
             <button
               onClick={handleSearch}
-              className="bg-[#D40303] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700"
+              className="bg-myred w-[150px] h-[45px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred"
             >
               Filter Reviews
             </button>
             <button
               onClick={handleClearFilters}
-              className="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded shadow-lg hover:bg-gray-300"
+              className="bg-gray-200 w-[150px] h-[45px] text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-gray-800 hover:border hover:border-mygray"
             >
               Clear Filters
             </button>

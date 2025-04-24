@@ -84,7 +84,7 @@ export default function AdminNotificationBox({notificationItem}: { notificationI
 
         <div className="ml-4 self-center">
           <button onClick={handleDeleteClick}
-            className="bg-myred border border-myred text-white text-lg font-semibold w-[120px] py-1 px-3 rounded-xl shadow-sm hover:bg-red-700 hover:border-red-700">
+            className="bg-myred border border-myred text-white text-lg font-semibold w-[120px] h-[40px] py-1 px-3 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred">
             Delete
           </button>
         </div>

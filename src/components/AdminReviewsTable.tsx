@@ -165,7 +165,7 @@ export default function AdminReviewsTable() {
                   <div className="ml-2 flex items-center">
                     <button
                       onClick={() => handleDeleteReview(review._id)}
-                      className="bg-red-600 text-white font-medium py-2 px-4 rounded-md hover:bg-red-700"
+                      className="bg-myred w-[100px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred"
                     >
                       delete
                     </button>

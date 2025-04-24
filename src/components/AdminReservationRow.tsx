@@ -30,7 +30,7 @@ export default function AdminReservationRow({reservationItem} : {reservationItem
     return (
         <tr key={reservationItem._id} className="border-t border-gray-300">
             <td className="border border-gray-300 px-4 py-2">{reservationItem._id}</td>
-            <td className="border border-gray-300 px-4 py-2">
+            <td className="border border-gray-300 px-4 py-2 text-center">
                 {reservationDate.toLocaleDateString('en-GB', {timeZone:'UTC'})}
             </td>
             <td className="border border-gray-300 px-4 py-2 text-center">{reservationDate.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}</td>
@@ -39,11 +39,11 @@ export default function AdminReservationRow({reservationItem} : {reservationItem
             <td className="border border-gray-300 px-4 py-2">{reservationItem.restaurant.name}</td> 
             <td className="border border-gray-300 px-4 py-2 text-center">
                 <Link href={`/reservations/edit/${reservationItem._id}`} passHref>
-                <button className="bg-mygray text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-gray-600">Edit</button>
+                <button className="w-[90px] h-[40px] bg-mygray text-white font-bold py-2 px-4 rounded-xl shadow-lg hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray">Edit</button>
                 </Link>
             </td>
             <td className="border border-gray-300 px-4 py-2 text-center">
-                <button onClick={handleCancelReservation} className="bg-myred text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700">Cancel</button>
+                <button onClick={handleCancelReservation} className="w-[90px] h-[40px] bg-myred text-white font-bold py-2 px-4 rounded-xl shadow-lg hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred">Cancel</button>
             </td>
         </tr>
     );

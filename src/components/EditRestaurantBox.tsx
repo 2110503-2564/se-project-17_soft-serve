@@ -309,18 +309,18 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         {isEditing ? (
           <>
             <button
-              className='block bg-gray-400 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-gray-400 hover:border hover:border-gray-400'
+              className='w-[140px] block bg-mygray border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray'
               onClick={handleCancelClick}>
               Cancel
             </button>
             <button
-              className='block bg-red-600 border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'
+              className='w-[140px] block bg-myred border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred'
               onClick={handleSaveClick}>
               Save
             </button>
           </>
         ) : (
-          <button onClick={handleEditClick} className='block bg-[#838383] border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600'>
+          <button onClick={handleEditClick} className='w-[140px] block bg-mygray border border-white text-white text-xl font-semibold py-2 px-10 m-5 rounded-xl shadow-sm hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray'>
             Edit
           </button>
         )}

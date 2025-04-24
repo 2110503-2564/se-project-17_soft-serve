@@ -42,7 +42,15 @@ export default function ManagerSearchBox({ token }: { token: string }) {
                         type="date"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        sx={{ flex: 1 }}
+                        sx={{
+                            flex: 1,
+                            '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'gray',
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'red',
+                            },
+                        }}
                         inputProps={{ max: "9999-12-31" }}
                     />
                 </div>
@@ -55,20 +63,28 @@ export default function ManagerSearchBox({ token }: { token: string }) {
                         type="time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        sx={{ flex: 1 }}
+                        sx={{
+                            flex: 1,
+                            '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'gray',
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'red',
+                            },
+                        }}
                     />
                 </div>
 
                 <div className="flex gap-4 mt-2">
                     <button
                         onClick={handleSearch}
-                        className="bg-[#D40303] text-white font-bold py-2 px-4 rounded shadow-lg hover:bg-red-700"
+                        className="bg-myred w-[100px] h-[45px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred"
                     >
                         Search
                     </button>
                     <button
                         onClick={handleClearFilters}
-                        className="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded shadow-lg hover:bg-gray-300"
+                        className="bg-gray-200 w-[100px] h-[45px] text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-gray-800 hover:border hover:border-mygray"
                     >
                         Clear
                     </button>

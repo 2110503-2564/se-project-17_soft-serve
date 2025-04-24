@@ -95,18 +95,18 @@ export default function AdminReservationTable() {
 
     return (
         <main>
-            <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-5">
-                <table className="w-full border-collapse border border-gray-300">
+            <div className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-6 py-6 overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 min-w-[600px]">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-4 py-2">Reservation Id</th>
-                            <th className="border border-gray-300 px-4 py-2">Date</th>
-                            <th className="border border-gray-300 px-4 py-2">Time</th>
-                            <th className="border border-gray-300 px-4 py-2">User Id</th>
-                            <th className="border border-gray-300 px-4 py-2">Guests</th>
-                            <th className="border border-gray-300 px-4 py-2">Restaurant</th>
-                            <th className="border border-gray-300 px-4 py-2">Edit</th>
-                            <th className="border border-gray-300 px-4 py-2">Cancel</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '15%' }}>Reservation Id</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Date</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '12%' }}>Time</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '15%' }}>User Id</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '8%' }}>Guests</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '15%' }}>Restaurant</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '10%' }}>Edit</th>
+                            <th className="border border-gray-300 px-4 py-2" style={{ width: '10%' }}>Cancel</th>
                         </tr>
                     </thead>
                     <tbody>

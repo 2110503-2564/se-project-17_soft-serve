@@ -72,7 +72,7 @@ export default function ReviewRestaurantBox({avgRating} : {avgRating : number}) 
               {reviewStats.reviewCount} Ratings
             </h2>
             <Link href={`/rating/${rid}/view`}>
-              <button className='bg-white border border-[#00C642] text-[#00C642] text-sm font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-[#00C642] hover:text-white'>
+              <button className='bg-white border border-[#00C642] text-[#00C642] text-md font-semibold py-2 px-10 rounded-xl shadow-sm hover:bg-[#00C642] hover:text-white'>
                 View more reviews
               </button>
             </Link>
