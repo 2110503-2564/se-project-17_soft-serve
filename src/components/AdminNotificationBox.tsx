@@ -57,10 +57,10 @@ export default function AdminNotificationBox({notificationItem}: { notificationI
             : "N/A"}
           </div>
           <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
-            <div>
-              <span className="font-medium">Creator ID:</span>{" "}
-              {notificationItem.creatorId}
-            </div>
+          <div>
+            <span className="font-medium">Creator ID:</span>{" "}
+            {notificationItem?.creatorId || " -"} 
+          </div>
             <div>
               <span className="font-medium">Target Audience:</span>{" "}
               {notificationItem.targetAudience}
