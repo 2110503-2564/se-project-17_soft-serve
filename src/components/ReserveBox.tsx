@@ -31,6 +31,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
     const [timeValue, setTimeValue] = useState('12:00');
     const [count, setCount] = useState<number>(1);
     const [availableSeats, setAvailableSeats] = useState<number>(0);
+    const [readyToFetchAvailable, setReadyToFetchAvailable] = useState(false);
 
     useEffect(() => {
         if (reservationData) {
@@ -40,16 +41,17 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
             setTimeValue(dayjs(tempReservationData).format('HH:mm'));
             setCount(reservationData.data.numberOfPeople);
         }
-    }, [reservationData, availableSeats]);
+        setReadyToFetchAvailable(true);
+    }, []);
 
     useEffect(() => {
-        fetchRestaurantAvailability(restaurantId, dateValue.format('YYYY-MM-DD'));
-    }, [dateValue]);
+        if(readyToFetchAvailable) fetchRestaurantAvailability(restaurantId, dateValue.format('YYYY-MM-DD'));
+    }, [dateValue, readyToFetchAvailable]);
 
     const fetchRestaurantAvailability = async (restaurantId: string, date: string) => {
         try {
             const response : RestaurantAvailabilityJson = await getRestaurantAvailability(restaurantId, date);
-            setAvailableSeats(response.available);
+            setAvailableSeats(reservationData && dayjs(date).isSame(dayjs(reservationData.data.revDate), 'day') ? response.available + reservationData.data.numberOfPeople : response.available);
         } catch (error) {
             console.error("Error fetching availability:", error);
             setAvailableSeats(0);
