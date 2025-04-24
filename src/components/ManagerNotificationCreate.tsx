@@ -73,6 +73,8 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
       });
 
       setSuccess('Notification created successfully!');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      router.push('/manager/notifications');
       
     } catch (err: any) {
       setError(err.message || 'Failed to create notification');
