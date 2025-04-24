@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, KeyboardEventHandler } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -47,6 +47,12 @@ export default function AdminSearchBox({ token }: { token: string }) {
         router.push('/admin/reservations');
     };
 
+    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+        if (event.key === 'Enter') {
+          handleSearch();
+        }
+      };
+
     return (
         <main className="flex flex-center p-5 w-[90vw] mt-10 h-fit rounded-lg shadow-lg bg-white mx-auto px-6 py-6">
             <Stack spacing={2} sx={{ width: "100%" }}>
@@ -59,11 +65,13 @@ export default function AdminSearchBox({ token }: { token: string }) {
                         options={restaurantNames}
                         value={selectedRestaurant}
                         onChange={(_, value) => setSelectedRestaurant(value || "")}
-                        renderInput={(params) => (<TextField {...params} placeholder="All restaurants" />)}
+                        renderInput={(params) => (
+                            <TextField {...params} placeholder="All restaurants" onKeyDown={handleKeyDown}/>
+                        )}
                         sx={{
                             flex: 1,
                             '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'purple',
+                                borderColor: 'gray',
                             },
                             '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                 borderColor: 'red',
@@ -80,7 +88,16 @@ export default function AdminSearchBox({ token }: { token: string }) {
                         type="date"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        sx={{ flex: 1 }}
+                        onKeyDown={handleKeyDown}
+                        sx={{
+                            flex: 1,
+                            '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'gray',
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'red',
+                            },
+                        }}
                         inputProps={{ max: "9999-12-31" }}
                     />
                 </div>
@@ -93,7 +110,16 @@ export default function AdminSearchBox({ token }: { token: string }) {
                         type="time"
                         value={seletedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        sx={{ flex: 1 }}
+                        onKeyDown={handleKeyDown}
+                        sx={{
+                            flex: 1,
+                            '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'gray',
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'red',
+                            },
+                        }}
                     />
                 </div>
 

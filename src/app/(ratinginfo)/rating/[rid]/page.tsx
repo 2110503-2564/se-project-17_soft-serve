@@ -28,7 +28,7 @@ const ratingReducer = (
 
 export default function RatingDetailPage() {
     const { rid } = useParams();
-    const { data: session } = useSession();
+    const { data: session, status } = useSession(); // Added status
     const router = useRouter();
 
     const [restaurant, setRestaurant] = useState<{ name: string, imgPath: string } | null>(null);
@@ -91,7 +91,6 @@ export default function RatingDetailPage() {
     // Calculate Overall Rating
     useEffect(() => {
         const validRatings = Array.from(ratings.values()).filter(value => value !== null);
-        // console.log("validRatings.length", validRatings.length)
         if (validRatings.length > 0) {
             const sumRatings = validRatings.reduce((sum, value) => sum + (value as number), 0);
             const newOverallRating = sumRatings / 4;
@@ -149,16 +148,20 @@ export default function RatingDetailPage() {
         <main className="text-center text-gray-800">
             {/* Restaurant Image */}
             <div className="w-screen h-[50vh] relative block p-5">
-                <Image src={restaurant.imgPath}
+                <Image
+                    src={restaurant.imgPath}
                     alt='cover'
                     fill={true}
                     priority
-                    objectFit='cover'/>
+                    objectFit='cover'
+                />
             </div>
+
             {/* Restaurant Name */}
             <div className="text-4xl font-bold mt-10 mb-6">
                 {restaurant.name}
             </div>
+
             {/* Description */}
             <div className="text-xl font-bold mb-2">
                 Rate the Restaurant
@@ -208,8 +211,11 @@ export default function RatingDetailPage() {
 
             {/* Submit Button */}
             <div className="flex flex-col justify-center items-center mb-5">
-                <button name="Reserve"className="block bg-myred border border-white text-white text-xl font-semibold py-2 px-5 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600"
-                    onClick={handleSubmit}>
+                <button
+                    name="Reserve"
+                    className="block bg-myred border border-white text-white text-xl font-semibold py-2 px-5 m-5 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600"
+                    onClick={handleSubmit}
+                >
                     Submit Your Review  
                 </button>
             </div>

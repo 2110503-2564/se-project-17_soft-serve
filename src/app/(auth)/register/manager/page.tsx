@@ -23,7 +23,7 @@ export default function RestaurantManagerRegisterPage() {
   const [restaurantTel, setRestaurantTel] = useState('');
   const [openTime, setOpenTime] = useState('');
   const [closeTime, setCloseTime] = useState('');
-  const [maxReservation, setMaxReservation] = useState(0); // New maxReservation field
+  const [maxReservation, setMaxReservation] = useState<number | null>(0); // New maxReservation field
   const [imgPath, setImgPath] = useState('');
   
   // UI control state
@@ -92,7 +92,7 @@ export default function RestaurantManagerRegisterPage() {
     }
     
     // Validate maxReservation is a non-negative number
-    if (isNaN(maxReservation) || maxReservation < 0) {
+    if (maxReservation === null || isNaN(maxReservation) || maxReservation < 0) {
       alert('Maximum reservation must be 0 or higher');
       return false;
     }
@@ -257,8 +257,11 @@ export default function RestaurantManagerRegisterPage() {
   // Render personal information form fields
   
   const renderPersonalInfoForm = () => (
-    <div className="space-y-6">
-      <div className="flex justify-center items-center">
+      <div className="flex flex-col">
+        <label htmlFor="name" className="block text-lg font-semibold mb-2 pl-20">
+          Name
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setName(e.target.value)} 
           type="text" 
@@ -268,8 +271,11 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="email" className="block text-lg font-semibold mb-2 pl-20">
+          Email
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setEmail(e.target.value)} 
           type="email" 
@@ -279,8 +285,11 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="tel" className="block text-lg font-semibold mb-2 pl-20">
+          Phone Number
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setTel(e.target.value)} 
           type="tel" 
@@ -290,8 +299,12 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        
+        <label htmlFor="password" className="block text-lg font-semibold mb-2 pl-20">
+          Password
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setPassword(e.target.value)} 
           type="password" 
@@ -301,8 +314,11 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="confirm-password" className="block text-lg font-semibold mb-2 pl-20">
+          Confirm Password
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setConfirmPassword(e.target.value)} 
           type="password" 
@@ -312,7 +328,8 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
+        </div>
+
       <div className="flex flex-col justify-center items-center mt-8">
         <button 
           type="button" 
@@ -323,14 +340,17 @@ export default function RestaurantManagerRegisterPage() {
           Next
         </button>
       </div>
-    </div>
+      </div>
   );
 
   // Render restaurant information form fields
   const renderRestaurantInfoForm = () => (
-    <div className="space-y-6">
-      <div className="flex justify-center items-center">
-        <input 
+    <div className="flex flex-col">
+        <label htmlFor="restaurant-name" className="block text-lg font-semibold mb-2 pl-20">
+        Restaurant Name
+        </label>
+        <div className="flex justify-center items-center block mb-4">
+        <input
           onChange={(e) => setRestaurantName(e.target.value)} 
           type="text" 
           id="restaurant-name" 
@@ -339,8 +359,11 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="restaurant-description" className="block text-lg font-semibold mb-2 pl-20">
+          Restaurant Description
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <textarea 
           onChange={(e) => setDescription(e.target.value)} 
           id="restaurant-description" 
@@ -350,8 +373,11 @@ export default function RestaurantManagerRegisterPage() {
           className={textareaClass}
           rows={3}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="food-type" className="block text-lg font-semibold mb-2 pl-20">
+          Food Type
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setFoodType(e.target.value)} 
           type="text" 
@@ -361,8 +387,11 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
-      </div>
-      <div className="flex justify-center items-center">
+        </div>
+        <label htmlFor="address" className="block text-lg font-semibold mb-2 pl-20">
+          Address
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setAddress(e.target.value)} 
           type="text" 
@@ -373,7 +402,10 @@ export default function RestaurantManagerRegisterPage() {
           className={inputClass}
         />
       </div>
-      <div className="flex justify-center items-center">
+      <label htmlFor="province" className="block text-lg font-semibold mb-2 pl-20">
+        Province
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setProvince(e.target.value)} 
           type="text" 
@@ -384,7 +416,10 @@ export default function RestaurantManagerRegisterPage() {
           className={inputClass}
         />
       </div>
-      <div className="flex justify-center items-center">
+      <label htmlFor="district" className="block text-lg font-semibold mb-2 pl-20">
+        District
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setDistrict(e.target.value)} 
           type="text" 
@@ -395,7 +430,10 @@ export default function RestaurantManagerRegisterPage() {
           className={inputClass}
         />
       </div>
-      <div className="flex justify-center items-center">
+      <label htmlFor="postalcode" className="block text-lg font-semibold mb-2 pl-20">
+        Postal Code
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setPostalcode(e.target.value)} 
           type="text" 
@@ -407,7 +445,10 @@ export default function RestaurantManagerRegisterPage() {
           className={inputClass}
         />
       </div>
-      <div className="flex justify-center items-center">
+      <label htmlFor="restaurant-tel" className="block text-lg font-semibold mb-2 pl-20">
+        Restaurant Phone Number
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setRestaurantTel(e.target.value)} 
           type="tel" 
@@ -422,7 +463,7 @@ export default function RestaurantManagerRegisterPage() {
       {/* Opening/Closing Time Fields */}
       <div className="flex justify-center space-x-4 w-4/5 mx-auto">
         <div className="flex-1">
-          <label htmlFor="open-time" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="open-time" className="block text-lg font-semibold mb-2 pl-2">
             Opening Time
           </label>
           <input 
@@ -431,11 +472,11 @@ export default function RestaurantManagerRegisterPage() {
             id="open-time" 
             value={openTime}
             disabled={isSubmitting}
-            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-1"
+            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-1 mb-4"
           />
         </div>
         <div className="flex-1">
-          <label htmlFor="close-time" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="close-time" className="block text-lg font-semibold mb-2 pl-2">
             Closing Time
           </label>
           <input 
@@ -444,31 +485,33 @@ export default function RestaurantManagerRegisterPage() {
             id="close-time" 
             value={closeTime}
             disabled={isSubmitting}
-            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-1"
+            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-1 mb-4"
           />
         </div>
       </div>
 
       {/* Max Reservation Field */}
-      <div className="flex justify-center items-center">
-        <div className="w-4/5">
-          <label htmlFor="max-reservation" className="block text-sm font-medium text-gray-700 mb-1">
-            Maximum Reservation (minimum 0)
-          </label>
-          <input 
-            onChange={(e) => setMaxReservation(parseInt(e.target.value) || 0)} 
-            type="number" 
-            id="max-reservation" 
-            placeholder="Maximum number of reservations"
-            value={maxReservation}
-            min="0"
-            disabled={isSubmitting}
-            className="w-full h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3"
-          />
+      <div className="flex flex-col">
+        <label htmlFor="max-reservation" className="block text-lg font-semibold mb-2 pl-20">
+          Maximum Reservation (minimum 0)
+        </label>
+        <div className="flex justify-center items-center block mb-4">
+        <input 
+          onChange={(e) => {const parsedValue = parseInt(e.target.value);
+            setMaxReservation(isNaN(parsedValue) ? null : parsedValue);}} 
+          type="number" 
+          id="max-reservation" 
+          placeholder="Maximum number of reservations"
+          value={maxReservation === null ? '' : maxReservation}
+          min="0"
+          disabled={isSubmitting}
+          className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3"
+        />
         </div>
-      </div>
-
-      <div className="flex justify-center items-center">
+        <label htmlFor="img-path" className="block text-lg font-semibold mb-2 pl-20">
+          Restaurant Image URL
+        </label>
+        <div className="flex justify-center items-center block mb-4">
         <input 
           onChange={(e) => setImgPath(e.target.value)} 
           type="text" 
@@ -478,6 +521,7 @@ export default function RestaurantManagerRegisterPage() {
           disabled={isSubmitting}
           className={inputClass}
         />
+      </div>
       </div>
 
       {/* Back and Register Buttons */}
@@ -502,14 +546,14 @@ export default function RestaurantManagerRegisterPage() {
   );
 
   return (
-    <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col px-4 md:px-20 lg:px-80 pt-[80px] pb-10 overflow-auto">
+    <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col px-4 md:px-20 lg:px-80 py-10 overflow-auto">
       <div className="w-full bg-white text-gray-800 py-10 px-6 md:px-20 rounded-3xl shadow-2xl relative">
-        <div className="text-3xl font-bold text-center mt-6 mb-12">
+        <div className="text-3xl font-bold text-center mt-6 mb-8">
           Create Restaurant Manager Account
         </div>
         
         {/* Tab Navigation */}
-        <div className="flex mb-8 border-b">
+        <div className="flex mb-8 border-b text-lg">
           <button 
             className={`flex-1 py-2 text-center ${activeTab === 'personal' ? 'border-b-2 border-myred text-myred font-semibold' : 'text-gray-500'}`}
             onClick={() => setActiveTab('personal')}

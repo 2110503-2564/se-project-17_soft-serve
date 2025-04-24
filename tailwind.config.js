@@ -8,9 +8,10 @@ module.exports = {
     extend: {
       colors: {
         'myred': 'var(--myred)',
+        'mygray': 'var(--mygray)',
+        'mygreen': 'var(--mygreen)',
       },
     },
   },
   plugins: [],
 }
-

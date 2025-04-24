@@ -19,6 +19,7 @@ export default async function AdminNotificationRow() {
   }
   const notificationJson: NotificationJson = await getNotifications({ token });
 
+
   return (
     <main className="w-screen m-0 p-0">
       <AdminNotificationPanel />

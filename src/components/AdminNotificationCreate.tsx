@@ -149,20 +149,25 @@ export default function AdminCreateNotification({ token }: AdminCreateNotificati
             className={inputClass}
           />
         </div>
-        
-        <label htmlFor="scheduled-datetime" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
-          Schedule Time (Optional)
-        </label>
-        <div className="flex justify-center items-center block mb-6">
-          <input 
-            value={scheduledDateTime}
-            onChange={(e) => setScheduledDateTime(e.target.value)} 
-            type="datetime-local" 
-            id="scheduled-datetime" 
-            placeholder="Leave empty to send now" 
-            className={inputClass}
-          />
-        </div>
+
+        <div>
+          <label htmlFor="scheduled-datetime" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
+            Schedule Time (Optional)
+          </label>
+          <div className="flex justify-center items-center block mb-6">
+            <input 
+              value={scheduledDateTime}
+              onChange={(e) => setScheduledDateTime(e.target.value)} 
+              type="datetime-local" 
+              id="scheduled-datetime" 
+              placeholder="Leave empty to send now" 
+              className={inputClass}
+              />
+          </div>
+          <p className="text-sm text-gray-600 text-center -mt-4 mb-6">
+            If left empty, the post will be published immediately upon submission.
+          </p>
+        </div>        
         
         <label htmlFor="target" className="block text-gray-800 text-lg font-semibold pl-20">
           Target Audience

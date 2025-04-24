@@ -50,30 +50,36 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80">
+        <main className="bg-myred min-h-[calc(100vh-60px)] flex justify-center items-center flex-col md:px-20 lg:px-80 py-10">
             <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
-                <div className="text-3xl font-bold text-center mt-6 mb-8">
+                <div className="text-3xl font-bold text-center my-6">
                     Login to your account
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex justify-center items-center block mb-6">
+                    <label htmlFor="email" className="block text-lg font-semibold mb-2 pl-20">
+                        Email
+                    </label>
+                    <div className="flex justify-center items-center block mb-4">
                         <input 
                             type="email" 
                             id="email" 
                             placeholder="Email"
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
+                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-white text-lg leading-4 indent-3 placeholder:text-gray-800"
                         />
                     </div>
-                    <div className="flex justify-center items-center block mb-4">
+                    <label htmlFor="password" className="block text-lg font-semibold mb-2 pl-20">
+                        Password
+                    </label>
+                    <div className="flex justify-center items-center block mb-2">
                         <input 
                             type="password" 
                             id="password" 
                             placeholder="Password"
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-800"
+                            className="w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-white text-lg leading-4 indent-3 placeholder:text-gray-800"
                         />
                     </div>
                     {message && (
@@ -103,7 +109,7 @@ export default function LoginPage() {
                 <div className="text-center text-slate-500 mb-2">
                     Need an account?
                 </div>
-                <div className="text-3xl font-bold text-center mb-2">
+                <div className="text-3xl font-bold text-center">
                     Create an account
                 </div>
                 <div className="flex flex-col justify-center items-center">
