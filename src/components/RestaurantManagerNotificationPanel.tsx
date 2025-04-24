@@ -5,7 +5,7 @@ export default function RestaurantManagerNotificationPanel() {
     const router = useRouter();
 
     const handleClick = () => {
-        router.replace('/admin/notifications/create');
+        router.replace('/manager/notifications/create');
     };
 
     return (
