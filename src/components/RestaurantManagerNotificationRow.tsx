@@ -46,6 +46,11 @@ export default function RestaurantManagerNotificationRow() {
     fetchData();
   }, [session, router]);
 
+  const handleDeleteNotification = (deletedId: string) => {
+    setNotifications(prevNotifications => 
+      prevNotifications.filter(notification => notification._id !== deletedId)
+    );
+  };
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-myred">
@@ -101,10 +106,10 @@ export default function RestaurantManagerNotificationRow() {
           // Render notifications sorted by publishAt
           (selectedTab === 'sent'
             ? managerNotifications.map((notification) => (
-                <RestaurantManagerNotificationBox key={notification._id} notificationItem={notification} />
+                <RestaurantManagerNotificationBox key={notification._id} notificationItem={notification}  onDelete={handleDeleteNotification}/>
               ))
             : adminNotifications.map((notification) => (
-                <RestaurantManagerNotificationBox key={notification._id} notificationItem={notification} />
+                <RestaurantManagerNotificationBox key={notification._id} notificationItem={notification} onDelete={handleDeleteNotification} />
               )))
         )}
       </div>

@@ -2,15 +2,28 @@
 import deleteNotification from "@/libs/deleteNotification";
 import { NotificationItem } from "../../interfaces";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 
-export default function RestaurantManagerNotificationBox({notificationItem}: { notificationItem: NotificationItem}) {
+export default function RestaurantManagerNotificationBox({notificationItem ,  onDelete}: { notificationItem: NotificationItem ; onDelete: (id: string) => void;}) {
   const { data: session } = useSession();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+
+
+
+  if (isDeleting) {
+    return (
+      <div className="w-full bg-yellow-50 border border-yellow-200 px-8 py-4 shadow-sm">
+        <p className="text-yellow-700 font-medium text-center">
+          Deleting notification...
+        </p>
+      </div>
+    );
+  }
+
 
   if (isDeleted) {
     return (
@@ -22,15 +35,6 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
     );
   }
 
-  if (isDeleting) {
-    return (
-      <div className="w-full bg-yellow-50 border border-yellow-200 px-8 py-4 shadow-sm">
-        <p className="text-yellow-700 font-medium text-center">
-          Deleting notification...
-        </p>
-      </div>
-    );
-  }
 
   const handleDeleteClick = async () => {
     if (!session) return;
@@ -50,12 +54,18 @@ export default function RestaurantManagerNotificationBox({notificationItem}: { n
         notificationId: notificationItem._id,
         token: session.user.token
       });
-      setIsDeleting(false);
-      setIsDeleted(true);
-      // Show the success message for 2 seconds before refreshing
+
       setTimeout(() => {
-        router.refresh();
-      }, 2000);
+        setIsDeleting(false);
+      }, 1500);
+      // Show the success message for 1 seconds before refreshing
+      
+        setIsDeleted(true);
+      
+      setTimeout(() => {
+        onDelete(notificationItem._id);
+      }, 2500);
+      
     } catch (error) {
       console.error('Failed to delete notification:', error);
       setIsDeleting(false);
