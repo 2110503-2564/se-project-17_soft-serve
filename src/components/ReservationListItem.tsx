@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react';
 import { ReservationItem } from "../../interfaces";
 import deleteReservation from "@/libs/deleteReservation";
+import Loader from "@/components/Loader";
 
 export default function ReservationListItem({ reservationItem, restaurantItem }: { reservationItem: ReservationItem, restaurantItem: { imgPath: string, name: string } }) {
     const { data: session } = useSession();
@@ -20,16 +21,18 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
             weekday: 'short',
             day: '2-digit',
             month: 'long',
-            year: 'numeric'
+            year: 'numeric',
+            timeZone: 'UTC' // Explicitly set the timezone
         }));
 
         setFormattedTime(date.toLocaleTimeString([], {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            timeZone: 'UTC' // Explicitly set the timezone
         }));
     }, [reservationItem.revDate]);
 
-    const handleCancleReservation = async () => {
+    const handleCancelReservation = async () => {
         if (!session || !session.user.token) return;
         setIsDeleting(true);
         try {
@@ -43,10 +46,12 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
         }
     }
 
-    if (isDeleting) return null;
+    if (isDeleting) {
+        return <Loader loadingtext="Cancelling ..." />;
+    }
 
     return (
-        <div className="mx-20 my-10 flex items-start transition-shadow duration-300 border-b border-gray-300 pb-10 text-gray-600">
+        <div className="mx-10 my-10 flex items-start transition-shadow duration-300 border-b border-gray-300 pb-10 text-gray-600">
             <div className="w-[200px] h-[200px] overflow-hidden rounded-xl shadow-lg hover:shadow-2xl">
                 <Image className="object-cover w-full h-full"
                     src={restaurantItem.imgPath} alt="Restaurant Image" width={200} height={200} />
@@ -67,9 +72,9 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
                         Edit
                     </button>
                 </Link>
-                <button onClick={handleCancleReservation}
+                <button onClick={handleCancelReservation}
                     className='w-[150px] bg-[#D40303] text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:bg-red-700 hover:shadow-lg transition-all'>
-                    Cancle
+                        Cancel
                 </button>
             </div>
         </div>
