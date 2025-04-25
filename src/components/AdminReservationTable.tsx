@@ -68,7 +68,7 @@ export default function AdminReservationTable() {
                 if (timeParam) {
                     formattedData = formattedData.filter((item: ReservationItem) => {
                         const reservationTime = new Date(item.revDate).toLocaleTimeString('en-GB', {
-                            timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+                            hour: '2-digit', minute: '2-digit' });
                         return reservationTime === timeParam;
                     });
                 }
