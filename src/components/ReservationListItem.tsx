@@ -21,18 +21,16 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
             weekday: 'short',
             day: '2-digit',
             month: 'long',
-            year: 'numeric',
-            timeZone: 'UTC' // Explicitly set the timezone
+            year: 'numeric'
         }));
 
         setFormattedTime(date.toLocaleTimeString([], {
             hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'UTC' // Explicitly set the timezone
+            minute: '2-digit'
         }));
     }, [reservationItem.revDate]);
 
-    const handleCancelReservation = async () => {
+    const handleCancleReservation = async () => {
         if (!session || !session.user.token) return;
         setIsDeleting(true);
         try {
@@ -47,7 +45,7 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
     }
 
     if (isDeleting) {
-        return <Loader loadingtext="Cancelling ..." />;
+        return <Loader loadingtext="Cancleling ..." />;
     }
 
     return (
@@ -72,9 +70,9 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
                         Edit
                     </button>
                 </Link>
-                <button onClick={handleCancelReservation}
+                <button onClick={handleCancleReservation}
                     className='w-[150px] bg-myred text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred transition-all'>
-                        Cancel
+                        Cancle
                 </button>
             </div>
         </div>
