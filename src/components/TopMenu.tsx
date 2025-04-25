@@ -39,7 +39,7 @@ export default async function TopMenu() {
                 {isManager && <TopMenuItem title='Your Restaurants' pageRef= {res} />}
                 <TopMenuItem title='Home' pageRef='/' />
                 <TopMenuItem title='Reservations' pageRef={isManager ? jong : '/reservations'} />
-                <TopMenuItem title='Notification' pageRef='/manager/notifications' />
+                <TopMenuItem title='Notifications' pageRef='/manager/notifications' />
 
                     <Link href={'/user'}>
                         <UserCircleIcon className="w-[70px] h-[70px] ml-1 pr-4 text-[#d42d2d] hover:text-myred" />
