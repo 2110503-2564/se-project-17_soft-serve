@@ -73,8 +73,6 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
       });
 
       setSuccess('Notification created successfully!');
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      router.push('/manager/notifications');
       
     } catch (err: any) {
       setError(err.message || 'Failed to create notification');
@@ -83,33 +81,33 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
     }
   };
 
-  // Common input field styles
-  const inputClass = "w-4/5 h-10 rounded-xl ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-lg leading-4 indent-3 placeholder:text-gray-500";
+  // Common input field styles - reduced height and padding
+  const inputClass = "w-full h-8 rounded-lg ring-1 ring-inset ring-gray-400 px-2 py-1 bg-slate-100 text-sm leading-4 indent-2 placeholder:text-gray-500";
 
   return (
-    <div className="w-full bg-white text-gray-800 py-8 px-20 rounded-3xl shadow-2xl relative">
-      <div className="text-center mb-8">
-        <div className="text-3xl font-bold mt-6 mb-2">Create a Notification</div>
-        <div className="text-lg text-gray-600">for customers with reservations at my restaurant</div>
+    <div className="w-full bg-white text-gray-800 py-3 px-4 rounded-xl shadow-lg relative">
+      <div className="text-center mb-3">
+        <div className="text-xl font-bold mt-2 mb-1">Create a Notification</div>
+        <div className="text-sm text-gray-600">for customers with reservations at my restaurant</div>
       </div>
       
       {error && (
-        <div className="mx-20 mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className="mx-4 mb-2 p-2 bg-red-100 border border-red-400 text-red-700 text-sm rounded">
           {error}
         </div>
       )}
       
       {success && (
-        <div className="mx-20 mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+        <div className="mx-4 mb-2 p-2 bg-green-100 border border-green-400 text-green-700 text-sm rounded">
           {success}
         </div>
       )}
       
       <form onSubmit={handleSubmit}>
-        <label htmlFor="title" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
+        <label htmlFor="title" className="block text-gray-800 text-sm font-semibold mb-1 pl-2">
           Title
         </label>
-        <div className="flex justify-center items-center block mb-6">
+        <div className="flex justify-center items-center block mb-3">
           <input 
             value={title}
             onChange={(e) => setTitle(e.target.value)} 
@@ -120,10 +118,10 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
           />
         </div>
         
-        <label htmlFor="message" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
+        <label htmlFor="message" className="block text-gray-800 text-sm font-semibold mb-1 pl-2">
           Message
         </label>
-        <div className="flex justify-center items-center block mb-6">
+        <div className="flex justify-center items-center block mb-3">
           <input 
             value={message}
             onChange={(e) => setMessage(e.target.value)} 
@@ -135,10 +133,10 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
         </div>
         
         <div>
-          <label htmlFor="scheduled-datetime" className="block text-gray-800 text-lg font-semibold mb-2 pl-20">
+          <label htmlFor="scheduled-datetime" className="block text-gray-800 text-sm font-semibold mb-1 pl-2">
             Publish Date
           </label>
-          <div className="flex justify-center items-center block mb-6">
+          <div className="flex justify-center items-center block mb-2">
             <input 
               value={scheduledDateTime}
               onChange={(e) => setScheduledDateTime(e.target.value)} 
@@ -148,22 +146,22 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
               className={inputClass}
             />
           </div>
-          <p className="text-sm text-gray-600 text-center -mt-4 mb-6">
+          <p className="text-xs text-gray-600 text-center -mt-1 mb-3">
             If left empty, the post will be published immediately upon submission.
           </p>
         </div>
         
-        <div className="flex flex-col justify-center items-center mt-8">
+        <div className="flex flex-col justify-center items-center mt-3">
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="block bg-myred border border-white text-white text-xl font-semibold w-40 py-2 px-4 rounded-xl shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600 disabled:bg-gray-400 disabled:text-gray-200 disabled:hover:bg-gray-400 disabled:hover:text-gray-200 disabled:cursor-not-allowed"
+            className="block bg-myred border border-white text-white text-sm font-semibold w-32 py-1 px-3 rounded-lg shadow-sm hover:bg-white hover:text-red-600 hover:border hover:border-red-600 disabled:bg-gray-400 disabled:text-gray-200 disabled:hover:bg-gray-400 disabled:hover:text-gray-200 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Sending...' : 'Submit'}
           </button>
         </div>
         
-        <div className="text-center text-slate-500 mt-4 mb-4">
+        <div className="text-center text-slate-500 text-xs mt-2 mb-2">
           {scheduledDateTime ? 'Your notification will be sent at the scheduled time.' : 'Your notification will be sent immediately.'}
         </div>
       </form>
