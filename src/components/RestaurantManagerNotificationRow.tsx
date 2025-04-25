@@ -7,6 +7,7 @@ import { NotificationJson, NotificationItem } from "../../interfaces";
 import { useSession } from 'next-auth/react';
 import RestaurantManagerNotificationBox from './RestaurantManagerNotificationBox';
 import RestaurantManagerNotificationPanel from './RestaurantManagerNotificationPanel';
+import Loader from './Loader';
 
 export default function RestaurantManagerNotificationRow() {
   const [selectedTab, setSelectedTab] = useState<'sent' | 'received'>('sent');
@@ -54,7 +55,7 @@ export default function RestaurantManagerNotificationRow() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-myred">
-        <div className="text-white text-2xl">Loading...</div>
+        <div className="text-white text-2xl"><Loader loadingtext='Loading ...'/>;</div>
       </div>
     );
   }
@@ -113,6 +114,7 @@ export default function RestaurantManagerNotificationRow() {
               )))
         )}
       </div>
+      
     </div>
   );
 }

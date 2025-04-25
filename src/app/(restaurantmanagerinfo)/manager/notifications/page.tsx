@@ -6,6 +6,7 @@ import getUserProfile from '@/libs/getUserProfile';
 import getNotifications from '@/libs/getNotifications';
 import RestaurantManagerNotificationPanel from '@/components/RestaurantManagerNotificationPanel';
 import RestaurantManagerNotificationRow from '@/components/RestaurantManagerNotificationRow';
+import Loader from '@/components/Loader';
 
 export default function RestaurantManagerNotification() {
   const [selectedTab, setSelectedTab] = useState<'sent' | 'received'>('sent');
@@ -36,7 +37,7 @@ export default function RestaurantManagerNotification() {
     fetchData();
   }, [session, router]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) <Loader loadingtext='Loading Notifications...'/>;
 
   return (
     <div className="bg-myred min-h-screen pb-10">
