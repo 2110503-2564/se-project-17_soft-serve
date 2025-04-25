@@ -4,15 +4,11 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';;
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
 import { OneReservationJson, RestaurantAvailabilityJson } from "../../interfaces";
 dayjs.extend(localizedFormat);
 dayjs.extend(isSameOrAfter)
-dayjs.extend(timezone)
-dayjs.extend(utc)
 
 import addReservation from '@/libs/addReservation';
 import editReservation from '@/libs/editReservation';
@@ -36,7 +32,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
     useEffect(() => {
         if (reservationData) {
             console.log("ReservationData", reservationData);
-            const tempReservationData = dayjs(reservationData.data.revDate).subtract(7, 'hour');
+            const tempReservationData = dayjs(reservationData.data.revDate)
             setDateValue(dayjs(tempReservationData));
             setTimeValue(dayjs(tempReservationData).format('HH:mm'));
             setCount(reservationData.data.numberOfPeople);
@@ -153,7 +149,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
         }
         const [hours, minutes] = timeValue.split(':').map(Number);
         const tempDate = new Date(dateValue.toDate());
-        tempDate.setHours(hours+7, minutes, 0, 0);
+        tempDate.setHours(hours, minutes, 0, 0);
         const combinedDateTime = tempDate;
         // console.log("dateValue:", dateValue);
         // console.log("timeValue:", timeValue);
