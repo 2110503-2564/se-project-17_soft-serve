@@ -7,6 +7,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
 import { OneReservationJson, RestaurantAvailabilityJson } from "../../interfaces";
+import getUserProfile from "@/libs/getUserProfile";
 dayjs.extend(localizedFormat);
 dayjs.extend(isSameOrAfter)
 
@@ -143,6 +144,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
         }
     };
 
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
     const handleEditReservation = async () => {
         if (!dateValue || !timeValue) {
             return null;
@@ -161,9 +163,16 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
         if(!reservationId) return null;
 
         try {
+            const userProfile = await getUserProfile(session.user.token);
+            const isUserAdmin = userProfile.data.role === 'admin';
+            setIsAdmin(isUserAdmin);
             await editReservation({reservationId : reservationId, revDate : combinedDateTime, numberOfPeople : count, token});
             alert('Edit Reservation successful!');
-            router.replace('/reservations');
+            if (isUserAdmin) {
+                router.replace('/admin/reservations');
+            } else {
+                router.replace('/reservations');
+            }
         } catch (err : any) {
             console.error('Error making reservation:', err);
             alert(err.message || 'Failed to edit reservation. Please try again.');
