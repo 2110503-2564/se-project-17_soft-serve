@@ -65,7 +65,7 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
             </div>
 
             {
-                new Date(reservationItem.revDate).getTime() > new Date().getTime() ?
+                new Date(reservationItem.revDate).getTime() - 3600000 > new Date().getTime() ?
                 <div className="ml-auto flex flex-row space-x-4 self-end">
                     <Link href={`/reservations/edit/${reservationItem._id}`}>
                         <button className="w-[150px] bg-mygray text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray transition-all">
