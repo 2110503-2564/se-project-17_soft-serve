@@ -73,7 +73,8 @@ export default function ManagerNotificationCreate({ token, restaurantId }: Manag
       });
 
       setSuccess('Notification created successfully!');
-      
+      router.replace('/manager/notifications');
+
     } catch (err: any) {
       setError(err.message || 'Failed to create notification');
     } finally {
