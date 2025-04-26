@@ -136,7 +136,6 @@ export default function EditRestaurantBox({ restaurantId, token }: { restaurantI
         }
       }
     } catch (err: any) {
-      setError("Failed to update restaurant");
       alert(err.message || 'Failed to edit restaurant. Please try again.');
     }
   };

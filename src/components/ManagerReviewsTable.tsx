@@ -115,12 +115,12 @@ export default function ManagerReviewsTable() {
           </div>
         )}
         
-        <h2 className="text-xl font-semibold mb-4 text-black">
+        <h2 className="text-xl font-semibold mb-4 text-black" id="numberOfReviews">
           {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'} Found
         </h2>
         
         {reviews.length === 0 ? (
-          <div className="text-center py-10 text-black">No reviews found matching your criteria</div>
+          <div className="text-center py-10 text-black" id="noReviews">No reviews found.</div>
         ) : (
           <div className="space-y-6">
             {reviews.map((review) => (

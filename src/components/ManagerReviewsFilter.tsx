@@ -44,6 +44,7 @@ export default function ManagerReviewsFilter() {
             <label className="w-28 mr-5 font-medium text-black">Min Rating</label>
             <TextField
               select
+              id="minRatingSelect"
               value={minRating}
               onChange={(e) => setMinRating(e.target.value)}
               SelectProps={{
@@ -70,6 +71,7 @@ export default function ManagerReviewsFilter() {
             <label className="w-28 mr-5 font-medium text-black">From Date</label>
             <TextField
               type="date"
+              id="dateFromInput"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
               sx={{ flex: 1,
@@ -86,6 +88,7 @@ export default function ManagerReviewsFilter() {
             <label className="w-28 mr-5 font-medium text-black">To Date</label>
             <TextField
               type="date"
+              id="dateToInput"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
               sx={{ flex: 1,
@@ -101,12 +104,14 @@ export default function ManagerReviewsFilter() {
           <div className="flex gap-4">
             <button
               onClick={handleSearch}
+              id="filter"
               className="bg-myred w-[150px] h-[45px] text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred"
             >
               Filter Reviews
             </button>
             <button
               onClick={handleClearFilters}
+              id="clear"
               className="bg-gray-200 w-[150px] h-[45px] text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-2xl hover:bg-white hover:text-gray-800 hover:border hover:border-mygray"
             >
               Clear Filters
