@@ -64,17 +64,20 @@ export default function ReservationListItem({ reservationItem, restaurantItem }:
                 <div>{reservationItem.numberOfPeople} {reservationItem.numberOfPeople > 1 ? 'Guests' : 'Guest'}</div>
             </div>
 
-            <div className="ml-auto flex flex-row space-x-4 self-end">
-                <Link href={`/reservations/edit/${reservationItem._id}`}>
-                    <button className="w-[150px] bg-mygray text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray transition-all">
-                        Edit
+            {
+                new Date(reservationItem.revDate).getTime() - 3600000 > new Date().getTime() ?
+                <div className="ml-auto flex flex-row space-x-4 self-end">
+                    <Link href={`/reservations/edit/${reservationItem._id}`}>
+                        <button className="w-[150px] bg-mygray text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-mygray hover:border hover:border-mygray transition-all">
+                            Edit
+                        </button>
+                    </Link>
+                    <button onClick={handleCancleReservation}
+                        className='w-[150px] bg-myred text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred transition-all'>
+                            Cancle
                     </button>
-                </Link>
-                <button onClick={handleCancleReservation}
-                    className='w-[150px] bg-myred text-white text-[22px] font-bold px-4 py-2 rounded-xl hover:shadow-2xl hover:bg-white hover:text-myred hover:border hover:border-myred transition-all'>
-                        Cancle
-                </button>
-            </div>
+                </div> : null
+            }
         </div>
     );
 }
