@@ -60,7 +60,8 @@ export default async function TopMenu() {
                 </Link>
             </div>
             <div className="flex items-center">
-                {isAdmin && <TopMenuItem title='Admin' pageRef='/admin' />}
+                <TopMenuItem title='Admin' pageRef='/admin' />
+                <TopMenuItem title='Verify' pageRef='/admin/verify'/>
                 <TopMenuItem title='Home' pageRef='/' />
                 
                     <Link href={'/user'}>
