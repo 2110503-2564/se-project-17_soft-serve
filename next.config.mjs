@@ -18,7 +18,7 @@ const nextConfig = {
       ]
   },
   experimental : {
-      serverActions : true
+      serverActions : { enabled: true } 
   },
   env: {
     FRONTEND_URL: process.env.FRONTEND_URL,
