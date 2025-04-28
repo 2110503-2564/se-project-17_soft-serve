@@ -27,9 +27,9 @@
             setHasChanges(true);
         };
 
-        const handCancle = () => {
+        const handCancel = () => {
             setUserData(user);
-            alert('Cancle');
+            alert('Cancel');
         };
 
         const handleSave = async () => {
@@ -147,7 +147,7 @@
                 </div>
                 <div className='flex flex-row justify-center'>
                     <button
-                        onClick={handCancle}
+                        onClick={handCancel}
                         className='mt-10 px-10 py-2 bg-white text-red-600 font-bold rounded-lg hover:bg-gray-400 hover:text-white shadow-lg'
                     >
                         ยกเลิกการเปลี่ยนแปลง
