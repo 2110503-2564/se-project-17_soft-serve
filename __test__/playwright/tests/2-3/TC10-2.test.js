@@ -5,16 +5,16 @@ import { test, expect } from '@playwright/test';
 const FE_URL = 'https://sw-softserve.vercel.app';
 const BE_URL = 'https://softserve-backend.vercel.app';
 
-test('TC10-2 : should display "No reviews found" message when no reviews exist', async ({ page }) => {
-    // Login before each test
-    test.beforeEach(async ({ page }) => {
-        await page.goto(`${FE_URL}/login`);
-        await page.fill('#email', 'eiei@eiei.com');
-        await page.fill('#password', '12345678');
-        await page.click('button[type="submit"]');
-        await page.waitForURL(`${FE_URL}`);
-    });
+// Login before each test
+test.beforeEach(async ({ page }) => {
+    await page.goto(`${FE_URL}/login`);
+    await page.fill('#email', 'eiei@eiei.com');
+    await page.fill('#password', '12345678');
+    await page.click('button[type="submit"]');
+    await page.waitForURL(`${FE_URL}`);
+});
 
+test('TC10-2 : should display "No reviews found" message when no reviews exist', async ({ page }) => {
     // Mock data for no reviews
     await page.route(`${BE_URL}/api/manager/reviews`, async route => {
         route.fulfill({

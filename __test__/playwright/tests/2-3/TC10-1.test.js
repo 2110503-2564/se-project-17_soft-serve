@@ -5,16 +5,16 @@ import { test, expect } from '@playwright/test';
 const FE_URL = 'https://sw-softserve.vercel.app';
 const BE_URL = 'https://softserve-backend.vercel.app';
 
+// Login before each test
+test.beforeEach(async ({ page }) => {
+    await page.goto(`${FE_URL}/login`);
+    await page.fill('#email', 'eiei@eiei.com');
+    await page.fill('#password', '12345678');
+    await page.click('button[type="submit"]');
+    await page.waitForURL(`${FE_URL}`);
+});
+
 test('TC10-1 : should display existing ratings and reviews', async ({ page }) => {
-    // Login before each test
-    test.beforeEach(async ({ page }) => {
-        await page.goto(`${FE_URL}/login`);
-        await page.fill('#email', 'eiei@eiei.com');
-        await page.fill('#password', '12345678');
-        await page.click('button[type="submit"]');
-        await page.waitForURL(`${FE_URL}`);
-    });
-    
     // Mock data for existing reviews (replace with actual API calls if needed)
     await page.route(`${BE_URL}/api/v1/reviews`, async route => {
         route.fulfill({
