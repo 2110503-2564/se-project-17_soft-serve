@@ -1,3 +1,5 @@
+// npx playwright test TC8-1.test.js
+// User Story 2-1 : User view restaurant reviews
 import { test, expect } from '@playwright/test';
 
 const FE_URL = 'https://sw-softserve.vercel.app';

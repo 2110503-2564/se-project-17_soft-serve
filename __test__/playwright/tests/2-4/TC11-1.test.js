@@ -1,3 +1,5 @@
+// npx playwright test TC11-1.test.js
+// User Story 2-4 : Admin view all reviews
 import { test, expect } from '@playwright/test';
 
 test('TC11-1 - admin can view all reviews when reviews exist in the system', async ({ page }) => {

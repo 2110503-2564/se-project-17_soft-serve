@@ -1,3 +1,5 @@
+// npx playwright test TC9-1.test.js
+// User Story 2-2 : User rate and review a restaurant
 import { test, expect } from '@playwright/test';
 
 test('TC9-1 - providing all stars with comment will successfully create review', async ({ page }) => {

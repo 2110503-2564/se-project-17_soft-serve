@@ -1,4 +1,5 @@
-// @ts-check
+// npx playwright test TC12-1.test.js
+// User Story 2-5 : Admin delete review
 import { test, expect } from '@playwright/test';
 
 
