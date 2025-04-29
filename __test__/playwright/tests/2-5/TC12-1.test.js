@@ -82,5 +82,6 @@ test('TC12-1 - As an admin I want to delete review So that I can ensure the qual
   
   expect(card2Count).toBe(0);
 
+  await page.waitForTimeout(3000);
 });
 

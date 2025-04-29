@@ -56,4 +56,5 @@ test('TC9-3 - Submit rating 0 stars with comment should show error and not creat
 
   // ตรวจสอบว่ารีวิวเท่าเดิม
   await expect(reviewCountAfter).toBe(reviewCountBefore);  // ตรวจสอบจำนวนรีวิวที่เพิ่มขึ้น
+  await page.waitForTimeout(3000);
 });

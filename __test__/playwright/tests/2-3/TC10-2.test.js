@@ -29,4 +29,5 @@ test('TC10-2 : should display "No reviews found" message when no reviews exist',
     await expect(page.locator('#noReviews')).toHaveText('No reviews found.');
     // Assert that the reviews count is also 0
     await expect(page.locator('#numberOfReviews')).toHaveText('0 Reviews Found');
+    await page.waitForTimeout(3000);
 });

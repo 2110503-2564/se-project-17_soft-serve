@@ -54,4 +54,5 @@ test('TC9-1 - providing all stars with comment will successfully create review',
 
   // ตรวจสอบว่ารีวิวเพิ่มขึ้น 1 ตัว
   await expect(reviewCountAfter).toBe(reviewCountBefore + 1);  // ตรวจสอบจำนวนรีวิวที่เพิ่มขึ้น
+  await page.waitForTimeout(3000);
 });

@@ -69,4 +69,5 @@ test('TC8-1 : User can view reviews of a restaurant', async ({ page })  => {
     await expect(page.locator('.border').first()).toBeVisible();       
 
     await page.waitForTimeout(3000);
+    await page.waitForTimeout(3000);
 });

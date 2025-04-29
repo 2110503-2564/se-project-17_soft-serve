@@ -55,4 +55,5 @@ test('TC9-2 - Not provide all stars and  without comment should show error and n
 
   // ตรวจสอบว่ารีวิวเพิ่มขึ้น 1 ตัว หุึ้ยยยยยยยยย
   await expect(reviewCountAfter).toBe(reviewCountBefore);  // ตรวจสอบจำนวนรีวิวที่เพิ่มขึ้น
+  await page.waitForTimeout(3000);
 });

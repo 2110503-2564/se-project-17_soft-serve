@@ -39,4 +39,5 @@ test('TC10-1 : should display existing ratings and reviews', async ({ page }) =>
     await page.waitForSelector('.border.rounded-lg', { state: 'visible' });
     const reviewElements = await page.locator('.border.rounded-lg').all();
     expect(reviewElements.length).toBeGreaterThanOrEqual(5);
+    await page.waitForTimeout(3000);
 });
