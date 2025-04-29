@@ -126,6 +126,7 @@ export default function ReserveBox({restaurantId, isUpdate, reservationId, reser
         const [hours, minutes] = timeValue.split(':').map(Number);
         const tempDate = new Date(dateValue.toDate());
         tempDate.setHours(hours, minutes, 0, 0);
+        tempDate.setMinutes(tempDate.getMinutes() - tempDate.getTimezoneOffset());
 
         const combinedDateTime = tempDate;
         // console.log("dateValue:", dateValue);
