@@ -27,7 +27,7 @@ test('TC11-1 - admin can view all reviews when reviews exist in the system', asy
   await expect(page).toHaveURL('https://sw-softserve.vercel.app/');
 
   // 7. Click on the Admin link to access the admin dashboard
-  await expect(page.getByText('AdminHome')).toBeVisible();
+  await expect(page.getByText('Admin')).toBeVisible();
   await page.getByRole('link', { name: 'Admin' }).click();
   
   // 8. Assert that the page URL is now the Admin dashboard

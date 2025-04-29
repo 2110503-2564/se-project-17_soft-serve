@@ -22,7 +22,7 @@ test('TC11-2 - admin sees "no reviews found" when no reviews exist in the system
     await expect(page).toHaveURL('https://sw-softserve.vercel.app/'); // Assert the homepage URL after login
 
     // 5. Click on the Admin link to access the admin dashboard
-    await expect(page.getByText('AdminHome')).toBeVisible(); // Ensure that the AdminHome link is visible after login
+    await expect(page.getByText('Admin')).toBeVisible(); // Ensure that the AdminHome link is visible after login
     await page.getByRole('link', { name: 'Admin' }).click(); // Click on the Admin link to go to the admin dashboard
     await expect(page).toHaveURL('https://sw-softserve.vercel.app/admin'); // Assert the Admin page URL
 
